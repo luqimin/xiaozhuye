@@ -1,0 +1,176 @@
+/*公共样式*/
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    background-color: transparent !important;
+    background-image: none !important;
+    color: #666;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.panel-heading a {
+    color: #ddd;
+}
+
+.panel-heading:hover a {
+    color: #fff;
+}
+
+.alert-dismissable,
+.alert-dismissible {
+    padding-right: 15px;
+}
+
+.alert-dismissable .close,
+.alert-dismissible .close {
+    right: 0;
+}
+
+.list-group-item {
+    padding: 10px 15px;
+}
+
+
+/*登录区域*/
+
+.login {
+    position: relative;
+}
+
+.loginMsg {
+    margin-left: 6px;
+}
+
+.tiny-wrap {
+    padding: 8px;
+    border: 1px #ddd solid;
+    border-radius: 4px;
+    box-shadow: none;
+}
+
+
+/*网址配置*/
+
+.siteConfig {
+    display: block;
+}
+
+
+/*模块配置*/
+
+.mokuaiConfig label {
+    margin-right: 10px;
+}
+
+.mokuaiConfig input[type="checkbox"]:after,
+.mokuaiConfig .checkbox input[type="checkbox"]:after,
+.mokuaiConfig .checkbox-inline input[type="checkbox"]:after {
+    border: 1px solid #fff;
+}
+
+.siteWrap {
+    margin: 16px -10px 0 0;
+}
+
+.siteWrap span {
+    margin: 0 8px 8px 0;
+}
+
+.siteBtn {
+    margin: 0 8px 8px 0;
+    transition: all .5s;
+}
+
+.site-icon {
+    display: inline-block;
+    max-width: 16px;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: text-bottom;
+}
+
+.addSiteBtn {
+    margin: 0 -16px -3px 0!important;
+    color: #2196f3;
+    border-radius: 0;
+}
+
+.baidu {
+    margin-bottom: 23px;
+}
+
+.addon-sel {
+    margin: 0 0 10px 0;
+}
+
+.addon {}
+
+.addon .addonimg {}
+
+.col-md-3 .addon .addonimg {
+    max-height: 180px;
+}
+
+.col-md-6 .addon .addonimg {
+    height: 180px;
+    cursor: -webkit-zoom-in;
+}
+
+.addon .addonimg.imgauto {
+    height: auto;
+    cursor: -webkit-zoom-out;
+}
+
+.addon .addon-video-wrap {
+    height: auto;
+}
+
+.addon .addon-video {
+    max-height: 200px;
+    cursor: -webkit-zoom-in;
+}
+
+.addon video.embed-responsive-item {
+    cursor: -webkit-zoom-out;
+}
+
+
+/*过渡动画*/
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0
+}
+
+
+/*网址动画*/
+
+.site-list-move {
+    transition: transform .5s;
+}
+
+
+/*登录浮层动画*/
+
+.login-fade-enter-active {
+    transition: all .25s ease;
+}
+
+.login-fade-leave-active {
+    transition: all .6s ease-in-out;
+}
+
+.login-fade-enter,
+.login-fade-leave-active {
+    opacity: 0;
+}
