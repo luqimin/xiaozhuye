@@ -1,6 +1,8 @@
 
 Application created by [ThinkJS](http://www.thinkjs.org)
 
+Demo [小主页](http://www.tinyren.com)
+
 ## Install dependencies
 
 ```
@@ -19,4 +21,10 @@ Use pm2 to deploy app on production enviroment.
 
 ```
 pm2 startOrReload pm2.json
+```
+
+## 前端js打包
+
+```
+webpack
 ```
