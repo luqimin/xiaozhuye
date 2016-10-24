@@ -14,7 +14,7 @@ coverage/
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
-
+www/static/js/*.js
 # node-waf configuration
 .lock-wscript
 
@@ -32,7 +32,7 @@ output.tar.gz
 typings/
 
 #app
-app/
+/app/
 runtime/
 # OS generated files #
 ######################

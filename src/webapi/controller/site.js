@@ -73,17 +73,15 @@ export default class extends Base {
             }
             let valArr = paramValue.split('');
             let valLength = valArr.length;
-            let condArr = [];
+            let _reg = ".*";
             for (let i = 0; i < valLength; i++) {
-                condArr.push("%" + valArr[i] + "%");
-            }
+                _reg += valArr[i] + '+.*';
 
+            }
             let num = this.get('number');
             let model = this.model('tiny_sites');
-            let list = await model.getSites({
-                isconst: 0,
-                "name|py|url": ["like", "%" + paramValue + "%"]
-            }, {
+            let _where = "(name REGEXP '"+ _reg +"') OR (py REGEXP '"+ _reg +"') OR (url REGEXP '"+ _reg +"')";
+            let list = await model.getSites(_where, {
                 id: 'ASC',
                 isfocus: 'DESC'
             }, num);
