@@ -128,5 +128,15 @@ export default {
             // 失败回调
             cb(res);
         });
+    },
+    //用户添加网址入库
+    addUserSite(cb, site) {
+        Vue.http.post('/webapi/site/add', site).then(res => {
+            // 响应成功回调
+            cb(res.body);
+        }, res => {
+            // 失败回调
+            cb(res.body);
+        });
     }
 }

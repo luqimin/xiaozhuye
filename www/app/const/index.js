@@ -18,4 +18,4 @@ export const MODARRAY = {
         name: '搞笑段子'
     }
 }
-export const MODCONF = ['gnnews', 'yule'];
+export const MODCONF = ['gnnews', 'baidu'];

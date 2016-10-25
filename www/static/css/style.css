@@ -59,6 +59,42 @@ select:-webkit-autofill {
     display: block;
 }
 
+.siteWrap .badge {
+    font-size: 15px;
+    border-radius: 50%;
+    margin: 0 0 0 6px;
+    padding: 0 0 0 1px;
+    height: 16px;
+    width: 16px;
+    line-height: 13px;
+}
+
+.submitSiteWrap {
+    margin: 16px 0 -10px 0;
+}
+
+.submitSiteWrap .error {}
+
+.addSiteLineTwo {
+    margin-top: 6px;
+}
+
+.addSiteLineTwo .checkbox {
+    margin-top: 8px;
+}
+
+.addSiteLineTwo select {
+    width: 100%;
+    padding-bottom: 3px;
+    padding-left: 1px;
+    font-size: 13px;
+}
+
+.submitSiteBtn {
+    float: right;
+    margin-top: 8px;
+}
+
 
 /*模块配置*/
 

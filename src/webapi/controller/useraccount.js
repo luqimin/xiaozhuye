@@ -55,7 +55,8 @@ export default class extends Base {
             let token = await tokenServiceInstance.createToken({
                 userInfo: {
                     id: ID,
-                    name: paramName
+                    name: paramName,
+                    isvip: isVip
                 }
             });
             //传输客户端token
@@ -69,6 +70,9 @@ export default class extends Base {
                 timeout: 366 * 24 * 3600
             });
             this.cookie("usr_name", paramName, {
+                timeout: 366 * 24 * 3600
+            });
+            this.cookie("usr_isvip", isVip, {
                 timeout: 366 * 24 * 3600
             });
             this.cookie("usr_token", token, {
@@ -100,7 +104,8 @@ export default class extends Base {
             let token = await tokenServiceInstance.createToken({
                 userInfo: {
                     id: data.id,
-                    name: data.name
+                    name: data.name,
+                    isvip: data.isvip
                 }
             });
             //传输客户端token
@@ -110,6 +115,9 @@ export default class extends Base {
                 timeout: 366 * 24 * 3600
             });
             this.cookie("usr_name", data.name, {
+                timeout: 366 * 24 * 3600
+            });
+            this.cookie("usr_isvip", data.isvip, {
                 timeout: 366 * 24 * 3600
             });
             this.cookie("usr_nickname", data.nickname, {

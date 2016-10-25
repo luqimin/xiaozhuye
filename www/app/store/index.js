@@ -19,6 +19,7 @@ const state = {
     registerFail: 0,
     username: '',
     password: '',
+    isvip: false,
     mokuai: MODCONF, //包含：sites,gnnews,gwnews,duanzi,yule
     SITES: [],
     USERSITES: [],
@@ -29,6 +30,7 @@ const mutations = {
     [types.INIT_USER](state, info) {
         state.isLogin = info.isLogin;
         state.username = info.username;
+        state.isvip = info.isvip;
         if (info.mokuai.length == 0) {
             state.mokuai = MODCONF;
         } else {
@@ -43,6 +45,7 @@ const mutations = {
             state.mokuai = result.body.data.mokuai.split(',');
             state.loginSuccess = 1;
             state.loginFail = 0;
+            state.isvip = result.body.data;
             setTimeout(() => {
                 state.isLogin = 1;
                 api.mySites((res) => {
@@ -60,6 +63,7 @@ const mutations = {
             state.registerFail = 0;
             setTimeout(() => {
                 state.isLogin = 1;
+                state.isvip = result.body.data;
                 api.mySites((res) => {
                     state.USERSITES = res;
                 });

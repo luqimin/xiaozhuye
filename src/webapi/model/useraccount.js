@@ -7,4 +7,8 @@ export default class extends think.model.base {
         let data = this.field(field).where(opt).select();
         return data;
     }
+    findInfo(opt, field) {
+        let data = this.field(field).where(opt).find();
+        return data;
+    }
 }

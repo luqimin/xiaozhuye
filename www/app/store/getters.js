@@ -1,6 +1,7 @@
 export const username = state => state.username;
 export const password = state => state.password;
 export const isLogin = state => state.isLogin;
+export const isvip = state => state.isvip;
 export const loginSuccess = state => state.loginSuccess;
 export const registerSuccess = state => state.registerSuccess;
 export const loginFail = state => state.loginFail;
