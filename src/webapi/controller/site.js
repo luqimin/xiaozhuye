@@ -17,6 +17,8 @@ slugify.config({
     separator: ''
 });
 
+
+
 export default class extends Base {
     /**
      * index action
@@ -98,7 +100,7 @@ export default class extends Base {
                 secret: secret || 0,
                 isfocus: isfocus || 0,
                 icon: siteIcon || '',
-                add_userid: '1',
+                add_userid: userId,
                 isactive: 1,
                 addtime: think.datetime(),
                 updatetime: think.datetime(),
@@ -136,9 +138,31 @@ export default class extends Base {
 
             }
             let num = this.get('number');
+
+            //获取http-header token
+            let userToken = this.cookie("usr_token");
+            //调用tokenservice中间件
+            let tokenService = think.service("token");
+            let tokenServiceInstance = new tokenService();
+            //验证token
+            let verifyTokenResult = await tokenServiceInstance.verifyToken(userToken);
+            //服务器错误时
+            if (verifyTokenResult === "fail") {
+                return this.fail("TOKEN_INVALID")
+            }
+            //获取用户信息
+            let userId = verifyTokenResult.userInfo.id;
+
             let model = this.model('tiny_sites');
+
             let _where = "((name REGEXP '" + _reg + "') OR (py REGEXP '" + _reg + "') OR (url REGEXP '" + _reg + "')) AND (isconst = 0)";
-            let list = await model.getSites(_where, {
+
+            let _secretWhere = "";
+            if (userId) {
+                _secretWhere = " AND ((secret = 0) || ((secret = 1) AND add_userid = " + userId + "))";
+            }
+
+            let list = await model.getSites(_where + _secretWhere, {
                 id: 'ASC',
                 isfocus: 'DESC'
             }, num);
