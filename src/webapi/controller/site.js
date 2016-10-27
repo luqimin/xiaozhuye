@@ -38,6 +38,12 @@ export default class extends Base {
         let sitePy = slugify(siteName);
         let model = this.model('tiny_sites');
 
+        if (secret) {
+            secret = '1';
+        }
+        if (isfocus) {
+            isfocus = '1';
+        }
         //获取http-header token
         let userToken = this.cookie("usr_token");
         //调用tokenservice中间件
@@ -80,7 +86,7 @@ export default class extends Base {
             id: 'ASC',
             isfocus: 'DESC'
         });
-        console.log(hasSites.length);
+
         if (hasSites.length) {
             return this.fail(1104, hasSites);
         }
