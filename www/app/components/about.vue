@@ -53,7 +53,7 @@ export default {
             return this.num == 0 ? true : false;
         },
         nextClass(){
-            return this.num == this.page.length ? true : false;
+            return this.num == this.page.length - 1 ? true : false;
         }
     },
 	methods: {
@@ -63,7 +63,7 @@ export default {
             }
 		},
         next(){
-            if (this.num < 4) {
+            if (this.num < (this.page.length - 1)) {
                 this.num++;
             }
         }

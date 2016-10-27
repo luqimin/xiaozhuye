@@ -142,6 +142,17 @@ export default class extends Base {
         }
     }
 
+    logoutAction() {
+        this.cookie("usr_id", null);
+        this.cookie("usr_name", null);
+        this.cookie("usr_isvip", null);
+        this.cookie("usr_nickname", null);
+        this.cookie("usr_mokuai", null);
+        this.cookie("usr_sites", null);
+        this.cookie("usr_token", null);
+        return this.success('退出成功');
+    }
+
     //修改用户模块配置
     async editmokuaiAction() {
         let mokuai = this.post('mokuai');

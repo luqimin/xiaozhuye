@@ -23,7 +23,6 @@ export const initSites = ({ commit }) => {
 
 export const userLogin = ({ commit, state }) => {
     api.login(res => {
-        if (typeof res != 'object') { return };
         commit(types.USER_LOGIN, res);
     }, {
         username: state.username,
@@ -43,10 +42,9 @@ export const userRegister = ({ commit, state }, inviteCode) => {
 }
 
 export const userLogout = ({ commit, state }) => {
-    Cookie.remove('usr_id');
-    Cookie.remove('usr_name');
-    Cookie.remove('usr_isvip');
-    Cookie.remove('usr_token');
-    Cookie.remove('usr_mokuai');
-    commit(types.USER_LOGOUT);
+    api.logout(res => {
+        if (res.errno == 0) {
+            commit(types.USER_LOGOUT);
+        }
+    });
 }

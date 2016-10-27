@@ -63,7 +63,16 @@ export default {
             // 失败回调
             cb(res);
         });
-
+    },
+    //用户退出
+    logout(cb) {
+        Vue.http.get('/webapi/useraccount/logout', '').then(res => {
+            // 响应成功回调
+            cb(res.body);
+        }, function(res) {
+            // 响应错误回调
+            cb(res);
+        });
     },
     //用户注册
     register(cb, info) {
