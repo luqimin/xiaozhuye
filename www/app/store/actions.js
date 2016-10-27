@@ -45,6 +45,7 @@ export const userRegister = ({ commit, state }, inviteCode) => {
 export const userLogout = ({ commit, state }) => {
     Cookie.remove('usr_id');
     Cookie.remove('usr_name');
+    Cookie.remove('usr_isvip');
     Cookie.remove('usr_token');
     Cookie.remove('usr_mokuai');
     commit(types.USER_LOGOUT);

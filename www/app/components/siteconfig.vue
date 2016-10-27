@@ -238,7 +238,7 @@ export default {
                 icon: this.siteIcon,
                 category: this.siteCategory,
                 secret: this.siteIssecret,
-                isfocus: this.siteIssecret,
+                isfocus: this.siteIsfocus,
             });
         }
     }
