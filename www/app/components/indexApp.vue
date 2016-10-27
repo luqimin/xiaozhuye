@@ -18,9 +18,9 @@
 								<ul v-show="isShowDropdown" class="dropdown-menu" role="menu">
 									<li><a href="#">配置网址</a></li>
 									<li><a href="#">配置模块</a></li>
-									<li><a href="#">配置壁纸</a></li>
+									<li><a href="#">配置壁纸 (即将上线)</a></li>
 									<li class="divider"></li>
-									<li><a href="#">我要吐槽</a></li>
+									<li><a href="#">我要吐槽 (即将上线)</a></li>
 									<li class="divider"></li>
 									<li><a @click="logout" class="pointer">退出</a></li>
 								</ul>
@@ -41,6 +41,7 @@
 			<div class="row">
 				<div class="col-md-3">
 					<Sites></Sites>
+					<about></ahout>
 				</div>
 				<div class="col-md-6">
 					<component v-bind:is="ttComp"></component>
@@ -72,6 +73,7 @@ import Sites from './sites';
 import LoginPop from './loginpop';
 import modconfig from './modconfig';
 import defmod from './default';
+import about from './about';
 
 import { mapGetters, mapActions } from 'vuex';
 
@@ -81,6 +83,7 @@ export default {
 		Sites,
 		modconfig,
 		defmod,
+		about,
 		baidu :(resolve) => {
 			setTimeout(()=>{
 				require(['./baidu'], (component) => {

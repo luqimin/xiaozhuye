@@ -1,7 +1,7 @@
 
 Application created by [ThinkJS](http://www.thinkjs.org)
 
-Demo [小主页](http://123.tinyren.com)
+Demo [小主页](http://xiaozhuye.com)
 
 ## Install dependencies
 

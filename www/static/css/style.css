@@ -176,6 +176,22 @@ select:-webkit-autofill {
 }
 
 
+/*about*/
+
+.about {}
+
+.about .panel-heading {
+    padding: 2px 15px;
+}
+.about .panel-title {
+    margin-top: 2px;
+    font-size: 13px;
+}
+.about-page {
+    margin: 0;
+}
+
+
 /*过渡动画*/
 
 .fade-enter-active,
