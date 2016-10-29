@@ -105,7 +105,7 @@ export default class extends Base {
                 category: siteCat,
                 secret: secret || 0,
                 isfocus: isfocus || 0,
-                icon: siteIcon || '',
+                icon: siteIcon || '//xiaozhuye.com/favicon.ico',
                 add_userid: userId,
                 isactive: 1,
                 addtime: think.datetime(),

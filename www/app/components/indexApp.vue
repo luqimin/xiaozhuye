@@ -51,16 +51,9 @@
 				</div>
 				<div class="col-md-3">
 					<modconfig></modconfig>
+					<component v-bind:is="jsComp"></component>
 					<component v-bind:is="bdComp"></component>
 					<component v-bind:is="ylComp"></component>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-
-				</div>
-				<div class="col-md-6">
-
 				</div>
 			</div>
 		</div>
@@ -85,46 +78,39 @@ export default {
 		defmod,
 		about,
 		baidu :(resolve) => {
-			setTimeout(()=>{
-				require(['./baidu'], (component) => {
-					resolve(component);
-				});
-			},100);
+			require(['./baidu'], (component) => {
+				resolve(component);
+			});
 		},
 		toutiao :(resolve) => {
-			setTimeout(()=>{
-				require(['./toutiao'], (component) => {
-					resolve(component);
-				});
-			},100);
+			require(['./toutiao'], (component) => {
+				resolve(component);
+			});
 		},
 		gnnews :(resolve) => {
-			setTimeout(()=>{
-				require(['./gnnews'], (component) => {
-					resolve(component);
-				});
-			},200);
+			require(['./gnnews'], (component) => {
+				resolve(component);
+			});
 		},
 		gwnews :(resolve) => {
-			setTimeout(()=>{
-				require(['./gwnews'], (component) => {
-					resolve(component);
-				});
-			},300);
+			require(['./gwnews'], (component) => {
+				resolve(component);
+			});
 		},
 		duanzi :(resolve) => {
-			setTimeout(()=>{
-				require(['./duanzi'], (component) => {
-					resolve(component);
-				});
-			},400);
+			require(['./duanzi'], (component) => {
+				resolve(component);
+			});
 		},
 		yule :(resolve) => {
-			setTimeout(()=>{
-				require(['./yule'], (component) => {
-					resolve(component);
-				});
-			},500);
+			require(['./yule'], (component) => {
+				resolve(component);
+			});
+		},
+		deadline :(resolve) => {
+			require(['./deadline'], (component) => {
+				resolve(component);
+			});
 		},
 	},
 	computed: {
@@ -150,6 +136,9 @@ export default {
 		},
 		ylComp(){
 			return this.mokuai.indexOf('yule')!=-1 ? 'yule' : 'defmod';
+		},
+		jsComp(){
+			return this.mokuai.indexOf('deadline')!=-1 ? 'deadline' : 'defmod';
 		},
 	},
 	data: () => ({

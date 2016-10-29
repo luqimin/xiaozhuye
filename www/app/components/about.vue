@@ -19,9 +19,6 @@
 </template>
 
 <script>
-import store from '../store';
-import api from '../api';
-
 export default {
 	data: ()=> ({
         num: 0,

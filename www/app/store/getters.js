@@ -10,3 +10,4 @@ export const mokuai = state => state.mokuai;
 export const SITES = state => state.SITES;
 export const USERSITES = state => state.USERSITES;
 export const isShowSitesconfig = state => state.isShowSitesconfig;
+export const isShowAlert = state => state.isShowAlert;

@@ -23,7 +23,8 @@ const state = {
     mokuai: MODCONF, //包含：sites,gnnews,gwnews,duanzi,yule
     SITES: [],
     USERSITES: [],
-    isShowSitesconfig: 0
+    isShowSitesconfig: 0,
+    isShowAlert: 0
 }
 
 const mutations = {

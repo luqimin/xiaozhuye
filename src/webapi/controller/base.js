@@ -43,7 +43,7 @@ export default class extends think.controller.base {
     }
 
     __call() {
-            this.fail("NEED_LOGIN");
+            this.fail("接口不存在");
         }
         //用户信息
     userInfo() {

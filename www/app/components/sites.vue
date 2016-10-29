@@ -17,6 +17,9 @@
         <transition name="fade">
             <component v-bind:is="siteModal"></component>
         </transition>
+        <transition name="fade">
+            <alert show="isShowAlert" :type="alertType" :title="alertTitle" :content="alertContent"></alert>
+        </transition>
 	</div>
 </template>
 
@@ -26,6 +29,7 @@ import { mapGetters, mapActions } from 'vuex';
 import Cookie from 'js-cookie';
 import api from '../api';
 import firstBy from '../plugin/firstby';
+import alert from './alert';
 
 export default {
     created () {
@@ -35,6 +39,7 @@ export default {
         }
     },
     components:{
+        alert,
         siteconfig :(resolve) => {
 			setTimeout(()=>{
 				require(['./siteconfig'], (component) => {
@@ -44,14 +49,18 @@ export default {
 		}
     },
     data: () => ({
-		clickFlag: 0
+		clickFlag: 0,
+        alertType: 'fail',
+        alertTitle: '请登录',
+        alertContent: '小主页部分功能需要用户登录后方能使用'
     }),
     computed: {
         ...mapGetters([
             'SITES',
             'USERSITES',
             'isShowSitesconfig',
-            'isLogin'
+            'isLogin',
+            'isShowAlert'
         ]),
         siteModal(){
 			return this.clickFlag
@@ -117,7 +126,10 @@ export default {
         },
         addSite () {
             if(!this.isLogin){
-                alert('请登录');
+                this.$store.commit('updateParam', {
+                    key:['isShowAlert'],
+                    value: [1]
+                });
                 return;
             }
             this.$store.commit('toggleSiteconfig');

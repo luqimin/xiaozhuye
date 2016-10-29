@@ -1,5 +1,9 @@
 /*公共样式*/
 
+.btn:focus {
+    outline: 0;
+}
+
 input:-webkit-autofill,
 textarea:-webkit-autofill,
 select:-webkit-autofill {
@@ -28,6 +32,16 @@ select:-webkit-autofill {
 .alert-dismissable .close,
 .alert-dismissible .close {
     right: 0;
+}
+
+.alert.top {
+    position: fixed;
+    top: 30px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    width: 50%;
+    z-index: 1050;
 }
 
 .list-group-item {
@@ -72,8 +86,6 @@ select:-webkit-autofill {
 .submitSiteWrap {
     margin: 16px 0 -10px 0;
 }
-
-.submitSiteWrap .error {}
 
 .addSiteLineTwo {
     margin-top: 6px;
@@ -178,17 +190,23 @@ select:-webkit-autofill {
 
 /*about*/
 
-.about {}
-
 .about .panel-heading {
     padding: 2px 15px;
 }
+
 .about .panel-title {
     margin-top: 2px;
     font-size: 13px;
 }
+
 .about-page {
     margin: 0;
+}
+
+.about .btn-default.disabled:hover,
+.about .btn-default.disabled:focus,
+.about .btn-default.disabled.focus {
+    background-color: transparent;
 }
 
 
@@ -214,15 +232,109 @@ select:-webkit-autofill {
 
 /*登录浮层动画*/
 
-.login-fade-enter-active {
-    transition: all .25s ease;
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s
 }
 
-.login-fade-leave-active {
-    transition: all .6s ease-in-out;
+.fade-enter,
+.fade-leave {
+    opacity: 0
 }
 
-.login-fade-enter,
-.login-fade-leave-active {
+
+/*deadline*/
+
+.deadline .panel-heading {
+    padding: 2px 15px;
+}
+
+.deadline .panel-body {
+    padding: 0 0 15px 15px;
+}
+
+.deadline .panel-title {
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+.deadline .funicon {
+    display: inline-block;
+    font-size: 34px;
+    font-weight: 300;
+    line-height: 24px;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.deadline .funicon:hover {
+    opacity: 1;
+}
+
+.deadline .note {
+    padding-right: 15px;
+    text-align: justify;
+    overflow: hidden;
+}
+
+.deadline .number {
+    padding: 3px 6px;
+    font-size: 66px;
+    font-weight: 200;
+    line-height: 1;
+    text-align: right;
+    color: #50ae55;
+    border-radius: 6px;
+    opacity: 1;
+    transition: all .25s;
+}
+
+.deadline .count {
+    position: relative;
+}
+
+.deadline .count .arrow {
+    position: absolute;
+    top: 11px;
+    width: 50px;
+    cursor: pointer;
     opacity: 0;
+    transition: opacity .3s;
+}
+
+.deadline .count .arrow.disable {
+    display: none;
+}
+
+.deadline .count:hover .arrow {
+    opacity: 1;
+}
+
+.deadline .count .arrow img {
+    width: 100%;
+}
+
+.deadline .count .left {
+    left: -15px;
+}
+
+.deadline .count .right {
+    left: 35px;
+}
+
+.deadline .number span {
+    font-size: 13px;
+}
+
+.deadline .addNote {
+    margin: 15px 15px 15px 0;
+}
+
+.deadline .addNote .btn-note {
+    margin-right: 10px;
+}
+
+.deadline .cov-vue-date {
+    display: block!important;
 }
