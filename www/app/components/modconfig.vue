@@ -59,7 +59,7 @@ export default {
                 });
             }
             //记录cookie
-            Cookie.set('usr_mokuai', _mokuai.join(','));
+            Cookie.set('usr_mokuai', _mokuai.join(','),{ expires: 366});
             this.$store.commit('updateParam', {
                 key:['mokuai'],
                 value: [_mokuai]
