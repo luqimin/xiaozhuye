@@ -1,3 +1,16 @@
+<style>
+    .deadline .addNote {
+        margin: 15px 15px 15px 0;
+    }
+
+    .deadline .addNote .btn-note {
+        margin-right: 10px;
+    }
+
+    .deadline .cov-vue-date {
+        display: block!important;
+    }
+</style>
 <template>
     <div v-show="isShow" class="addNote">
         <div class="form-group">

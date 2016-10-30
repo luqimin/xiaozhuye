@@ -37,9 +37,10 @@
 			<h1>
 				<!--<%= title%>-->
 			</h1>
-
+			<component v-bind:is="noteComp"></component>
 			<div class="row">
 				<div class="col-md-3">
+					<component v-bind:is="bdComp"></component>
 					<Sites></Sites>
 					<about></ahout>
 				</div>
@@ -52,7 +53,6 @@
 				<div class="col-md-3">
 					<modconfig></modconfig>
 					<component v-bind:is="jsComp"></component>
-					<component v-bind:is="bdComp"></component>
 					<component v-bind:is="ylComp"></component>
 				</div>
 			</div>
@@ -107,6 +107,11 @@ export default {
 				resolve(component);
 			});
 		},
+		notepad :(resolve) => {
+			require(['./notepad'], (component) => {
+				resolve(component);
+			});
+		},
 		deadline :(resolve) => {
 			require(['./deadline'], (component) => {
 				resolve(component);
@@ -136,6 +141,9 @@ export default {
 		},
 		ylComp(){
 			return this.mokuai.indexOf('yule')!=-1 ? 'yule' : 'defmod';
+		},
+		noteComp(){
+			return this.mokuai.indexOf('notepad')!=-1 ? 'notepad' : 'defmod';
 		},
 		jsComp(){
 			return this.mokuai.indexOf('deadline')!=-1 ? 'deadline' : 'defmod';

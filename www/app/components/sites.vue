@@ -2,7 +2,7 @@
 	<div class="panel">
 		<div class="panel-body">
             <div class="input-group">
-                <input @input="searchSite" @keyup.enter="gotoSite" type="text" class="form-control" placeholder="智能筛选 Enter跳转" autofocus>
+                <input @input="searchSite" @keyup.enter="gotoSite" type="text" class="form-control" placeholder="智能筛选 Enter跳转" :autofocus="mokuai.indexOf('baidu')==-1" tabindex="2">
                 <span class="input-group-btn">
                     <button @click="addSite" class="addSiteBtn btn btn-link" type="button">配置</button>
                 </span>
@@ -58,6 +58,7 @@ export default {
         ...mapGetters([
             'SITES',
             'USERSITES',
+            'mokuai',
             'isShowSitesconfig',
             'isLogin',
             'isShowAlert'

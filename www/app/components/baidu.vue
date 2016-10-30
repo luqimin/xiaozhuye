@@ -1,7 +1,7 @@
 <template>
     <div class="baidu">
         <div class="input-group" :class="{'has-error':isError}">
-            <input @input="input" @keyup.enter="search" type="text" v-model="word" class="form-control" placeholder="输入关键字搜索">
+            <input @input="input" @keyup.enter="search" type="text" v-model="word" class="form-control" placeholder="输入关键字搜索" autofocus tabindex="1">
             <span class="input-group-btn">
                 <button @click="search" class="btn btn-primary" type="button">百度一下</button>
             </span>

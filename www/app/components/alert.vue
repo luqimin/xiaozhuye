@@ -26,7 +26,7 @@ export default {
     },
     watch: {
         isShowAlert () {
-            if (this._time) clearTimeout(this._time)
+            if (this._time) clearTimeout(this._time);
             this._time = setTimeout(() => {
                 this.$store.commit('updateParam', {
                     key:['isShowAlert'],

@@ -44,6 +44,20 @@ select:-webkit-autofill {
     z-index: 1050;
 }
 
+.funicon {
+    display: inline-block;
+    font-size: 34px;
+    font-weight: 300;
+    line-height: 24px;
+    opacity: 0.6;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.funicon:hover {
+    opacity: 1;
+}
+
 .list-group-item {
     padding: 10px 15px;
 }
@@ -240,101 +254,4 @@ select:-webkit-autofill {
 .fade-enter,
 .fade-leave {
     opacity: 0
-}
-
-
-/*deadline*/
-
-.deadline .panel-heading {
-    padding: 2px 15px;
-}
-
-.deadline .panel-body {
-    padding: 0 0 15px 15px;
-}
-
-.deadline .panel-title {
-    margin-top: 5px;
-    font-size: 13px;
-}
-
-.deadline .funicon {
-    display: inline-block;
-    font-size: 34px;
-    font-weight: 300;
-    line-height: 24px;
-    opacity: 0.6;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.deadline .funicon:hover {
-    opacity: 1;
-}
-
-.deadline .note {
-    padding-right: 15px;
-    text-align: justify;
-    overflow: hidden;
-}
-
-.deadline .number {
-    padding: 3px 6px;
-    font-size: 66px;
-    font-weight: 200;
-    line-height: 1;
-    text-align: right;
-    color: #50ae55;
-    border-radius: 6px;
-    opacity: 1;
-    transition: all .25s;
-}
-
-.deadline .count {
-    position: relative;
-}
-
-.deadline .count .arrow {
-    position: absolute;
-    top: 11px;
-    width: 50px;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity .3s;
-}
-
-.deadline .count .arrow.disable {
-    display: none;
-}
-
-.deadline .count:hover .arrow {
-    opacity: 1;
-}
-
-.deadline .count .arrow img {
-    width: 100%;
-}
-
-.deadline .count .left {
-    left: -15px;
-}
-
-.deadline .count .right {
-    left: 35px;
-}
-
-.deadline .number span {
-    font-size: 13px;
-}
-
-.deadline .addNote {
-    margin: 15px 15px 15px 0;
-}
-
-.deadline .addNote .btn-note {
-    margin-right: 10px;
-}
-
-.deadline .cov-vue-date {
-    display: block!important;
 }

@@ -17,8 +17,11 @@ export const MODARRAY = {
     duanzi: {
         name: '搞笑段子'
     },
+    notepad: {
+        name: '云记事本'
+    },
     deadline: {
-        name: '倒计时'
+        name: '云倒计时'
     }
 }
 export const MODCONF = ['gnnews', 'baidu'];
