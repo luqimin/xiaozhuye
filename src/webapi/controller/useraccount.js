@@ -2,6 +2,7 @@
 
 import Base from './base.js';
 import _ from 'lodash';
+import Memcached from 'memcached';
 
 export default class extends Base {
     /**
@@ -15,19 +16,69 @@ export default class extends Base {
         this.end();
     }
 
+    async testAction() {
+        memcached.set('foo', 'bar', 1000, (err, res) => {
+            console.log(err + '   ======err');
+            console.log(res + '   ======res');
+        });
+    }
+
+    async testtAction() {
+        let memcached = this.model('memcached');
+        let aaa = await memcached.get('qilu@163.com#code');
+        console.log(aaa);
+    }
+
+    async sendemailcodeAction() {
+        let email = this.post('email');
+        if (!email) {
+            return this.fail('请输入邮箱');
+        }
+
+        let userModel = this.model("useraccount");
+        //查询数据库是否有当前用户名
+        let isHasEmail = await userModel.where({
+            email: email
+        }).find();
+        console.log(isHasEmail);
+        if (!think.isEmpty(isHasEmail)) {
+            return this.fail(1002, "邮箱已存在");
+        }
+
+        let cacheModel = this.model('memcached');
+
+        let code = Math.round(Math.random() * 1000000);
+
+        let emailRes = await global.sendEmail({
+            to: email,
+            subject: '[小主页] 注册验证码',
+            html: '<h4>验证码如下</h4><h2>' + code + '</h2><p>来自<a href="xiaozhye.com" target="_blank">小主页</a></p>'
+        });
+
+        if (emailRes) {
+            let setCache = await cacheModel.set(email + '#code', code, 10 * 60);
+            if (setCache) {
+                this.success('发送成功');
+                console.log('写入memcache成功=== ' + email + '#code' + ' ===' + code);
+            }
+        }
+    }
+
     async registerAction() {
+
+
         //定义接收参数
         let paramName = this.post("username");
         let parmPassword = this.post("password");
+        let parmEmail = this.post("email");
+        let parmCode = this.post("code");
         let inviteCode = this.post("inviteCode");
         let isVip = 0;
+
         if (inviteCode == 'xiaozhuyetiny') {
             isVip = 1;
-        } else if (inviteCode == 'fuckxiaozhuye') {
-            isVip = 0;
-        } else {
-            return this.fail("邀请码无效");
         }
+
         //定义数据模型
         let model = this.model("useraccount");
         //定义个人id
@@ -39,11 +90,21 @@ export default class extends Base {
         if (!think.isEmpty(isHasName)) {
             return this.fail(1001, "用户名已存在");
         }
+
+        //验证码邮件/手机验证码是否正确
+        let cacheModel = this.model('memcached');
+        let code = await cacheModel.get(parmEmail + '#code');
+
+        if (code != parmCode) {
+            return this.fail(1005, '验证码不正确');
+        }
+
         //数据库写入记录
         try {
             let insertId = await model.add({
                 name: paramName,
                 password: think.md5(parmPassword),
+                email: parmEmail,
                 isvip: isVip,
                 registerDate: think.datetime() // new Date()
             });

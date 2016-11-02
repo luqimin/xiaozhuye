@@ -13,10 +13,6 @@ Vue.use(Vuex)
 
 const state = {
     isLogin: 0,
-    loginSuccess: 0,
-    registerSuccess: 0,
-    loginFail: 0,
-    registerFail: 0,
     username: '',
     password: '',
     isvip: false,
@@ -41,38 +37,6 @@ const mutations = {
     [types.INIT_SITES](state, list) {
         state.SITES = list.concat(state.SITES);
     },
-    [types.USER_LOGIN](state, result) {
-        if (!result.body.errno) {
-            state.mokuai = result.body.data.mokuai.split(',');
-            state.loginSuccess = 1;
-            state.loginFail = 0;
-            state.isvip = result.body.data;
-            setTimeout(() => {
-                state.isLogin = 1;
-                api.mySites((res) => {
-                    state.USERSITES = res;
-                });
-            }, 666);
-        } else {
-            state.loginFail = result.body.errmsg;
-        }
-    },
-    [types.USER_REGISTER](state, result) {
-        console.log(result);
-        if (!result.body.errno) {
-            state.registerSuccess = 1;
-            state.registerFail = 0;
-            setTimeout(() => {
-                state.isLogin = 1;
-                state.isvip = result.body.data;
-                api.mySites((res) => {
-                    state.USERSITES = res;
-                });
-            }, 666);
-        } else {
-            state.registerFail = result.body.errmsg;
-        }
-    },
     [types.USER_LOGOUT](state) {
         state.username = '';
         state.password = '';
@@ -87,9 +51,6 @@ const mutations = {
     },
     updatePassword(state, pwd) {
         state.password = pwd;
-    },
-    updateSites(state, list) {
-        state.SITES = list;
     },
     updateParam(state, param) {
         for (let i in param.key) {

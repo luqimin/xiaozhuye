@@ -9,7 +9,12 @@ export default class extends think.controller.base {
     async __before(action) {
 
         //登录、注册不验证token
-        if (this.http.action === 'login' || this.http.action === 'register' || this.http.action === 'get') {
+        if (this.http.action === 'login' ||
+            this.http.action === 'register' ||
+            this.http.action === 'get' ||
+            this.http.action === 'sendemailcode' ||
+            this.http.action === 'test' ||
+            this.http.action === 'testt') {
             return;
         }
         //获取http-header token

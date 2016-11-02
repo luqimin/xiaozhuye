@@ -21,26 +21,6 @@ export const initSites = ({ commit }) => {
 
 }
 
-export const userLogin = ({ commit, state }) => {
-    api.login(res => {
-        commit(types.USER_LOGIN, res);
-    }, {
-        username: state.username,
-        password: state.password
-    });
-}
-
-export const userRegister = ({ commit, state }, inviteCode) => {
-    api.register(res => {
-        if (typeof res != 'object') { return };
-        commit(types.USER_REGISTER, res);
-    }, {
-        username: state.username,
-        password: state.password,
-        inviteCode: inviteCode
-    });
-}
-
 export const userLogout = ({ commit, state }) => {
     api.logout(res => {
         if (res.errno == 0) {
