@@ -38,7 +38,7 @@ export default class extends Base {
         let sitePy = slugify(siteName);
         let model = this.model('tiny_sites');
 
-        if (secret) {
+        if (!secret) {
             secret = '1';
         }
         if (isfocus) {
@@ -96,6 +96,9 @@ export default class extends Base {
             this.fail(1000, '用户权限不够, 不允许添加网址');
         }
 
+        if (siteUrl.indexOf('http://') == -1 || siteUrl.indexOf('https://') == -1) {
+            siteUrl = 'http://' + siteUrl;
+        }
         //写入数据库
         try {
             let insertId = await model.add({

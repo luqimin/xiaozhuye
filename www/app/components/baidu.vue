@@ -3,7 +3,7 @@
         <div class="input-group" :class="{'has-error':isError}">
             <input @input="input" @keyup.enter="search" type="text" v-model="word" class="form-control" placeholder="输入关键字搜索" autofocus tabindex="1">
             <span class="input-group-btn">
-                <button @click="search" class="btn btn-primary" type="button">百度一下</button>
+                <a :href="url" class="btn btn-primary" type="button" target="_blank">百度一下</button>
             </span>
         </div>
     </div>
@@ -14,6 +14,7 @@
 export default {
     data: ()=>({
         word: '',
+        url: 'javascript:void(0)',
         isError: false
     }),
     methods: {
@@ -28,7 +29,8 @@ export default {
             return;
         },
         input(e){
-            console.log(e.target.value);
+            let baiduUrl = 'https://www.baidu.com/s?ie=utf-8&wd=';
+            this.url = baiduUrl + this.word;
             this.isError = e.target.value ? false : true;
         }
     },

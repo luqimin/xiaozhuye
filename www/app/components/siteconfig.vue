@@ -55,6 +55,7 @@
                                 <option value="yy">音乐</option>
                                 <option value="zp">招聘</option>
                                 <option value="yx">邮箱</option>
+                                <option value="js">技术</option>
                                 <option value="ty">体育</option>
                                 <option value="rj">软件</option>
                                 <option value="sh">生活</option>
@@ -168,7 +169,7 @@ export default {
             Cookie.set('usr_sites', this.userSitesId.join(','), { expires: 366, path: '/' });
         },
         deleteSite(e){
-            let siteId = parseInt(e.target.id);
+            let siteId = parseInt(e.target.id || e.target.parentNode.id);
             let _userSites = this.USERSITES;
             let index = this.userSitesId.indexOf(siteId);
             //设置用户网址配置

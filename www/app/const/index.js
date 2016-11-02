@@ -25,3 +25,31 @@ export const MODARRAY = {
     }
 }
 export const MODCONF = ['gnnews', 'baidu'];
+export let ORDER = {
+    a: [{
+        name: 'baidu'
+    }],
+    b: [{
+            name: 'toutiao'
+        },
+
+        {
+            name: 'gnnews'
+        },
+
+        {
+            name: 'gwnews'
+        },
+
+        {
+            name: 'duanzi'
+        }
+    ],
+    c: [{
+            name: 'deadline'
+        },
+        {
+            name: 'yule'
+        }
+    ]
+}

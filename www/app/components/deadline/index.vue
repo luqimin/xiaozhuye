@@ -1,4 +1,8 @@
 <style>
+    .deadline a {
+        text-decoration: none;
+    }
+
     .deadline .panel-heading {
         padding: 2px 15px;
     }
@@ -78,7 +82,7 @@
 	<div class="deadline panel panel-success">
 		<div class="panel-heading">
             <div class="clearfix">
-                <span class="panel-title pull-left">{{addTitle || notes[num].title}}</span>
+                <span class="panel-title pull-left">{{addTitle || notes[num].title}} &nbsp;&nbsp;&nbsp;<a v-if="canDelete" @click="deleteNote" href="javascript:;">[&nbsp;删除&nbsp;]</a></span>
                 <div class="pull-right">
                     <span @click="addNote" class="funicon">{{addBtn}}</span>
                 </div>
@@ -166,6 +170,9 @@ export default {
 		addComp(){
 			return this.isAdd ? 'add' : 'defmod';
 		},
+        canDelete(){
+            return this.isLogin && this.notes[0].title!='新增一条倒计时';
+        }
     },
 	methods: {
         addNote(){
@@ -179,6 +186,21 @@ export default {
             this.addTitle = this.addTitle ? '' : '增加一条倒计时';
             this.addBtn = this.addBtn == '×' ? '+' : '×';
             this.isAdd = !this.isAdd;
+        },
+        deleteNote(){
+            let that = this;
+            Vue.http.post('/webapi/deadline/delete', {
+                id: that.notes[that.num].id
+            }).then(res => {
+                if(!res.body.errno){
+                    if (that.notes.length > 1) {
+                        that.notes.splice(that.num, 1);
+                    } else {
+                        that.notes = [{title:'新增一条倒计时',content:'添加一条倒计时, 不错过每一个重要日期! 猛戳右上角 "+"!',data: '166'}];
+                    }
+                    that.num = 0;
+                }
+            });
         },
 		prev(){
             if (this.num > 0) {

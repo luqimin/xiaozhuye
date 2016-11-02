@@ -40,20 +40,20 @@
 			<component v-bind:is="noteComp"></component>
 			<div class="row">
 				<div class="col-md-3">
-					<component v-bind:is="bdComp"></component>
+					<component v-bind:is="a0Comp"></component>
 					<Sites></Sites>
 					<about></ahout>
 				</div>
 				<div class="col-md-6">
-					<component v-bind:is="ttComp"></component>
-					<component v-bind:is="gnComp"></component>
-					<component v-bind:is="gwComp"></component>
-					<component v-bind:is="dzComp"></component>			
+					<component v-bind:is="b0Comp"></component>
+					<component v-bind:is="b1Comp"></component>
+					<component v-bind:is="b2Comp"></component>
+					<component v-bind:is="b3Comp"></component>
 				</div>
 				<div class="col-md-3">
 					<modconfig></modconfig>
-					<component v-bind:is="jsComp"></component>
-					<component v-bind:is="ylComp"></component>
+					<component v-bind:is="c0Comp"></component>
+					<component v-bind:is="c1Comp"></component>
 				</div>
 			</div>
 		</div>
@@ -67,6 +67,7 @@ import LoginPop from './loginpop';
 import modconfig from './modconfig';
 import defmod from './default';
 import about from './about';
+import { ORDER } from '../const';
 
 import { mapGetters, mapActions } from 'vuex';
 
@@ -124,29 +125,29 @@ export default {
 			'isLogin',
 			'mokuai',
 		]),
-		bdComp(){
-			return this.mokuai.indexOf('baidu')!=-1 ? 'baidu' : 'defmod';
+		a0Comp(){
+			return this.mokuai.indexOf(ORDER.a[0].name)!=-1 ? ORDER.a[0].name : 'defmod';
 		},
-		ttComp(){
-			return this.mokuai.indexOf('toutiao')!=-1 ? 'toutiao' : 'defmod';
+		b0Comp(){
+			return this.mokuai.indexOf(ORDER.b[0].name)!=-1 ? ORDER.b[0].name : 'defmod';
 		},
-		gnComp(){
-			return this.mokuai.indexOf('gnnews')!=-1 ? 'gnnews' : 'defmod';
+		b1Comp(){
+			return this.mokuai.indexOf(ORDER.b[1].name)!=-1 ? ORDER.b[1].name : 'defmod';
 		},
-		gwComp(){
-			return this.mokuai.indexOf('gwnews')!=-1 ? 'gwnews' : 'defmod';
+		b2Comp(){
+			return this.mokuai.indexOf(ORDER.b[2].name)!=-1 ? ORDER.b[2].name : 'defmod';
 		},
-		dzComp(){
-			return this.mokuai.indexOf('duanzi')!=-1 ? 'duanzi' : 'defmod';
+		b3Comp(){
+			return this.mokuai.indexOf(ORDER.b[3].name)!=-1 ? ORDER.b[3].name : 'defmod';
 		},
-		ylComp(){
-			return this.mokuai.indexOf('yule')!=-1 ? 'yule' : 'defmod';
+		c0Comp(){
+			return this.mokuai.indexOf(ORDER.c[0].name)!=-1 ? ORDER.c[0].name : 'defmod';
+		},
+		c1Comp(){
+			return this.mokuai.indexOf(ORDER.c[1].name)!=-1 ? ORDER.c[1].name : 'defmod';
 		},
 		noteComp(){
 			return this.mokuai.indexOf('notepad')!=-1 ? 'notepad' : 'defmod';
-		},
-		jsComp(){
-			return this.mokuai.indexOf('deadline')!=-1 ? 'deadline' : 'defmod';
 		},
 	},
 	data: () => ({
