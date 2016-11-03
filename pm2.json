@@ -1,10 +1,10 @@
 {
   "apps": [{
-    "name": "think",
+    "name": "xiaozhuye",
     "script": "www/production.js",
-    "cwd": "/Users/lqm/xiaozhuye",
-    "exec_mode": "cluster",
-    "instances": 0,
+    "cwd": "/www/web/123",
+    "exec_mode": "fork",
+ //   "instances": 0,
     "max_memory_restart": "1G",
     "autorestart": true,
     "node_args": [],
