@@ -1,7 +1,5 @@
 <template>
 	<div id="app" class="">
-
-		<!--<button v-on:click="addDuanzi">ssssss</button>-->
 		<nav class="navbar navbar-inverse">
 			<div class="container container-fluid">
 				<div class="navbar-header">
