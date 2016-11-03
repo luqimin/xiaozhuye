@@ -25,8 +25,20 @@ export default class extends Base {
                 '>': (new Date()).getTime(),
                 '<': (new Date()).getTime() + 24 * 3600 * 1000,
             }
-        }, '', ['userid', 'day']);
-        console.log(list);
-        global.sendEmail();
+        }, '', ['userid', 'title', 'content', 'day']);
+
+        for (let i = 0, _length = list.length; i < _length; i++) {
+            let userModel = this.model('webapi/useraccount');
+            let userInfo = await userModel.findInfo({
+                id: list[i].userid
+            }, ['email', 'nickName']);
+            if (userInfo.email) {
+                global.sendEmail({
+                    to: userInfo.email,
+                    subject: '[小主页] 您的倒计时 【' + list[i].title + '】 快到期啦',
+                    html: '<h4>倒计时详情:</h4><h2>' + list[i].content + '</h2><h2>到期时间: ' + list[i].day + '</h2><p>来自<a href="xiaozhye.com" target="_blank">小主页</a></p>'
+                });
+            }
+        }
     }
 }

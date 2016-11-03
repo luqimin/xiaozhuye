@@ -79,6 +79,13 @@ export default class extends Base {
             isVip = 1;
         }
 
+        if (!parmEmail) {
+            return this.fail(1006, "请输入邮箱");
+        }
+        if (!parmCode) {
+            return this.fail(1007, "请输入验证码");
+        }
+
         //定义数据模型
         let model = this.model("useraccount");
         //定义个人id
