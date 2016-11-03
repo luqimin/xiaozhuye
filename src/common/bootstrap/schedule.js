@@ -8,4 +8,4 @@ let pushDeadline = () => {
 let jobId = crontab.scheduleJob("00 10 * * *", pushDeadline);
 
 //f服务启动立即执行一次
-pushDeadline();
+// pushDeadline();
