@@ -17,8 +17,6 @@ slugify.config({
     separator: ''
 });
 
-
-
 export default class extends Base {
     /**
      * index action

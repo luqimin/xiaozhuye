@@ -8,6 +8,10 @@ export default class extends think.controller.base {
      */
     async __before(action) {
 
+        //页面加载写入csrf
+        let csrf = await this.session('__CSRF__');
+        await this.cookie('__CSRF__', csrf);
+
         //登录、注册不验证token
         if (this.http.action === 'login' ||
             this.http.action === 'register' ||

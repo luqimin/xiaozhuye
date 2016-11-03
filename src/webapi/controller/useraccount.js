@@ -3,6 +3,7 @@
 import Base from './base.js';
 import _ from 'lodash';
 import Memcached from 'memcached';
+import http from 'http';
 
 export default class extends Base {
     /**
@@ -35,17 +36,42 @@ export default class extends Base {
             return this.fail('请输入邮箱');
         }
 
+        let clientIp = this.ip();
+
         let userModel = this.model("useraccount");
         //查询数据库是否有当前用户名
         let isHasEmail = await userModel.where({
             email: email
         }).find();
-        console.log(isHasEmail);
+
         if (!think.isEmpty(isHasEmail)) {
             return this.fail(1002, "邮箱已存在");
         }
 
         let cacheModel = this.model('memcached');
+
+        //csrf检验
+        let csrf = await this.session('__CSRF__');
+        let clientCsrf = this.cookie('__CSRF__');
+        if (!clientCsrf || clientCsrf != csrf) {
+            return this.fail(1005, "csrf verification failed");
+        }
+
+        //判断邮箱发送次数
+        let emailCountCache = await cacheModel.get(email + '#email') || 0;
+        if (emailCountCache >= 3) {
+            return this.fail(1003, "同一个邮箱5分钟内只允许发3封邮件");
+        } else {
+            emailCountCache++;
+        }
+
+        //判断ip发送次数
+        let ipCountCache = await cacheModel.get(clientIp + '#ip') || 0;
+        if (ipCountCache >= 10) {
+            return this.fail(1004, "同一个ip5分钟内只允许发10封邮件");
+        } else {
+            ipCountCache++;
+        }
 
         let code = Math.round(Math.random() * 1000000);
 
@@ -57,9 +83,13 @@ export default class extends Base {
 
         if (emailRes) {
             let setCache = await cacheModel.set(email + '#code', code, 10 * 60);
-            if (setCache) {
+            let setEmailCache = await cacheModel.set(email + '#email', emailCountCache, 5 * 60);
+            let setIpCache = await cacheModel.set(clientIp + '#ip', ipCountCache, 5 * 60);
+            if (setCache && setEmailCache && setIpCache) {
                 this.success('发送成功');
                 console.log('写入memcache成功=== ' + email + '#code' + ' ===' + code);
+            } else {
+                return this.fail(1005, "系统错误");
             }
         }
     }
