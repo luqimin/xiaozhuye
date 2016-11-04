@@ -25,23 +25,24 @@ export default {
         page: [
             {
                 title :'小主页简介',
-                content: '<p>小主页是一个<span class="text-primary">轻量级的</span>、<span class="text-primary">可定制的</span>个人主页，您完全可以把小主页设置成您的首页</p>'
+                content: '<p>小主页是一个<span class="text-primary">轻量级的</span>、<span class="text-primary">可定制的</span>个人主页，您完全可以把小主页设置成您的首页</p>'+
+                        '<p>小主页基于 <code>ThinkJS</code> <code>Vue2.0</code> 制作</p><p>您可以在此查看源码: <a href="https://github.com/luqimin/xiaozhuye" target="_blank">GitHub</a></p>'
             },
             {
                 title :'云同步',
                 content: '<p>小主页提供简单的用户系统, 在您注册帐号后, 您可以保存您在本站的所有配置</p><p>我保证您在所有电脑上打开的小主页都<span class="text-warning">一个德行</span></p>'
             },
             {
-                title :'模块定制',
-                content: '小主页有许多模块: 搜索、新闻、段子... 您可以任意配置</p><p>如果您不满足目前小主页已有模块, 请联系我! '
-            },
-            {
                 title :'网址定制',
                 content: '<p>网址是导航网站的最重要功能, 小主页允许您完全定义自己的网址库</p><p>在<span class="text-danger">经过您同意</span>的前提下, 小主页还可以分享您添加的网址给所有用户</p>'
             },
             {
-                title :'源码说明',
-                content: '<p>小主页基于 <code>ThinkJS</code> <code>Vue2.0</code> 制作</p><p>您可以在此查看源码: <a href="https://github.com/luqimin/xiaozhuye" target="_blank">GitHub</a></p>'
+                title :'模块定制',
+                content: '小主页有许多模块: 搜索、新闻、便签、... 您可以任意配置</p><p>如果您不满足目前小主页已有模块, 请联系我! <code>=&gt;</code> '
+            },
+            {
+                title :'联系我',
+                content: '<p>WeChat: <code>luqimin</code></p><p>QQ: <code>6800316</code></p><p>Email: <a href="mailto:qilu@163.com">qilu@163.com</a></p>'
             }
         ]
     }),
