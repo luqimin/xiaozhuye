@@ -26,9 +26,11 @@ export default class extends Base {
                 '<': (new Date()).getTime() + 24 * 3600 * 1000,
             }
         }, '', ['userid', 'title', 'content', 'day']);
-
+        if (!list) {
+            return;
+        }
+        let userModel = this.model('webapi/useraccount');
         for (let i = 0, _length = list.length; i < _length; i++) {
-            let userModel = this.model('webapi/useraccount');
             let userInfo = await userModel.findInfo({
                 id: list[i].userid
             }, ['email', 'nickName']);

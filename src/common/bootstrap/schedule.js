@@ -5,7 +5,7 @@ let pushDeadline = () => {
 }
 
 //每天10点执行
-let jobId = crontab.scheduleJob("00 10 * * *", pushDeadline);
+let jobId = crontab.scheduleJob("10 10,18 * * *", pushDeadline);
 
 //f服务启动立即执行一次
 // pushDeadline();
