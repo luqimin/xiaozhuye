@@ -4,6 +4,12 @@ import Base from './base.js';
 import _ from 'lodash';
 import Memcached from 'memcached';
 import http from 'http';
+// import Geetest from 'geetest';
+
+// let pcGeetest = new Geetest({
+//     geetest_id: '05a8b5b7153e11f05a6330c1b66bbf3d',
+//     geetest_key: '7e55d25619bd4660a40f177d869cef8b'
+// });
 
 export default class extends Base {
     /**
@@ -60,7 +66,7 @@ export default class extends Base {
         //判断邮箱发送次数
         let emailCountCache = await cacheModel.get(email + '#email') || 0;
         if (emailCountCache >= 3) {
-            return this.fail(1003, "同一个邮箱5分钟内只允许发3封邮件");
+            return this.fail(1003, "邮件发送太频繁，请5分钟后操作");
         } else {
             emailCountCache++;
         }
@@ -68,7 +74,7 @@ export default class extends Base {
         //判断ip发送次数
         let ipCountCache = await cacheModel.get(clientIp + '#ip') || 0;
         if (ipCountCache >= 10) {
-            return this.fail(1004, "同一个ip5分钟内只允许发10封邮件");
+            return this.fail(1004, "ip操作太频繁，请5分钟后操作");
         } else {
             ipCountCache++;
         }

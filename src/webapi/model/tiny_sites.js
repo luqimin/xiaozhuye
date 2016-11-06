@@ -3,11 +3,27 @@
  * model
  */
 export default class extends think.model.base {
-    getSites(whereOpt, orderOpt, limitNum) {
+    async getSites(whereOpt, orderOpt, limitNum) {
         if (!limitNum) {
             limitNum = 166;
         }
-        let data = this.where(whereOpt).order(orderOpt).limit(limitNum).select();
-        return data;
+
+        if (whereOpt.isconst) {
+            let cacheModel = this.model('memcached');
+            let originSites = await cacheModel.get('originSites');
+
+            if (!originSites) {
+                let originSites = await this.where(whereOpt).order(orderOpt).limit(limitNum).select();
+                let setSitesCache = await cacheModel.set('originSites', originSites, 30 * 24 * 60 * 60);
+                return setSitesCache && originSites;
+            } else {
+                return originSites;
+            }
+
+        } else {
+            let data = this.where(whereOpt).order(orderOpt).limit(limitNum).select();
+            return data;
+        }
+
     }
 }
