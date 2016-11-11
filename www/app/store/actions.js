@@ -13,7 +13,12 @@ export const initUser = ({ commit }) => {
 }
 
 export const initSites = ({ commit }) => {
+    if (window.localStorage && localStorage.getItem('constSites')) {
+        commit(types.INIT_SITES, JSON.parse(localStorage.getItem('constSites')));
+        return;
+    }
     api.getSites((res) => {
+        window.localStorage && localStorage.setItem('constSites', JSON.stringify(res));
         commit(types.INIT_SITES, res)
     }, {
         isConst: 1
@@ -21,7 +26,7 @@ export const initSites = ({ commit }) => {
 
 }
 
-export const userLogout = ({ commit, state }) => {
+export const userLogout = ({ commit }) => {
     api.logout(res => {
         if (res.errno == 0) {
             commit(types.USER_LOGOUT);
