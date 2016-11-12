@@ -110,11 +110,8 @@
 import { mapGetters } from 'vuex';
 
 import Vue from 'vue';
-import VueResource from 'vue-resource';
 import defmod from '../default';
 import alert from '../alert';
-
-Vue.use(VueResource);
 
 export default {
     created(){

@@ -30,9 +30,11 @@ import api from '../api';
 export default {
     created(){
 		this.init();
-		setTimeout(()=>{
-			this.refresh();
-		},1000);
+		if(window.localStorage && localStorage.getItem('duanzi')){
+			setTimeout(()=>{
+				this.refresh();
+			},1000);
+		}
 	},
 	data: ()=> ({
         lists: [],

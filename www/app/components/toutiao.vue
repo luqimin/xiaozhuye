@@ -19,9 +19,11 @@ import api from '../api';
 let TOUTIAO = {
     created(){
         this.init();
-		setTimeout(()=>{
-			this.refresh();
-		},1000);
+		if(window.localStorage && localStorage.getItem('toutiao')){
+			setTimeout(()=>{
+				this.refresh();
+			},1000);
+		}
     },
     data: ()=> ({
         lists: [],

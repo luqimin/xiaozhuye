@@ -31,10 +31,7 @@
 
 <script>
 import Vue from 'vue';
-import VueResource from 'vue-resource';
 import myDatepicker from 'vue-datepicker';
-
-Vue.use(VueResource);
 
 export default {
     props: [
