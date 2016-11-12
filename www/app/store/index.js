@@ -16,7 +16,7 @@ const state = {
     username: '',
     password: '',
     isvip: false,
-    mokuai: MODCONF, //包含：sites,gnnews,gwnews,duanzi,yule
+    mokuai: [], //包含：sites,gnnews,gwnews,duanzi,yule
     SITES: [],
     USERSITES: [],
     isShowSitesconfig: 0,
