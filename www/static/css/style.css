@@ -63,6 +63,39 @@ select:-webkit-autofill {
 }
 
 
+/*带刷新的panel*/
+
+.refresh-header {
+    padding: 5px 15px;
+    font-size: 15px;
+}
+
+.refresh-header .btn-refresh {
+    margin-top: 6px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    transition: transform .6s;
+}
+
+.refresh-header .btn-refresh:hover {
+    transform: rotate(360deg);
+}
+
+.refresh-header .btn-refresh.ing {
+    animation: rotate 1s infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
 /*登录区域*/
 
 .login {
@@ -170,10 +203,6 @@ select:-webkit-autofill {
     margin: 0 0 10px 0;
 }
 
-.addon {}
-
-.addon .addonimg {}
-
 .col-md-3 .addon .addonimg {
     max-height: 180px;
 }
@@ -181,6 +210,18 @@ select:-webkit-autofill {
 .col-md-6 .addon .addonimg {
     height: 180px;
     cursor: -webkit-zoom-in;
+}
+
+.addon a {
+    text-decoration: none;
+}
+
+.addon .list-group-item {
+    transition: background-color .3s;
+}
+
+.addon .list-group-item:hover {
+    background-color: #f5f5f5;
 }
 
 .addon .addonimg.imgauto {

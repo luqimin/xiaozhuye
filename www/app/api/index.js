@@ -4,54 +4,22 @@ import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
 export default {
-    //获取国内焦点
-    toutiao(cb) {
-        Vue.http.get('/addons/fetch/toutiao', '').then(res => {
+    //获取新闻类addon列表
+    addon(cb, name, force) {
+        if (!force && window.localStorage && localStorage.getItem(name)) {
+            cb(JSON.parse(localStorage.getItem(name)));
+            return;
+        }
+        Vue.http.get('/addons/fetch/' + name, '').then(res => {
             // 响应成功回调
-            cb(JSON.parse(res.body));
+            let list = JSON.parse(res.body);
+            if (list && list.length) {
+                window.localStorage && localStorage.setItem(name, res.body);
+                cb(list);
+            }
         }, function(res) {
             // 响应错误回调
-            cb(JSON.parse(res.body));
-        });
-    },
-    //获取国内焦点
-    guonei(cb) {
-        Vue.http.get('/addons/fetch/gnfocus', '').then(res => {
-            // 响应成功回调
-            cb(JSON.parse(res.body));
-        }, function(res) {
-            // 响应错误回调
-            cb(JSON.parse(res.body));
-        });
-    },
-    //获取国外焦点
-    guowai(cb) {
-        Vue.http.get('/addons/fetch/gwfocus', '').then(res => {
-            // 响应成功回调
-            cb(JSON.parse(res.body));
-        }, function(res) {
-            // 响应错误回调
-            cb(JSON.parse(res.body));
-        });
-    },
-    //获取段子
-    duanzi(cb) {
-        Vue.http.get('/addons/fetch/duanzi', '').then(res => {
-            // 响应成功回调
-            cb(JSON.parse(res.body));
-        }, function(res) {
-            // 响应错误回调
-            cb(JSON.parse(res.body));
-        });
-    },
-    //获取花边新闻
-    yule(cb) {
-        Vue.http.get('/addons/fetch/yule', '').then(res => {
-            // 响应成功回调
-            cb(JSON.parse(res.body));
-        }, function(res) {
-            // 响应错误回调
-            cb(res);
+            cb(res.body);
         });
     },
     //用户登录
@@ -61,7 +29,7 @@ export default {
             cb(res);
         }, res => {
             // 失败回调
-            cb(res);
+            cb(res.body);
         });
     },
     //用户退出
@@ -71,7 +39,7 @@ export default {
             cb(res.body);
         }, function(res) {
             // 响应错误回调
-            cb(res);
+            cb(res.body);
         });
     },
     //用户注册
@@ -81,7 +49,7 @@ export default {
             cb(res);
         }, res => {
             // 失败回调
-            cb(res);
+            cb(res.body);
         });
 
     },
@@ -93,7 +61,7 @@ export default {
             cb(res.body.data);
         }, function(res) {
             // 响应错误回调
-            // cb(JSON.parse(res.body));
+            cb(res.body);
         });
     },
     //获取用户网址
@@ -104,7 +72,7 @@ export default {
             cb(res.body.data);
         }, function(res) {
             // 响应错误回调
-            // cb(JSON.parse(res.body));
+            cb(res.body);
         });
     },
     //模糊查询网址
@@ -115,7 +83,7 @@ export default {
             cb(res.body.data);
         }, function(res) {
             // 响应错误回调
-            // cb(JSON.parse(res.body));
+            cb(res.body);
         });
     },
     //编辑模块配置
@@ -125,7 +93,7 @@ export default {
             cb(res);
         }, res => {
             // 失败回调
-            cb(res);
+            cb(res.body);
         });
     },
     //编辑模块配置
@@ -135,7 +103,7 @@ export default {
             cb(res);
         }, res => {
             // 失败回调
-            cb(res);
+            cb(res.body);
         });
     },
     //用户添加网址入库
