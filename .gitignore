@@ -34,6 +34,7 @@ typings/
 #app
 /app/
 runtime/
+tiny.appcache
 # OS generated files #
 ######################
 .DS_Store
