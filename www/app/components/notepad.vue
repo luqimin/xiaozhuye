@@ -89,7 +89,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     created(){
@@ -111,10 +111,10 @@ export default {
     },
 	methods: {
         getNote(){
-            Vue.http.get('/webapi/notepad/get', '').then(res => {
-                if(!res.body.errno){
-                    if(res.body.data.length){
-                        this.notes = res.body.data;
+            axios.get('/webapi/notepad/get', '').then(res => {
+                if(!res.data.errno){
+                    if(res.data.data.length){
+                        this.notes = res.data.data;
                     }
                 }
             });
@@ -148,11 +148,11 @@ export default {
 
             let noteId = this.notes.length > 0 && this.notes[this.num].id || '';
             
-            Vue.http.post('/webapi/notepad/update', {
+            axios.post('/webapi/notepad/update', {
                 noteId: noteId,
                 noteContent: value
             }).then(res => {
-                if (!res.body.errno) {
+                if (!res.data.errno) {
                     that.msg = '更新成功';
                     if (!noteId) {
                         that.getNote();

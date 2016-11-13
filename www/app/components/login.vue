@@ -51,7 +51,7 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import Vue from 'vue';
+import axios from 'axios';
 
 import api from '../api';
 
@@ -97,12 +97,12 @@ export default {
 		login(){
 			let that = this;
 			api.login(res => {
-				if (!res.body.errno) {
+				if (!res.data.errno) {
 					that.loginSuccess = 1;
 					that.loginFail = 0;
 					that.$store.commit('updateParam', {
 						key:['isLogin', 'mokuai', 'isvip'],
-						value: [1, res.body.data.mokuai.split(','), res.body.data.isvip]
+						value: [1, res.data.data.mokuai.split(','), res.data.data.isvip]
 					});
 					api.mySites((res) => {
 						that.$store.commit('updateParam', {
@@ -111,7 +111,7 @@ export default {
 						});
 					});
 				} else {
-					that.loginFail = res.body.errmsg;
+					that.loginFail = res.data.errmsg;
 				}
 			}, {
 				username: that.username,
@@ -121,15 +121,15 @@ export default {
 		register(){
 			let that = this;
 			api.register(res => {
-				if (!res.body.errno) {
+				if (!res.data.errno) {
 					that.registerSuccess = 1;
 					that.registerFail = 0;
 					that.$store.commit('updateParam', {
 						key:['isLogin', 'isvip'],
-						value: [1, res.body.data.isvip]
+						value: [1, res.data.data.isvip]
 					});
 				} else {
-					that.registerFail = res.body.errmsg;
+					that.registerFail = res.data.errmsg;
 				}
 			}, {
 				username: that.username,
@@ -151,12 +151,12 @@ export default {
 			}
 
 			this.codeSended = true;
-			Vue.http.post('/webapi/useraccount/sendemailcode', {
+			axios.post('/webapi/useraccount/sendemailcode', {
 				email: this.email
 			}).then(res => {
 				// 响应成功回调
-				if(res.body.errno){
-					return this.registerFail = res.body.errmsg;
+				if(res.data.errno){
+					return this.registerFail = res.data.errmsg;
 				}else{
 					return this.registerFail = '';
 				}

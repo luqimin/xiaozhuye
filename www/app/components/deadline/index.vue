@@ -109,16 +109,16 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import Vue from 'vue';
+import axios from 'axios';
 import defmod from '../default';
 import alert from '../alert';
 
 export default {
     created(){
-        Vue.http.get('/webapi/deadline/getnote', '').then(res => {
-            if(!res.body.errno){
-                if(res.body.data.length){
-                    this.notes = res.body.data;
+        axios.get('/webapi/deadline/getnote', '').then(res => {
+            if(!res.data.errno){
+                if(res.data.data.length){
+                    this.notes = res.data.data;
                 }
             }
         });
@@ -186,10 +186,10 @@ export default {
         },
         deleteNote(){
             let that = this;
-            Vue.http.post('/webapi/deadline/delete', {
+            axios.post('/webapi/deadline/delete', {
                 id: that.notes[that.num].id
             }).then(res => {
-                if(!res.body.errno){
+                if(!res.data.errno){
                     if (that.notes.length > 1) {
                         that.notes.splice(that.num, 1);
                     } else {

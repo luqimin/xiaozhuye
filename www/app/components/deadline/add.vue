@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
+import axios from 'axios';
 import myDatepicker from 'vue-datepicker';
 
 export default {
@@ -94,12 +94,12 @@ export default {
                 return this.error = '请选择一个日期';
             }
             
-            Vue.http.post('/webapi/deadline/add', {
+            axios.post('/webapi/deadline/add', {
                 noteTitle: this.noteTitle,
                 noteContent: this.noteContent,
                 noteDay: this.noteDay.time
             }).then(res => {
-                if(res.ok){
+                if(res.data && !res.data.errno){
                     this.noteTitle = '';
                     this.noteContent = '';
                     this.noteDay.time = '';
