@@ -17,7 +17,7 @@ export default class extends Base {
         let child = execFile(shPath, [''], (err, stdout, tderr) => {
             if (err) throw err;
             console.log(stdout);
+            return this.success(stdout);
         });
-        return this.success('heh');
     }
 }
