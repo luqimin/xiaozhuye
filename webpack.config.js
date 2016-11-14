@@ -13,7 +13,7 @@ module.exports = {
         // 输出路径是 myProject/output/static
         path: path.join(__dirname, '/www/static/js'),
         publicPath: path.join('/static/js/'),
-        filename: "[name].js",
+        filename: "[name].[hash:6].js",
         chunkFilename: '[id].[chunkhash:6].js'
     },
     resolve: {

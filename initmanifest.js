@@ -6,6 +6,7 @@ const webpackConfig = require('./webpack.config.js');
 let compiler = webpack(webpackConfig);
 
 const jsPath = './www/static/js';
+const indexHtmlPath = './view/home/index_index.html';
 const manifestPath = './www/tiny.appcache';
 
 // 清空js文件夹内所有文件
@@ -13,16 +14,33 @@ let jsFolder = fs.readdirSync(jsPath);
 jsFolder.forEach(fileName => {
     fs.unlinkSync(jsPath + '/' + fileName);
 });
-console.log('\033[91m 清空js文件夹 \033[0m' + '\n');
+console.log('\033[91m 清空js文件夹; \033[0m' + '\n');
 
 // webpack打包
 compiler.run((err, stats) => {
     if (stats.hasErrors()) {
-        return console.log(stats.hasErrors());
+        return console.log(stats.toJson().errorDetail);
     }
     if (stats.hasWarnings()) {
         return console.log(stats.hasWarnings());
     }
+
+    let chunksArr = stats.toJson('minimal').chunks;
+    // 获取index.js
+    let indexJs = chunksArr[0];
+
+    // 更新index_html script标签
+    fs.readFile(indexHtmlPath, 'utf8', (err, data) => {
+        if (err) throw err;
+        // script标签
+        let scriptExp = /\/static\/js\/index\.*[\d\w]*\.js/;
+        let newScript = data.replace(scriptExp, '/static/js/' + indexJs.files[0]);
+        // 更新文件
+        fs.writeFile(indexHtmlPath, newScript, 'utf8', (err) => {
+            if (err) throw err;
+            console.log('\033[92m' + indexHtmlPath + ' 更新成功; \033[0m' + '\n');
+        });
+    });
 
     // 获取当前文件夹下所有js文件
     let jsFolder = fs.readdirSync(jsPath),
@@ -30,13 +48,13 @@ compiler.run((err, stats) => {
     jsFolder.forEach(fileName => {
         newJsCache += '\n' + '/static/js/' + fileName;
     });
-    console.log('\033[92m 打包js完成 \033[0m' + newJsCache + '\n');
+    console.log('\033[92m 打包js完成; \033[0m' + newJsCache + '\n');
 
     // 更新manifest配置
     fs.readFile(manifestPath, 'utf8', (err, data) => {
         if (err) throw err;
 
-        let jsExp = /\/static\/js\/\d*\.*[\d\w]+\.js\n/g;
+        let jsExp = /\/static\/js\/[\d\w]*\.*[\d\w]+\.js\n/g;
         let verExp = /#\s\d+\-\d+\-\d+\sv\d\.\d\.\d\b/;
         let verNumExp = /v\d\.\d\.\d\b/;
 
