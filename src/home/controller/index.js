@@ -18,5 +18,16 @@ export default class extends Base {
         //auto render template file index_index.html
         return this.display();
     }
+    testAction() {
+
+        this.assign({
+            title: "测试test",
+            brand: "TINY",
+            author: "luqimin"
+        });
+
+        //auto render template file index_index.html
+        return this.display();
+    }
 
 }
