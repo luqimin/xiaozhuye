@@ -34,13 +34,14 @@ export default class extends Base {
         let getApiData = () => {
             let fn = think.promisify(request.get);
             return fn({
-                url: "https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001cd&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=894684fc4441dbecc5279247b5b2936a"
+                url: "https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001cd&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617"
             });
         }
 
         let msg = getApiData();
 
         let result = await Promise.all([msg]);
+        console.log(result[0].body);
         let resArr = JSON.parse(result[0].body).showapi_res_body.pagebean.contentlist;
         this.end(resArr);
     }
@@ -51,7 +52,7 @@ export default class extends Base {
         let getApiData = () => {
             let fn = think.promisify(request.get);
             return fn({
-                url: "https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001ce&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=894684fc4441dbecc5279247b5b2936a"
+                url: "https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001ce&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617"
             });
         }
 
@@ -68,7 +69,7 @@ export default class extends Base {
         let getApiData = () => {
             let fn = think.promisify(request.get);
             return fn({
-                url: "https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001d5&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=894684fc4441dbecc5279247b5b2936a"
+                url: "https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001d5&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617"
             });
         }
 
@@ -83,7 +84,7 @@ export default class extends Base {
         let getApiData = () => {
             let fn = think.promisify(request.get);
             return fn({
-                url: "https://route.showapi.com/255-1?page=&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617&"
+                url: "https://route.showapi.com/255-1?page=&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617"
             });
         }
 
