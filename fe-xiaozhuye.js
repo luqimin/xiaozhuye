@@ -1,20 +1,32 @@
 const fs = require('fs');
 const path = require('path');
-
+const _ = require('lodash');
 const webpack = require('webpack');
-const webpackConfig = require('./webpack.config.js');
+const webpackConfig = require('./www/xiaozhuye/webpack.config.js');
 let compiler = webpack(webpackConfig);
 
-const jsPath = './www/static/js';
+const jsPath = './www/static/js/xiaozhuye';
+const chunkPath = './www/static/js/xiaozhuye/chunk';
 const indexHtmlPath = './view/home/index_index.html';
 const manifestPath = './www/tiny.appcache';
-
 // 清空js文件夹内所有文件
-let jsFolder = fs.readdirSync(jsPath);
-jsFolder.forEach(fileName => {
-    fs.unlinkSync(jsPath + '/' + fileName);
-});
-console.log('\033[91m 清空js文件夹; \033[0m' + '\n');
+// 删除chunk文件夹
+if (fs.existsSync(chunkPath)) {
+    let chunkFolder = fs.readdirSync(chunkPath);
+    chunkFolder.forEach(fileName => {
+        fs.unlinkSync(chunkPath + '/' + fileName);
+    });
+    fs.rmdirSync(chunkPath);
+}
+// 删除js文件夹
+if (fs.existsSync(jsPath)) {
+    let jsFolder = fs.readdirSync(jsPath);
+    jsFolder.forEach(fileName => {
+        fs.unlinkSync(jsPath + '/' + fileName);
+    });
+}
+
+console.log('\033[91m 清理js文件夹; \033[0m' + '\n');
 
 // webpack打包
 compiler.run((err, stats) => {
@@ -26,14 +38,15 @@ compiler.run((err, stats) => {
     }
 
     let chunksArr = stats.toJson('minimal').chunks;
+    // console.log(chunksArr);
     // 获取index.js
-    let indexJs = chunksArr[0];
-
-    // 更新index_html script标签
+    let indexJs = _.find(chunksArr, ['names', ['index']]);
+    let blogJs = _.find(chunksArr, ['names', ['blog']]);
+    // 更新xiaozhuye index_html script标签
     fs.readFile(indexHtmlPath, 'utf8', (err, data) => {
         if (err) throw err;
         // script标签
-        let scriptExp = /\/static\/js\/index\.*[\d\w]*\.js/;
+        let scriptExp = /\/static\/js\/\w*.*[\d\w]*\.js/;
         let newScript = data.replace(scriptExp, '/static/js/' + indexJs.files[0]);
         // 更新文件
         fs.writeFile(indexHtmlPath, newScript, 'utf8', (err) => {
@@ -43,18 +56,17 @@ compiler.run((err, stats) => {
     });
 
     // 获取当前文件夹下所有js文件
-    let jsFolder = fs.readdirSync(jsPath),
-        newJsCache = '';
-    jsFolder.forEach(fileName => {
-        newJsCache += '\n' + '/static/js/' + fileName;
+    let newJsCache = '';
+    _.each(chunksArr, (value) => {
+        newJsCache += '\n' + '/static/js/' + value.files[0];
+        console.log('\033[92m 打包js完成; \033[0m' + value.files[0]);
     });
-    console.log('\033[92m 打包js完成; \033[0m' + newJsCache + '\n');
 
     // 更新manifest配置
     fs.readFile(manifestPath, 'utf8', (err, data) => {
         if (err) throw err;
 
-        let jsExp = /\/static\/js\/[\d\w]*\.*[\d\w]+\.js\n/g;
+        let jsExp = /\/static\/js\/\w*.*[\d\w]*\.js\n/g;
         let verExp = /#\s\d+\-\d+\-\d+\sv\d\.\d\.\d\b/;
         let verNumExp = /v\d\.\d\.\d\b/;
 

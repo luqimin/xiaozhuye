@@ -1,21 +1,19 @@
 // webpack.config.js
 var path = require('path');
 var webpack = require('webpack');
-
 module.exports = {
     // 入口文件，path.resolve()方法，可以结合我们给定的两个参数最后生成绝对路径，最终指向的就是我们的index.js文件
     // entry: path.join(__dirname, '/www/app/index.js'),
     entry: {
-        index: path.join(__dirname, '/www/xiaozhuye/index'),
-        blog: path.join(__dirname, '/www/blog/index')
+        index: path.join(__dirname)
     },
     // 输出配置
     output: {
         // 输出路径是 myProject/output/static
-        path: path.join(__dirname, '/www/static/js'),
+        path: path.join(__dirname, '../static/js'),
         publicPath: path.join('/static/js/'),
-        filename: "[name].[hash:6].js",
-        chunkFilename: 'chunk/[id].[chunkhash:6].js'
+        filename: "xiaozhuye/[name].[hash:6].js",
+        chunkFilename: 'xiaozhuye/chunk/[id].[chunkhash:6].js'
     },
     resolve: {
         extensions: ['', '.js', '.vue', 'jsx'],

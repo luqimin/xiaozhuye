@@ -7,7 +7,8 @@
     "compile": "babel --presets es2015-loose,stage-1 --plugins transform-runtime src/ --out-dir app/ --source-maps",
     "watch-compile": "node -e \"console.log('<npm run watch-compile> no longer need, use <npm start> command direct.');console.log();\"",
     "watch": "npm run watch-compile",
-    "manifest": "node ./initmanifest.js"
+    "fe-xiaozhuye": "node ./fe-xiaozhuye.js",
+    "fe-blog": "node ./initmanifest.js"
   },
   "dependencies": {
     "babel-runtime": "6.x.x",
