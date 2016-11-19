@@ -1,22 +1,21 @@
 // webpack.config.js
 var path = require('path');
 var webpack = require('webpack');
+console.log(__dirname);
 module.exports = {
     entry: {
-        index: path.join(__dirname)
+        index: path.join(__dirname),
+        vendor: ['react','react-dom']
     },
     // 输出配置
     output: {
         path: path.join(__dirname, '../static/js'),
         publicPath: path.join('/static/js/'),
-        filename: "xiaozhuye/[name].[hash:6].js",
-        chunkFilename: 'xiaozhuye/chunk/[id].[chunkhash:6].js'
+        filename: "blog/[name].js",
+        chunkFilename: 'blog/chunk/[id].[chunkhash:6].js'
     },
     resolve: {
-        extensions: ['', '.js', '.vue', 'jsx'],
-        alias: {
-            'vue$': 'vue/dist/vue.js'
-        }
+        extensions: ['', '.js', 'jsx']
     },
     plugins: [
         // new webpack.optimize.UglifyJsPlugin({
@@ -25,16 +24,13 @@ module.exports = {
         //     },
         //     comments: false
         // })
-        // new webpack.optimize.CommonsChunkPlugin({
-        //     name: 'yule',
-        //     chunks: ["yule"]
-        // })
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'react',
+            filename: "blog/vendor.js"
+        })
     ],
     module: {
-        loaders: [{
-                test: /\.vue$/,
-                loader: 'vue'
-            },
+        loaders: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
@@ -51,13 +47,8 @@ module.exports = {
             }
         ]
     },
-    vue: {
-        loaders: {
-            js: 'babel'
-        }
-    },
     babel: {
-        presets: ['es2015', 'stage-0'],
+        presets: ['es2015', 'react'],
         plugins: ['transform-runtime']
     }
 };

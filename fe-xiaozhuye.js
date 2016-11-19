@@ -12,7 +12,7 @@ const manifestPath = './www/tiny.appcache';
 
 // 清空js文件夹内所有文件
 // 删除chunk文件夹
-console.log('\033[91m 清理js文件夹... \033[0m' + '\n');
+console.log('\n\033[91m 清理js文件夹... \033[0m' + '\n');
 if (fs.existsSync(chunkPath)) {
     let chunkFolder = fs.readdirSync(chunkPath);
     chunkFolder.forEach(fileName => {
@@ -32,7 +32,7 @@ if (fs.existsSync(jsPath)) {
 console.log('\033[91m 开始打包js... \033[0m');
 compiler.run((err, stats) => {
     if (stats.hasErrors()) {
-        return console.log(stats.toJson().errorDetail);
+        return console.log(stats.toJson().errorDetails);
     }
     if (stats.hasWarnings()) {
         return console.log(stats.hasWarnings());
@@ -42,7 +42,6 @@ compiler.run((err, stats) => {
     // console.log(chunksArr);
     // 获取index.js
     let indexJs = _.find(chunksArr, ['names', ['index']]);
-    let blogJs = _.find(chunksArr, ['names', ['blog']]);
     // 更新xiaozhuye index_html script标签
     fs.readFile(indexHtmlPath, 'utf8', (err, data) => {
         if (err) throw err;

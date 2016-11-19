@@ -26,5 +26,12 @@ pm2 startOrReload pm2.json
 ## 前端js打包
 
 ```
-webpack
+npm run fe-xiaozhuye
+npm run fe-blog
+```
+
+## 便捷更新生产环境
+
+```
+sh rebuild.sh
 ```
