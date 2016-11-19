@@ -11,7 +11,7 @@
         },
         data: () => ({
             pm25: '初始化...',
-            pos: ''
+            pos: '(北京美国大使馆)'
         }),
         computed: {
             pmLevel(){
@@ -37,7 +37,6 @@
                     if (!res.data.errno) {
                         let msg = res.data.data.msg;
                         this.pm25 = msg.aqi;
-                        this.pos = '(' + msg.city.name + ')';
                     }
                 });
             }

@@ -16,8 +16,7 @@ export default class extends Base {
 
     //pm2.5
     async pm25Action() {
-        let res = await axios.get('https://waqi.info/api/feed/@3303/obs.cn.json');
-        console.log(res.data);
+        let res = await axios.get('https://waqi.info/api/feed/@3303/now.json');
         if(res.data.rxs && res.data.rxs.status == 'ok'){
             return this.success(res.data.rxs.obs[0]);
         }
