@@ -9,9 +9,7 @@
                     </a>
                 </div>
                 <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <pm></pm>
-                    </ul>
+                    <weather></weather>
                     <template v-if="isLogin">
                         <ul class="login nav navbar-nav navbar-right">
                             <li class="dropdown" :class="{open:isShowDropdown}">
@@ -69,7 +67,7 @@
     import modconfig from './modconfig';
     import defmod from './default';
     import about from './about';
-    import pm from './pm25';
+    import weather from './weather';
     import {ORDER} from '../const';
 
     import {mapGetters, mapActions} from 'vuex';
@@ -81,7 +79,7 @@
             modconfig,
             defmod,
             about,
-            pm,
+            weather,
             baidu: (resolve) => {
                 require(['./baidu'], (component) => {
                     resolve(component);

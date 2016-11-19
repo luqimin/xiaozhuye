@@ -17,11 +17,38 @@ export default class extends Base {
     //pm2.5
     async pm25Action() {
         let res = await axios.get('https://waqi.info/api/feed/@3303/now.json');
-        if(res.data.rxs && res.data.rxs.status == 'ok'){
+        if (res.data.rxs && res.data.rxs.status == 'ok') {
             return this.success(res.data.rxs.obs[0]);
         }
         return this.fail({
-            status:'fail'
+            status: 'fail'
+        });
+    }
+
+    //天气
+    async weatherAction() {
+        let ip = this.ip();
+        let res = await axios.get('https://route.showapi.com/9-4?ip=' + ip + '&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617');
+        let data = res.data;
+        if (data.showapi_res_body.ret_code != '-1') {
+            data = {
+                pos: data.showapi_res_body.cityInfo.c5,
+                now: {
+                    temperature: data.showapi_res_body.now.temperature,
+                    weather: data.showapi_res_body.now.weather,
+                    wind_power: data.showapi_res_body.now.wind_power
+                },
+                f1: {
+                    day_weather: data.showapi_res_body.f1.day_weather,
+                    night_weather: data.showapi_res_body.f1.night_weather,
+                    day_air_temperature: data.showapi_res_body.f1.day_air_temperature,
+                    night_air_temperature: data.showapi_res_body.f1.night_air_temperature
+                }
+            };
+            return this.success(data);
+        }
+        return this.fail({
+            status: 'fail'
         });
     }
 
