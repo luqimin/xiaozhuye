@@ -1,5 +1,5 @@
 <template>
-    <li><a href="javascript:void(0)">pm2.5: {{pm25}} {{pos}}</a></li>
+    <li><a v-html="pmLevel" href="javascript:void(0)"></a></li>
 </template>
 
 <script>
@@ -13,6 +13,23 @@
             pm25: '初始化...',
             pos: ''
         }),
+        computed: {
+            pmLevel(){
+                let pos = this.pos;
+                let pm = this.pm25;
+                let res = 'pm2.5: ' + pm;
+                if (this.pm25 <= 50) {
+                    res = 'pm2.5: <span class="text-success">' + pm + '</span> ' + pos;
+                } else if (this.pm25 > 51 && this.pm25 <= 150) {
+                    res = 'pm2.5: <span class="text-warning">' + pm + '</span> ' + pos;
+                } else if (this.pm25 > 151 && this.pm25 <= 200) {
+                    res = 'pm2.5: <span class="text-danger">' + pm + '</span> ' + pos;
+                } else if (this.pm25 > 200) {
+                    res = 'pm2.5: <span class="text-info">' + pm + '</span> ' + pos;
+                }
+                return res;
+            }
+        },
         methods: {
             init(){
                 axios.get('/addons/fetch/pm25', '').then(res => {
