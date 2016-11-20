@@ -62,7 +62,6 @@ select:-webkit-autofill {
     padding: 10px 15px;
 }
 
-
 /*带刷新的panel*/
 
 .refresh-header {
@@ -95,16 +94,7 @@ select:-webkit-autofill {
     }
 }
 
-
 /*登录区域*/
-
-.login {
-    position: relative;
-}
-
-.loginMsg {
-    margin-left: 6px;
-}
 
 .tiny-wrap {
     padding: 8px;
@@ -112,7 +102,6 @@ select:-webkit-autofill {
     border-radius: 4px;
     box-shadow: none;
 }
-
 
 /*网址配置*/
 
@@ -154,7 +143,6 @@ select:-webkit-autofill {
     margin-top: 8px;
 }
 
-
 /*模块配置*/
 
 .mokuaiConfig label {
@@ -190,7 +178,7 @@ select:-webkit-autofill {
 }
 
 .addSiteBtn {
-    margin: 0 -16px -3px 0!important;
+    margin: 0 -16px -3px 0 !important;
     color: #2196f3;
     border-radius: 0;
 }
@@ -242,7 +230,6 @@ select:-webkit-autofill {
     cursor: -webkit-zoom-out;
 }
 
-
 /*about*/
 
 .about .panel-heading {
@@ -264,7 +251,6 @@ select:-webkit-autofill {
     background-color: transparent;
 }
 
-
 /*过渡动画*/
 
 .fade-enter-active,
@@ -277,13 +263,11 @@ select:-webkit-autofill {
     opacity: 0
 }
 
-
 /*网址动画*/
 
 .site-list-move {
     transition: transform .5s;
 }
-
 
 /*登录浮层动画*/
 

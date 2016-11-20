@@ -8,7 +8,8 @@
     "watch-compile": "node -e \"console.log('<npm run watch-compile> no longer need, use <npm start> command direct.');console.log();\"",
     "watch": "npm run watch-compile",
     "fe-xiaozhuye": "node ./fe-xiaozhuye.js",
-    "fe-blog": "node ./fe-blog.js"
+    "fe-blog": "node ./fe-blog.js",
+    "build": "bash rebuild.sh"
   },
   "dependencies": {
     "babel-runtime": "6.x.x",
