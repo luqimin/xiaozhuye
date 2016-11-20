@@ -80,7 +80,6 @@ export default class extends Base {
         let msg = getApiData();
 
         let result = await Promise.all([msg]);
-        console.log(result[0].body);
         let resArr = JSON.parse(result[0].body).showapi_res_body.pagebean.contentlist;
         this.end(resArr);
     }

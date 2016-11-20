@@ -89,7 +89,6 @@
                         this.nowWind = msg.now.wind_power;
                         this.f1Temp = msg.f1.day_air_temperature + '℃' + '~' + msg.f1.night_air_temperature + '℃';
                         this.f1Wea = msg.f1.day_weather + '~' + msg.f1.night_weather;
-                        console.log(msg);
                     }
                 });
             }

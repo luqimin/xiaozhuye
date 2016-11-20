@@ -3,12 +3,14 @@
         <nav class="navbar navbar-inverse">
             <div class="container container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/">TINY
-                        <!--<%= brand%>-->
-                        <!--<img alt="Brand" src="...">-->
-                    </a>
+                    <button @click="expandHead" type="button" class="navbar-toggle collapsed">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">TINY </a>
                 </div>
-                <div class="collapse navbar-collapse">
+                <div class="collapse navbar-collapse" :class="{in:isExpand}">
                     <weather></weather>
                     <template v-if="isLogin">
                         <ul class="login nav navbar-nav navbar-right">
@@ -154,11 +156,15 @@
         },
         data: () => ({
             isShowDropdown: 0,
+            isExpand: false
         }),
         methods: {
             ...mapActions([
                 'userLogout'
             ]),
+            expandHead(){
+                this.isExpand = !this.isExpand;
+            },
             showDropdown(){
                 this.isShowDropdown = !this.isShowDropdown
             },
