@@ -33,5 +33,5 @@ npm run fe-blog
 ## 便捷更新生产环境
 
 ```
-sh rebuild.sh
+bash rebuild.sh
 ```
