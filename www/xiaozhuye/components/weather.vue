@@ -1,6 +1,18 @@
+<style>
+    .pm25 span {
+        background: #b2dbfb;
+        border-radius: 5px;
+        padding: 0 2px;
+        transition: background .2s;
+    }
+
+    .pm25:hover span {
+        background: #fff;
+    }
+</style>
 <template>
     <ul class="nav navbar-nav">
-        <li><a v-html="pmLevel"></a></li>
+        <li><a v-html="pmLevel" class="pm25"></a></li>
         <li><a v-html="nowWeather"></a></li>
         <li><a v-html="f1Weather"></a></li>
     </ul>
@@ -28,15 +40,15 @@
             pmLevel(){
                 let pos = this.pos;
                 let pm = this.pm25;
-                let res = 'pm2.5: ' + pm;
+                let res = 'PM2.5: ' + pm;
                 if (this.pm25 <= 50) {
-                    res = 'pm2.5: <span class="text-success">' + pm + '</span> ' + pos;
+                    res = 'PM2.5: <span class="text-success">' + pm + '</span> ' + pos;
                 } else if (this.pm25 > 51 && this.pm25 <= 150) {
-                    res = 'pm2.5: <span class="text-warning">' + pm + '</span> ' + pos;
+                    res = 'PM2.5: <span class="text-warning">' + pm + '</span> ' + pos;
                 } else if (this.pm25 > 151 && this.pm25 <= 200) {
-                    res = 'pm2.5: <span class="text-danger">' + pm + '</span> ' + pos;
+                    res = 'PM2.5: <span class="text-danger">' + pm + '</span> ' + pos;
                 } else if (this.pm25 > 200) {
-                    res = 'pm2.5: <span class="text-info">' + pm + '</span> ' + pos;
+                    res = 'PM2.5: <span class="text-info">' + pm + '</span> ' + pos;
                 }
                 return res;
             },

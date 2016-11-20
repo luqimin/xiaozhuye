@@ -3,7 +3,7 @@
         <nav class="navbar navbar-inverse">
             <div class="container container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">TINY
+                    <a class="navbar-brand" href="/">TINY
                         <!--<%= brand%>-->
                         <!--<img alt="Brand" src="...">-->
                     </a>
