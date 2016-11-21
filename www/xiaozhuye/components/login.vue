@@ -1,7 +1,6 @@
 <style>
     .modal {
         display: block;
-        overflow-y: auto;
     }
 
     .navbar-inverse .btn-link {

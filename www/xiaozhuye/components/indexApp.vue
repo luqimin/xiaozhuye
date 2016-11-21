@@ -1,3 +1,8 @@
+<style>
+    .navbar-collapse.in {
+        overflow-y: visible;
+    }
+</style>
 <template>
     <div id="app" class="">
         <nav class="navbar navbar-inverse">
