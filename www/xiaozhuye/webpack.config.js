@@ -1,6 +1,24 @@
 // webpack.config.js
 var path = require('path');
 var webpack = require('webpack');
+var prod = process.env.NODE_ENV === 'production' ? true : false;
+
+var plugins = [];
+if (prod) {
+    plugins = [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            },
+            comments: false
+        })
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'yule',
+        //     chunks: ["yule"]
+        // })
+    ]
+}
+
 module.exports = {
     entry: {
         index: path.join(__dirname)
@@ -18,23 +36,12 @@ module.exports = {
             'vue$': 'vue/dist/vue.js'
         }
     },
-    plugins: [
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false
-        //     },
-        //     comments: false
-        // })
-        // new webpack.optimize.CommonsChunkPlugin({
-        //     name: 'yule',
-        //     chunks: ["yule"]
-        // })
-    ],
+    plugins: plugins,
     module: {
         loaders: [{
-                test: /\.vue$/,
-                loader: 'vue'
-            },
+            test: /\.vue$/,
+            loader: 'vue'
+        },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,

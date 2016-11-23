@@ -11,7 +11,7 @@ echo -e '\n\033[35m> npm install... \033[0m'
 npm install
 
 echo -e '\n\033[35m> 打包前端文件... \033[0m'
-npm run fe-xiaozhuye
+npm run fe-release
 
 echo -e '\n\033[35m> 打包后端文件... \033[0m'
 npm run compile

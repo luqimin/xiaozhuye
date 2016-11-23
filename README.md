@@ -26,8 +26,8 @@ pm2 startOrReload pm2.json
 ## 前端js打包
 
 ```
-npm run fe-xiaozhuye
-npm run fe-blog
+生产环境 npm run fe-release
+开发环境 npm run fe-dev
 ```
 
 ## 便捷更新生产环境

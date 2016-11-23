@@ -7,8 +7,8 @@
     "compile": "babel --presets es2015-loose,stage-1 --plugins transform-runtime src/ --out-dir app/ --source-maps",
     "watch-compile": "node -e \"console.log('<npm run watch-compile> no longer need, use <npm start> command direct.');console.log();\"",
     "watch": "npm run watch-compile",
-    "fe-xiaozhuye": "node ./fe-xiaozhuye.js",
-    "fe-blog": "node ./fe-blog.js",
+    "fe-release": "export NODE_ENV=production&&node ./fe-xiaozhuye.js",
+    "fe-dev": "export NODE_ENV=develop&&node ./fe-xiaozhuye.js",
     "build": "bash rebuild.sh"
   },
   "dependencies": {
