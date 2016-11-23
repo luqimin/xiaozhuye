@@ -1,5 +1,5 @@
 <template>
-    <div class="modal" :class="{siteConfig: isShowSitesconfig}">
+    <div class="modal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -110,8 +110,7 @@
         computed: {
             ...mapGetters([
                 'isvip',
-                'USERSITES',
-                'isShowSitesconfig'
+                'USERSITES'
             ]),
             errorClass(){
                 return {
@@ -138,7 +137,7 @@
                 });
             },
             hideModal(){
-                this.$store.commit('toggleSiteconfig');
+                this.$emit('closeSiteConfig');
             },
             addSite(e){
                 let siteId = parseInt(e.target.id);

@@ -7,9 +7,9 @@ import * as actions from './actions';
 
 import api from '../api';
 
-import { MODCONF } from '../const';
+import {MODCONF} from '../const';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const state = {
     isLogin: 0,
@@ -19,9 +19,8 @@ const state = {
     mokuai: [], //包含：sites,gnnews,gwnews,duanzi,yule
     SITES: [],
     USERSITES: [],
-    isShowSitesconfig: 0,
     isShowAlert: 0
-}
+};
 
 const mutations = {
     [types.INIT_USER](state, info) {
@@ -57,10 +56,7 @@ const mutations = {
             state[param.key[i]] = param.value[i];
         }
     },
-    toggleSiteconfig(state) {
-        state.isShowSitesconfig = !state.isShowSitesconfig;
-    }
-}
+};
 
 export default new Vuex.Store({
     state,
