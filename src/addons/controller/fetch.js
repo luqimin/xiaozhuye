@@ -12,7 +12,8 @@ const CITY = [
     { cn: '芜湖', en: 'wuhu', id: '1498' },
     { cn: '南京', en: 'nanjing', id: '1485' },
     { cn: '武汉', en: 'wuhan', id: '1529' },
-    { cn: '济南', en: 'jinan', id: '1505' }
+    { cn: '济南', en: 'jinan', id: '1505' },
+    { cn: '临沂', en: 'linyi', id: '1517' }
 ];
 
 export default class extends Base {
