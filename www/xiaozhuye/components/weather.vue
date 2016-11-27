@@ -12,7 +12,7 @@
 </style>
 <template>
     <ul class="nav navbar-nav">
-        <li><a v-html="pmLevel" class="pm25"></a></li>
+        <li><a v-html="pmLevel" class="pm25" :href="pmUrl" target="_blank"></a></li>
         <li><a v-html="nowWeather"></a></li>
         <li><a v-html="f1Weather"></a></li>
     </ul>
@@ -28,7 +28,8 @@
         },
         data: () => ({
             pm25: '初始化...',
-            pos: '(北京美国大使馆)',
+            pmUrl: '',
+            pos: '',
             weaPos: '',
             nowTemp: '',
             nowWea: '',
@@ -54,7 +55,7 @@
             },
             nowWeather(){
                 if (this.nowWea && this.nowTemp && this.nowWind) {
-                    return this.nowWea + ', ' + this.nowTemp + '℃, ' + '风力' + this.nowWind;
+                    return this.weaPos + ': ' + this.nowWea + ', ' + this.nowTemp + '℃, ' + '风力' + this.nowWind;
                 } else {
                     return ''
                 }
@@ -62,7 +63,7 @@
             },
             f1Weather(){
                 if (this.f1Wea && this.f1Temp) {
-                    return '明日: ' + this.f1Wea + ', ' + this.f1Temp;
+                    return '明: ' + this.f1Wea + ', ' + this.f1Temp;
                 } else {
                     return ''
                 }
@@ -73,8 +74,10 @@
                 axios.get('/addons/fetch/pm25', '').then(res => {
                     // 响应成功回调
                     if (res.data.status != 'fail') {
-                        let msg = res.data.data.msg;
+                        let msg = res.data.data;
                         this.pm25 = msg.aqi;
+                        this.pos = '('+ msg.pos +')';
+                        this.pmUrl = msg.url;
                     }
                 });
             },
