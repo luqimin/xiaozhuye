@@ -158,13 +158,10 @@ export default class extends Base {
                     span += 0.1;
                 }
             }
+
             //将地区信息写入cookie
-            this.cookie("city_id", _city.idx, {
-                timeout: 5 * 24 * 3600
-            });
-            this.cookie("city_name", _city.cn, {
-                timeout: 5 * 24 * 3600
-            });
+            this.cookie("city_id", _city.idx);
+            this.cookie("city_name", _city.cn);
         } else {
             _city.idx = cityCookie;
             _city.cn = this.cookie('city_name');
