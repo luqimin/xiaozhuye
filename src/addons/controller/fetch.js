@@ -113,7 +113,10 @@ export default class extends Base {
 
     //pm2.5
     async pm25Action() {
-        //获取ip
+        if (this.cookie('city_id') && !this.cookie('city_name')) {
+            this.cookie('city_id', null);
+        }
+
         let cityCookie = this.cookie('city_id');
         let _city = CITY[0];
         if (!cityCookie) {
@@ -157,14 +160,14 @@ export default class extends Base {
             }
             //将地区信息写入cookie
             this.cookie("city_id", _city.idx, {
-                timeout: 30 * 24 * 3600
+                timeout: 5 * 24 * 3600
             });
             this.cookie("city_name", _city.cn, {
-                timeout: 30 * 24 * 3600
+                timeout: 5 * 24 * 3600
             });
         } else {
             _city.idx = cityCookie;
-            _city.cn = this.cookie('city_name');;
+            _city.cn = this.cookie('city_name');
         }
         let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`);
         // let res = await axios.get(`https://waqi.info/api/feed/@${_city.id}/obs.cn.json`);
