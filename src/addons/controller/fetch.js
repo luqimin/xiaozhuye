@@ -11,15 +11,15 @@ slugify.config({
 });
 
 const CITY = [
-    { cn: '北京', en: 'beijing', id: '3303' },
-    { cn: '上海', en: 'shanghai', id: '1437' },
-    { cn: '合肥', en: 'hefei', id: '1497' },
-    { cn: '安庆', en: 'anqing', id: '7900' },
-    { cn: '芜湖', en: 'wuhu', id: '1498' },
-    { cn: '南京', en: 'nanjing', id: '1485' },
-    { cn: '武汉', en: 'wuhan', id: '1529' },
-    { cn: '济南', en: 'jinan', id: '1505' },
-    { cn: '临沂', en: 'linyi', id: '1517' }
+    { cn: '北京', en: 'beijing', idx: '3303' },
+    { cn: '上海', en: 'shanghai', idx: '1437' },
+    { cn: '合肥', en: 'hefei', idx: '1497' },
+    { cn: '安庆', en: 'anqing', idx: '7900' },
+    { cn: '芜湖', en: 'wuhu', idx: '1498' },
+    { cn: '南京', en: 'nanjing', idx: '1485' },
+    { cn: '武汉', en: 'wuhan', idx: '1529' },
+    { cn: '济南', en: 'jinan', idx: '1505' },
+    { cn: '临沂', en: 'linyi', idx: '1517' }
 ];
 
 export default class extends Base {
@@ -33,236 +33,83 @@ export default class extends Base {
     }
 
     //获取美国大使馆pm接口所有数据
-    async usembassyAction() {
-        let city = [];
-        let idArr = [
-                [1238, 1661],
-                [3303, 3309],
-                [3410, 3546],
-                [3579, 3682],
-                [3721, 3730],
-                [3785, 3792],
-                [3864, 3869],
-                [],
-            ]
-            // for (let i = 1238; i <= 1661; i++) {3303 3309  3410 3546  3579 3682  3721 3730  37854147
-            //     let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
-            //     if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
-            //         let result = res.data.rxs.obs[0].msg;
-            //         if (!result.city) {
-            //             return;
-            //         }
-            //         let singleCity = {
-            //             id: i,
-            //             cn: result.city.name,
-            //             en: slugify(result.city.name),
-            //             geo: result.city.geo
-            //         };
-            //         city.push(singleCity);
-            //         console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi);
-            //     }
-            // }
-        for (let i = 3881; i <= 9999; i++) {
-            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
-            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
-                let result = res.data.rxs.obs[0].msg;
-                if (!result.city || !result.city.name) {
-                    continue;
-                }
-                let singleCity = {
-                    id: i,
-                    cn: result.city.name,
-                    en: slugify(result.city.name),
-                    geo: result.city.geo
-                };
-                city.push(singleCity);
-                console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi);
-            }
-        }
+    // async getcityfAction() {
+    //     let city = [];
+    //     for (let i = 446; i < 10000; i++) {
+    //         let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
+    //         if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
+    //             let result = res.data.rxs.obs[0].msg;
+    //             if (!result.city || !result.city.name || !result.city.geo) {
+    //                 continue;
+    //             }
 
-        fs.writeFile('./city2.js', JSON.stringify(city), 'utf8', (err) => {
-            if (err) throw err;
-            console.log('新建 city2.js 成功');
-        });
-    }
-
-    //获取美国大使馆pm接口所有数据
-    async getcityaAction() {
-        let city = [];
-        for (let i = 446; i < 2000; i++) {
-            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
-            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
-                let result = res.data.rxs.obs[0].msg;
-                if (!result.city || !result.city.name || !result.city.geo) {
-                    continue;
-                }
-
-                if (result.city.geo[0] >= 3.84 && result.city.geo[0] <= 53.56 && result.city.geo[1] >= 73.54 && result.city.geo[1] <= 135.1) {
-                    let singleCity = {
-                        id: i,
-                        cn: result.city.name,
-                        en: slugify(result.city.name),
-                        geo: result.city.geo
-                    };
-                    city.push(singleCity);
-                    console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi + ' == ' + result.city.geo);
-                } else {
-                    console.log(i + ': 不是大中国 == ' + result.city.name);
-                }
-            }
-        }
-
-        fs.writeFile('./citya.js', JSON.stringify(city), 'utf8', (err) => {
-            if (err) throw err;
-            console.log('新建 citya.js 成功');
-        });
-    }
-    async getcitybAction() {
-        let city = [];
-        for (let i = 2000; i < 4000; i++) {
-            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
-            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
-                let result = res.data.rxs.obs[0].msg;
-                if (!result.city || !result.city.name || !result.city.geo) {
-                    continue;
-                }
-
-                if (result.city.geo[0] >= 3.84 && result.city.geo[0] <= 53.56 && result.city.geo[1] >= 73.54 && result.city.geo[1] <= 135.1) {
-                    let singleCity = {
-                        id: i,
-                        cn: result.city.name,
-                        en: slugify(result.city.name),
-                        geo: result.city.geo
-                    };
-                    city.push(singleCity);
-                    console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi + ' == ' + result.city.geo);
-                } else {
-                    console.log(i + ': 不是大中国 == ' + result.city.name);
-                }
-            }
-        }
-
-        fs.writeFile('./cityb.js', JSON.stringify(city), 'utf8', (err) => {
-            if (err) throw err;
-            console.log('新建 cityb.js 成功');
-        });
-    }
-    async getcitycAction() {
-        let city = [];
-        for (let i = 4000; i < 6000; i++) {
-            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
-            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
-                let result = res.data.rxs.obs[0].msg;
-                if (!result.city || !result.city.name || !result.city.geo) {
-                    continue;
-                }
-
-                if (result.city.geo[0] >= 3.84 && result.city.geo[0] <= 53.56 && result.city.geo[1] >= 73.54 && result.city.geo[1] <= 135.1) {
-                    let singleCity = {
-                        id: i,
-                        cn: result.city.name,
-                        en: slugify(result.city.name),
-                        geo: result.city.geo
-                    };
-                    city.push(singleCity);
-                    console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi + ' == ' + result.city.geo);
-                } else {
-                    console.log(i + ': 不是大中国 == ' + result.city.name);
-                }
-            }
-        }
-
-        fs.writeFile('./cityc.js', JSON.stringify(city), 'utf8', (err) => {
-            if (err) throw err;
-            console.log('新建 cityc.js 成功');
-        });
-    }
-    async getcitydAction() {
-        let city = [];
-        for (let i = 6000; i < 8000; i++) {
-            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
-            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
-                let result = res.data.rxs.obs[0].msg;
-                if (!result.city || !result.city.name || !result.city.geo) {
-                    continue;
-                }
-
-                if (result.city.geo[0] >= 3.84 && result.city.geo[0] <= 53.56 && result.city.geo[1] >= 73.54 && result.city.geo[1] <= 135.1) {
-                    let singleCity = {
-                        id: i,
-                        cn: result.city.name,
-                        en: slugify(result.city.name),
-                        geo: result.city.geo
-                    };
-                    city.push(singleCity);
-                    console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi + ' == ' + result.city.geo);
-                } else {
-                    console.log(i + ': 不是大中国 == ' + result.city.name);
-                }
-            }
-        }
-
-        fs.writeFile('./cityd.js', JSON.stringify(city), 'utf8', (err) => {
-            if (err) throw err;
-            console.log('新建 cityd.js 成功');
-        });
-    }
-    async getcityeAction() {
-        let city = [];
-        for (let i = 8000; i < 10000; i++) {
-            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
-            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
-                let result = res.data.rxs.obs[0].msg;
-                if (!result.city || !result.city.name || !result.city.geo) {
-                    continue;
-                }
-
-                if (result.city.geo[0] >= 3.84 && result.city.geo[0] <= 53.56 && result.city.geo[1] >= 73.54 && result.city.geo[1] <= 135.1) {
-                    let singleCity = {
-                        id: i,
-                        cn: result.city.name,
-                        en: slugify(result.city.name),
-                        geo: result.city.geo
-                    };
-                    city.push(singleCity);
-                    console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi + ' == ' + result.city.geo);
-                } else {
-                    console.log(i + ': 不是大中国 == ' + result.city.name);
-                }
-            }
-        }
-
-        fs.writeFile('./citye.js', JSON.stringify(city), 'utf8', (err) => {
-            if (err) throw err;
-            console.log('新建 citye.js 成功');
-        });
-    }
-    async getcityfAction() {
-        let city = [];
-        for (let i = 3303; i < 10000; i++) {
-            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
-            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
-                let result = res.data.rxs.obs[0].msg;
-                if (!result.city || !result.city.name || !result.city.geo) {
-                    continue;
-                }
-
-                if (result.city.geo[0] >= 3.84 && result.city.geo[0] <= 53.56 && result.city.geo[1] >= 73.54 && result.city.geo[1] <= 135.1) {
-                    let singleCity = {
-                        id: i,
-                        cn: result.city.name,
-                        en: slugify(result.city.name),
-                        geo: result.city.geo
-                    };
-                    city.push(singleCity);
-                    fs.appendFileSync('./cityall.js', JSON.stringify(singleCity) + ',\n', { encoding: 'utf8' });
-                    console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi + ' == ' + result.city.geo);
-                } else {
-                    console.log(i + ': 不是大中国 == ' + result.city.name);
-                }
-            }
-        }
-    }
+    //             if (result.city.geo[0] >= 3.84 && result.city.geo[0] <= 53.56 && result.city.geo[1] >= 73.54 && result.city.geo[1] <= 135.1) {
+    //                 let singleCity = {
+    //                     id: i,
+    //                     cn: result.city.name,
+    //                     en: slugify(result.city.name),
+    //                     geo: result.city.geo
+    //                 };
+    //                 city.push(singleCity);
+    //                 fs.appendFileSync('./cityall.js', JSON.stringify(singleCity) + ',\n', { encoding: 'utf8' });
+    //                 console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi + ' == ' + result.city.geo);
+    //             } else {
+    //                 console.log(i + ': 不是大中国 == ' + result.city.name);
+    //             }
+    //         }
+    //     }
+    // }
+    // async filtercityAction() {
+    //     let oriPath = './cityall.js';
+    //     let distPath = './cityres.js';
+    //     let cityHtml = fs.readFileSync(oriPath, { encoding: 'utf8' });
+    //     let city = JSON.parse(cityHtml);
+    //     for (let i = 0; i < city.length; i++) {
+    //         let res = await axios.get(`http://api.map.baidu.com/geocoder/v2/?location=${city[i].geo[0]},${city[i].geo[1]}&output=json&pois=0&ak=6fd470666614aa24ae93d4f61463050c`);
+    //         if (res && res.data.result.addressComponent.country_code == 0) {
+    //             let singleCity = {
+    //                 id: city[i].id,
+    //                 cn: city[i].cn,
+    //                 en: city[i].en,
+    //                 geo: city[i].geo
+    //             };
+    //             fs.appendFileSync(distPath, JSON.stringify(singleCity) + ',\n', { encoding: 'utf8' });
+    //             console.log('add ==> ' + city[i].id + ': ' + city[i].cn);
+    //         } else {
+    //             console.log('FILTER ==> ' + city[i].id + ': ' + city[i].cn);
+    //         }
+    //     }
+    // }
+    // async creattableAction() {
+    //     let model = this.model('city');
+    //     let distPath = './cityres.js';
+    //     let cityHtml = fs.readFileSync(distPath, { encoding: 'utf8' });
+    //     let city = JSON.parse(cityHtml);
+    //     for (let i = 0; i < city.length; i++) {
+    //         let list = await model.addInfo({
+    //             idx: city[i].id,
+    //             cn: city[i].cn,
+    //             en: city[i].en,
+    //             geo: city[i].geo[0] + ',' + city[i].geo[1]
+    //         });
+    //     }
+    // }
+    // async fucktableAction() {
+    //     let model = this.model('city');
+    //     let distPath = './cityres.js';
+    //     let cityHtml = fs.readFileSync(distPath, { encoding: 'utf8' });
+    //     let city = JSON.parse(cityHtml);
+    //     for (let i = 0; i < city.length; i++) {
+    //         let list = await model.updateInfo({
+    //             lat: city[i].geo[0],
+    //             lng: city[i].geo[1]
+    //         }, {
+    //             where: {
+    //                 idx: city[i].id
+    //             }
+    //         });
+    //     }
+    // }
 
     //pm2.5
     async pm25Action() {
@@ -271,31 +118,63 @@ export default class extends Base {
         let _city = CITY[0];
         if (!cityCookie) {
             let ip = this.ip();
-            let loc = await axios.get(`http://apis.juhe.cn/ip/ip2addr?ip=${ip}&key=7b941499afc9d7283f6e5eef2407eb8e`);
-            if (loc && loc.data && loc.data.result) {
-                loc = loc.data.result.area;
-                for (let i = 0; i < CITY.length; i++) {
-                    if (loc.indexOf(CITY[i].cn) != -1 || CITY[i].cn.indexOf(loc) != -1) {
-                        _city = CITY[i];
-                    }
+            //百度地图api，ip精确查找
+            let loc = await axios.get(`https://api.map.baidu.com/highacciploc/v1?qcip=${ip}&qterm=pc&ak=6fd470666614aa24ae93d4f61463050c&coord=bd09ll&extensions=1`);
+            let lat = 0,
+                lng = 0;
+            if (loc && loc.data && loc.data.result && loc.data.result.error == '161') {
+                loc = loc.data.content;
+                lat = loc.location.lat;
+                lng = loc.location.lng;
+            } else {
+                //百度地图api，ip模糊查找
+                let secLoc = await axios.get(`https://api.map.baidu.com/location/ip?ip=${ip}&ak=6fd470666614aa24ae93d4f61463050c&coor=bd09ll`);
+                if (secLoc && secLoc.data && secLoc.data.content) {
+                    secLoc = secLoc.data.content;
+                    lat = secLoc.point.y;
+                    lng = secLoc.point.x;
                 }
             }
-            this.cookie("city_id", _city.id, {
+
+            let span = 0.1;
+            let model = this.model('city');
+            for (let i = 0; i < 100; i++) {
+                let whereSql = `lat > (${lat} - ${span}) AND lat < (${lat} + ${span}) AND lng > (${lng} - ${span}) AND lng < (${lng} + ${span})`;
+                let list = await model.getInfo(whereSql, {
+                    lat: 'ASC',
+                    lng: 'ASC'
+                });
+                if (list.length) {
+                    //如果查询到结果，计算结果中距离最短的地点
+                    for (let j = 0; j < list.length; j++) {
+                        list[j].distance = Math.pow((lat - list[j].lat), 2) + Math.pow((lng - list[j].lng), 2);
+                    }
+                    _city = _.minBy(list, 'distance');
+                    break;
+                } else {
+                    span += 0.1;
+                }
+            }
+            //将地区信息写入cookie
+            this.cookie("city_id", _city.idx, {
+                timeout: 30 * 24 * 3600
+            });
+            this.cookie("city_name", _city.cn, {
                 timeout: 30 * 24 * 3600
             });
         } else {
-            _city.id = cityCookie;
+            _city.idx = cityCookie;
+            _city.cn = this.cookie('city_name');;
         }
-
-        // let res = await axios.get('https://waqi.info/api/feed/@3303/now.json');
-        let res = await axios.get(`https://waqi.info/api/feed/@${_city.id}/obs.cn.json`);
+        let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`);
+        // let res = await axios.get(`https://waqi.info/api/feed/@${_city.id}/obs.cn.json`);
+        // console.log(res);
         if (res.data.rxs && res.data.rxs.status == 'ok') {
             let result = res.data.rxs.obs[0].msg;
             let data = {
-                pos: result.city.name,
-                url: result.city.url,
+                pos: _city.cn,
                 aqi: result.aqi,
-                time: result.time.v
+                time: result.time.s
             }
             return this.success(data);
         }

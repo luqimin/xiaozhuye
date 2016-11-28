@@ -12,7 +12,7 @@
 </style>
 <template>
     <ul class="nav navbar-nav">
-        <li><a v-html="pmLevel" class="pm25" :href="pmUrl" target="_blank"></a></li>
+        <li><a v-html="pmLevel" class="pm25"></a></li>
         <li><a v-html="nowWeather"></a></li>
         <li><a v-html="f1Weather"></a></li>
     </ul>
@@ -28,7 +28,6 @@
         },
         data: () => ({
             pm25: '初始化...',
-            pmUrl: '',
             pos: '',
             weaPos: '',
             nowTemp: '',
@@ -77,7 +76,6 @@
                         let msg = res.data.data;
                         this.pm25 = msg.aqi;
                         this.pos = '('+ msg.pos +')';
-                        this.pmUrl = msg.url;
                     }
                 });
             },
