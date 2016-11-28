@@ -2,7 +2,13 @@
 
 import Base from './base.js';
 import axios from 'axios';
+import fs from 'fs';
 import _ from 'lodash';
+import { slugify } from 'transliteration';
+slugify.config({
+    lowercase: true,
+    separator: ''
+});
 
 const CITY = [
     { cn: '北京', en: 'beijing', id: '3303' },
@@ -24,6 +30,92 @@ export default class extends Base {
     indexAction() {
         //auto render template file index_index.html
         return this.display();
+    }
+
+    //获取美国大使馆pm接口所有数据
+    async usembassyAction() {
+        let city = [];
+        let idArr = [
+                [1238, 1661],
+                [3303, 3309],
+                [3410, 3546],
+                [3579, 3682],
+                [3721, 3730],
+                [3785, 3792],
+                [3864, 3869],
+                [],
+            ]
+            // for (let i = 1238; i <= 1661; i++) {3303 3309  3410 3546  3579 3682  3721 3730  37854147
+            //     let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
+            //     if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
+            //         let result = res.data.rxs.obs[0].msg;
+            //         if (!result.city) {
+            //             return;
+            //         }
+            //         let singleCity = {
+            //             id: i,
+            //             cn: result.city.name,
+            //             en: slugify(result.city.name),
+            //             geo: result.city.geo
+            //         };
+            //         city.push(singleCity);
+            //         console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi);
+            //     }
+            // }
+        for (let i = 3881; i <= 9999; i++) {
+            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
+            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
+                let result = res.data.rxs.obs[0].msg;
+                if (!result.city || !result.city.name) {
+                    continue;
+                }
+                let singleCity = {
+                    id: i,
+                    cn: result.city.name,
+                    en: slugify(result.city.name),
+                    geo: result.city.geo
+                };
+                city.push(singleCity);
+                console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi);
+            }
+        }
+
+        fs.writeFile('./city2.js', JSON.stringify(city), 'utf8', (err) => {
+            if (err) throw err;
+            console.log('新建 city2.js 成功');
+        });
+    }
+
+    //获取美国大使馆pm接口所有数据
+    async getcityAction() {
+        let city = [];
+        for (let i = 446; i < 10000; i++) {
+            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
+            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
+                let result = res.data.rxs.obs[0].msg;
+                if (!result.city || !result.city.name || !result.city.geo) {
+                    continue;
+                }
+
+                if (result.city.geo[0] >= 3.84 && result.city.geo[0] <= 53.56 && result.city.geo[1] >= 73.54 && result.city.geo[1] <= 135.1) {
+                    let singleCity = {
+                        id: i,
+                        cn: result.city.name,
+                        en: slugify(result.city.name),
+                        geo: result.city.geo
+                    };
+                    city.push(singleCity);
+                    console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi + ' == ' + result.city.geo);
+                } else {
+                    console.log(i + ': 不是大中国 == ' + result.city.name);
+                }
+            }
+        }
+
+        fs.writeFile('./city2.js', JSON.stringify(city), 'utf8', (err) => {
+            if (err) throw err;
+            console.log('新建 city2.js 成功');
+        });
     }
 
     //pm2.5
