@@ -237,6 +237,32 @@ export default class extends Base {
             console.log('新建 citye.js 成功');
         });
     }
+    async getcityfAction() {
+        let city = [];
+        for (let i = 3303; i < 10000; i++) {
+            let res = await axios.get(`https://waqi.info/api/feed/@${i}/obs.cn.json`);
+            if (res.data.rxs && res.data.rxs.status == 'ok' && res.data.rxs.obs[0] && res.data.rxs.obs[0].msg) {
+                let result = res.data.rxs.obs[0].msg;
+                if (!result.city || !result.city.name || !result.city.geo) {
+                    continue;
+                }
+
+                if (result.city.geo[0] >= 3.84 && result.city.geo[0] <= 53.56 && result.city.geo[1] >= 73.54 && result.city.geo[1] <= 135.1) {
+                    let singleCity = {
+                        id: i,
+                        cn: result.city.name,
+                        en: slugify(result.city.name),
+                        geo: result.city.geo
+                    };
+                    city.push(singleCity);
+                    fs.appendFileSync('./cityall.js', JSON.stringify(singleCity) + ',\n', { encoding: 'utf8' });
+                    console.log(i + ': ' + result.city.name + ' ==> ' + result.aqi + ' == ' + result.city.geo);
+                } else {
+                    console.log(i + ': 不是大中国 == ' + result.city.name);
+                }
+            }
+        }
+    }
 
     //pm2.5
     async pm25Action() {
