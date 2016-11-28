@@ -121,8 +121,16 @@ export default class extends Base {
         let _city = CITY[0];
         if (!cityCookie) {
             let ip = this.ip();
+            //判断ua
+            let isH5 = () => {
+                var sUserAgent = this.userAgent();
+                var reg = new RegExp('Silk|Kindle|MIDP|WAP|(UP\.Browser)|Smartphone|Obigo|(AU\.Browser)|(wxd\.Mms)|(WxdB\.Browser)|CLDC|(UP\.Link)|(KM\.Browser)|UCWEB|(SEMC-Browser)|Mini|Symbian|Palm|Nokia|Panasonic|MOT|SonyEricsson|NEC|Alcatel|Ericsson|BENQ|BenQ|Amoisonic|Amoi|Capitel|PHILIPS|SAMSUNG|Lenovo|Mitsu|Motorola|SHARP|WAPPER|LG|EG900|CECT|Compal|kejian|Bird|(BIRD|G900/V1\.0)|Arima|CTL|TDG|Daxian|DAXIAN|DBTEL|Eastcom|EASTCOM|PANTECH|Dopod|Haier|HAIER|KONKA|KEJIAN|LENOVO|Soutec|SOUTEC|SAGEM|SEC|SED|EMOL|INNO55|ZTE|iPhone|Android|(Windows\sCE)|(Opera\sMini)|iPod|(Googlebot-Mobile)|IEMobile|(Windows\sPhone)');
+                return reg.test(sUserAgent);
+            }
+            let client = isH5() ? 'mb' : 'pc';
+
             //百度地图api，ip精确查找
-            let loc = await axios.get(`https://api.map.baidu.com/highacciploc/v1?qcip=${ip}&qterm=pc&ak=6fd470666614aa24ae93d4f61463050c&coord=bd09ll&extensions=1`);
+            let loc = await axios.get(`https://api.map.baidu.com/highacciploc/v1?qcip=${ip}&qterm=${client}&ak=6fd470666614aa24ae93d4f61463050c&coord=bd09ll&extensions=1`);
             let lat = 0,
                 lng = 0;
             if (loc && loc.data && loc.data.result && loc.data.result.error == '161') {
