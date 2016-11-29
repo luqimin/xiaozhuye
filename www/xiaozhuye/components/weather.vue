@@ -30,8 +30,12 @@
                 navigator.geolocation.getCurrentPosition(pos => {
                     Cookie.set('lat', pos.coords.latitude);
                     Cookie.set('lng', pos.coords.longitude);
+                    Cookie.remove('nogps');
                 }, err => {
                     Cookie.set('nogps', 1);
+                },{
+                    enableHighAccuracy: true,
+                    maximumAge: 3600 * 1000
                 });
             } else {
                 Cookie.set('nogps', 1);
