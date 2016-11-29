@@ -2,7 +2,6 @@
 
 import Base from './base.js';
 import _ from 'lodash';
-import Memcached from 'memcached';
 import http from 'http';
 // import Geetest from 'geetest';
 

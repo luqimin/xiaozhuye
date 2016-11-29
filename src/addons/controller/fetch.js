@@ -208,6 +208,7 @@ export default class extends Base {
         let ip = this.ip();
         let res = await axios.get('https://route.showapi.com/9-4?ip=' + ip + '&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
             console.log(err.code);
+            return '';
         });
         let data = res.data;
         if (data.showapi_res_body.ret_code != '-1') {
@@ -236,17 +237,23 @@ export default class extends Base {
     async toutiaoAction() {
         let res = await axios.get('http://v.juhe.cn/toutiao/index?type=top&key=1cbcc9bbbced658f6c56e7fa695e4fa3').catch(err => {
             console.log(err.code);
+            return '';
         });
-        let result = res.data.result.data;
-        this.end(_.dropRight(result, 21));
+        let result = res && res.data.result.data;
+        if (result) {
+            this.end(_.dropRight(result, 21));
+        } else {
+            this.end('');
+        }
     }
 
     //国内焦点
     async gnfocusAction() {
         let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001cd&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
             console.log(err.code);
+            return '';
         });
-        let result = res.data.showapi_res_body.pagebean.contentlist;
+        let result = res && res.data.showapi_res_body.pagebean.contentlist;
         this.end(result);
     }
 
@@ -254,8 +261,9 @@ export default class extends Base {
     async gwfocusAction() {
         let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001ce&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
             console.log(err.code);
+            return '';
         });
-        let result = res.data.showapi_res_body.pagebean.contentlist;
+        let result = res && res.data.showapi_res_body.pagebean.contentlist;
         this.end(result);
     }
 
@@ -263,16 +271,18 @@ export default class extends Base {
     async yuleAction() {
         let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a10ab3cdc86cf39001eb&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
             console.log(err.code);
+            return '';
         });
-        let result = res.data.showapi_res_body.pagebean.contentlist;
+        let result = res && res.data.showapi_res_body.pagebean.contentlist;
         this.end(result);
     }
 
     async duanziAction() {
         let res = await axios.get('https://route.showapi.com/255-1?page=&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
             console.log(err.code);
+            return '';
         });
-        let result = res.data.showapi_res_body.pagebean.contentlist;
+        let result = res && res.data.showapi_res_body.pagebean.contentlist;
         this.end(result);
     }
 }
