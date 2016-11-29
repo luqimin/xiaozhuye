@@ -130,25 +130,30 @@ export default class extends Base {
             let client = isH5() ? 'mb' : 'pc';
 
             //百度地图api，ip精确查找
-            let loc = await axios.get(`https://api.map.baidu.com/highacciploc/v1?qcip=${ip}&qterm=${client}&ak=6fd470666614aa24ae93d4f61463050c&coord=bd09ll&extensions=1`);
-            let lat = 0,
-                lng = 0;
-            if (loc && loc.data && loc.data.result && loc.data.result.error == '161') {
-                loc = loc.data.content;
-                lat = loc.location.lat;
-                lng = loc.location.lng;
-            } else {
-                //百度地图api，ip模糊查找
-                let secLoc = await axios.get(`https://api.map.baidu.com/location/ip?ip=${ip}&ak=6fd470666614aa24ae93d4f61463050c&coor=bd09ll`);
-                if (secLoc && secLoc.data && secLoc.data.content) {
-                    secLoc = secLoc.data.content;
-                    lat = secLoc.point.y;
-                    lng = secLoc.point.x;
+            let lat = this.get('lat') || 0,
+                lng = this.get('lng') || 0;
+
+            //判断是否能精确获取lat/lng,如果不能则通过ip获取pos
+            if (!lat || !lng) {
+                let loc = await axios.get(`https://api.map.baidu.com/highacciploc/v1?qcip=${ip}&qterm=${client}&ak=6fd470666614aa24ae93d4f61463050c&coord=bd09ll&extensions=1`);
+                if (loc && loc.data && loc.data.result && loc.data.result.error == '161') {
+                    loc = loc.data.content;
+                    lat = loc.location.lat;
+                    lng = loc.location.lng;
+                } else {
+                    //百度地图api，ip模糊查找
+                    let secLoc = await axios.get(`https://api.map.baidu.com/location/ip?ip=${ip}&ak=6fd470666614aa24ae93d4f61463050c&coor=bd09ll`);
+                    if (secLoc && secLoc.data && secLoc.data.content) {
+                        secLoc = secLoc.data.content;
+                        lat = secLoc.point.y;
+                        lng = secLoc.point.x;
+                    }
                 }
             }
 
             let span = 0.1;
             let model = this.model('city');
+            //从数据库获取距离当前地点最近的city
             for (let i = 0; i < 100; i++) {
                 let whereSql = `lat > (${lat} - ${span}) AND lat < (${lat} + ${span}) AND lng > (${lng} - ${span}) AND lng < (${lng} + ${span})`;
                 let list = await model.getInfo(whereSql, {
@@ -168,15 +173,16 @@ export default class extends Base {
             }
 
             //将地区信息写入cookie
-            this.cookie("city_id", _city.idx);
-            this.cookie("city_name", _city.cn);
+            if ((this.get('lat') && this.get('lng')) || this.cookie('nogps')) {
+                this.cookie("city_id", _city.idx);
+                this.cookie("city_name", _city.cn);
+            }
         } else {
             _city.idx = cityCookie;
             _city.cn = this.cookie('city_name');
         }
         let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`);
         // let res = await axios.get(`https://waqi.info/api/feed/@${_city.id}/obs.cn.json`);
-        // console.log(res);
         if (res.data.rxs && res.data.rxs.status == 'ok') {
             let result = res.data.rxs.obs[0].msg;
             let data = {

@@ -20,11 +20,22 @@
 
 <script>
     import axios from 'axios';
+    import Cookie from 'js-cookie';
 
     export default {
         created () {
             this.initPM();
             this.initWeather();
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(pos => {
+                    Cookie.set('lat', pos.coords.latitude);
+                    Cookie.set('lng', pos.coords.longitude);
+                }, err => {
+                    Cookie.set('nogps', 1);
+                });
+            } else {
+                Cookie.set('nogps', 1);
+            }
         },
         data: () => ({
             pm25: '初始化...',
@@ -70,17 +81,38 @@
         },
         methods: {
             initPM(){
-                axios.get('/addons/fetch/pm25', '').then(res => {
-                    // 响应成功回调
-                    if (res.data.status != 'fail') {
-                        let msg = res.data.data;
-                        this.pm25 = msg.aqi;
-                        this.pos = '('+ msg.pos +')';
+                let getData = pos => {
+                    let opt = '';
+                    if(pos){
+                        opt = {
+                            params:{
+                                lat: pos.lat || '',
+                                lng: pos.lng || ''
+                            }
+                        };
                     }
-                });
+                    axios.get('/addons/fetch/pm25', opt).then(res => {
+                        // 响应成功回调
+                        if (res.data.status != 'fail') {
+                            let msg = res.data.data;
+                            this.pm25 = msg.aqi;
+                            this.pos = '('+ msg.pos +')';
+                        }
+                    });
+                };
+                let cookieLat = Cookie.get('lat');
+                let cookieLng = Cookie.get('lng');
+                if(cookieLat && cookieLng){
+                    getData({
+                        lat: cookieLat,
+                        lng: cookieLng
+                    });
+                } else {
+                    getData();
+                }
             },
             initWeather(){
-                axios.get('/addons/fetch/weather', '').then(res => {
+                axios.get('/addons/fetch/weather').then(res => {
                     // 响应成功回调
                     if (res.data.status != 'fail') {
                         let msg = res.data.data;
