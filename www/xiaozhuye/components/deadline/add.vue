@@ -100,13 +100,19 @@ export default {
                 noteDay: this.noteDay.time
             }).then(res => {
                 if(res.data && !res.data.errno){
+                    this.$emit('addOneNote', {
+                        title: this.noteTitle,
+                        content: this.noteContent,
+                        day: this.noteDay.time,
+                        date: Date.parse(this.noteDay.time)
+                    })
+
                     this.noteTitle = '';
                     this.noteContent = '';
                     this.noteDay.time = '';
                     this.error = '提交成功';
                 }
             });
-
         }
 	},
     components: {

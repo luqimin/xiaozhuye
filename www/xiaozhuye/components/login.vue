@@ -48,13 +48,13 @@
                     <div class="form-group">
                         <label for="password" class="col-sm-2 control-label">密码</label>
                         <div class="col-sm-10">
-                            <input @input="updatePassword" @keyup.enter="submitAction" :value="password" type="password" class="form-control" id="password" placeholder="* 密码6-16位">
+                            <input @input="updatePassword" @keyup.enter="submit" :value="password" type="password" class="form-control" id="password" placeholder="* 密码6-16位">
                         </div>
                     </div>
                     <div v-if="type=='register'" class="form-group">
                         <label for="inviteCode" class="col-sm-2 control-label">邀请码</label>
                         <div class="col-sm-10">
-                            <input v-model="inviteCode" @keyup.enter="submitAction" type="text" class="form-control" id="inviteCode" placeholder="选填">
+                            <input v-model="inviteCode" @keyup.enter="submit" type="text" class="form-control" id="inviteCode" placeholder="选填">
                         </div>
                     </div>
                     <div class="form-group">

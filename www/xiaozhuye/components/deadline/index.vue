@@ -89,7 +89,7 @@
             </div>
 		</div>
 		<div class="panel-body">
-            <component v-bind:is="addComp" :show.sync="isAdd"></component>
+            <component v-bind:is="addComp" :show.sync="isAdd" v-on:addOneNote="addOneNote"></component>
             <div class="count clearfix">
                 <div class="number">
                     <span class="date">{{notes[num].day}}</span>
@@ -183,6 +183,9 @@ export default {
             this.addTitle = this.addTitle ? '' : '增加一条倒计时';
             this.addBtn = this.addBtn == '×' ? '+' : '×';
             this.isAdd = !this.isAdd;
+        },
+        addOneNote(data){
+            this.notes.unshift(data);
         },
         deleteNote(){
             let that = this;
