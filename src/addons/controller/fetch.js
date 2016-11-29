@@ -135,14 +135,18 @@ export default class extends Base {
 
             //判断是否能精确获取lat/lng,如果不能则通过ip获取pos
             if (!lat || !lng) {
-                let loc = await axios.get(`https://api.map.baidu.com/highacciploc/v1?qcip=${ip}&qterm=${client}&ak=6fd470666614aa24ae93d4f61463050c&coord=bd09ll&extensions=1`);
+                let loc = await axios.get(`https://api.map.baidu.com/highacciploc/v1?qcip=${ip}&qterm=${client}&ak=6fd470666614aa24ae93d4f61463050c&coord=bd09ll&extensions=1`).catch(err => {
+                    console.log(err.code);
+                });
                 if (loc && loc.data && loc.data.result && loc.data.result.error == '161') {
                     loc = loc.data.content;
                     lat = loc.location.lat;
                     lng = loc.location.lng;
                 } else {
                     //百度地图api，ip模糊查找
-                    let secLoc = await axios.get(`https://api.map.baidu.com/location/ip?ip=${ip}&ak=6fd470666614aa24ae93d4f61463050c&coor=bd09ll`);
+                    let secLoc = await axios.get(`https://api.map.baidu.com/location/ip?ip=${ip}&ak=6fd470666614aa24ae93d4f61463050c&coor=bd09ll`).catch(err => {
+                        console.log(err.code);
+                    });
                     if (secLoc && secLoc.data && secLoc.data.content) {
                         secLoc = secLoc.data.content;
                         lat = secLoc.point.y;
@@ -181,7 +185,9 @@ export default class extends Base {
             _city.idx = cityCookie;
             _city.cn = this.cookie('city_name');
         }
-        let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`);
+        let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`).catch(err => {
+            console.log(err.code);
+        });
         // let res = await axios.get(`https://waqi.info/api/feed/@${_city.id}/obs.cn.json`);
         if (res.data.rxs && res.data.rxs.status == 'ok') {
             let result = res.data.rxs.obs[0].msg;
@@ -200,7 +206,9 @@ export default class extends Base {
     //天气
     async weatherAction() {
         let ip = this.ip();
-        let res = await axios.get('https://route.showapi.com/9-4?ip=' + ip + '&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617');
+        let res = await axios.get('https://route.showapi.com/9-4?ip=' + ip + '&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
+            console.log(err.code);
+        });
         let data = res.data;
         if (data.showapi_res_body.ret_code != '-1') {
             data = {
@@ -226,34 +234,44 @@ export default class extends Base {
 
     //新闻头条
     async toutiaoAction() {
-        let res = await axios.get('http://v.juhe.cn/toutiao/index?type=top&key=1cbcc9bbbced658f6c56e7fa695e4fa3');
+        let res = await axios.get('http://v.juhe.cn/toutiao/index?type=top&key=1cbcc9bbbced658f6c56e7fa695e4fa3').catch(err => {
+            console.log(err.code);
+        });
         let result = res.data.result.data;
         this.end(_.dropRight(result, 21));
     }
 
     //国内焦点
     async gnfocusAction() {
-        let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001cd&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617');
+        let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001cd&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
+            console.log(err.code);
+        });
         let result = res.data.showapi_res_body.pagebean.contentlist;
         this.end(result);
     }
 
     //国外焦点
     async gwfocusAction() {
-        let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001ce&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617');
+        let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001ce&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
+            console.log(err.code);
+        });
         let result = res.data.showapi_res_body.pagebean.contentlist;
         this.end(result);
     }
 
     //娱乐焦点
     async yuleAction() {
-        let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a10ab3cdc86cf39001eb&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617');
+        let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a10ab3cdc86cf39001eb&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
+            console.log(err.code);
+        });
         let result = res.data.showapi_res_body.pagebean.contentlist;
         this.end(result);
     }
 
     async duanziAction() {
-        let res = await axios.get('https://route.showapi.com/255-1?page=&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617');
+        let res = await axios.get('https://route.showapi.com/255-1?page=&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
+            console.log(err.code);
+        });
         let result = res.data.showapi_res_body.pagebean.contentlist;
         this.end(result);
     }
