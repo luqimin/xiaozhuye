@@ -33,5 +33,5 @@ pm2 startOrReload pm2.json
 ## 便捷更新生产环境
 
 ```
-bash rebuild.sh
+npm run build
 ```
