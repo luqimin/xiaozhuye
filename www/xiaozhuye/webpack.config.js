@@ -1,6 +1,7 @@
 // webpack.config.js
 var path = require('path');
 var webpack = require('webpack');
+require("babel-polyfill");
 var prod = process.env.NODE_ENV === 'production' ? true : false;
 
 var plugins = [];
@@ -21,7 +22,7 @@ if (prod) {
 
 module.exports = {
     entry: {
-        index: path.join(__dirname)
+        index: ['babel-polyfill', path.join(__dirname)]
     },
     // 输出配置
     output: {
