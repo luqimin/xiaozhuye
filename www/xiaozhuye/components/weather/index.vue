@@ -1,39 +1,57 @@
 <style>
-    .pm25 span {
+    .pm25 span.pm {
+        margin-right: 2px;
         background: #b2dbfb;
         border-radius: 5px;
         padding: 0 2px;
         transition: background .2s;
     }
 
-    .pm25:hover span {
+    span.pos {
+        cursor: pointer;
+    }
+
+    span.pos:hover {
+        text-decoration: underline;
+    }
+
+    .pm25:hover span.pm {
         background: #fff;
     }
 </style>
 <template>
     <ul class="nav navbar-nav">
-        <li><a v-html="pmLevel" class="pm25"></a></li>
+        <li v-if="">
+            <a class="pm25">
+                PM2.5: <span v-if="pm25" class="pm" :class="pmClass">{{pm25}}</span>
+                [<span @click="changePos" class="pos">{{pos}}</span>]
+            </a>
+        </li>
         <li><a v-html="nowWeather"></a></li>
         <li><a v-html="f1Weather"></a></li>
+        <transition name="fade">
+            <component v-bind:is="posComp" v-on:setPosSucc="setPosSucc" v-on:closeSetPos="closePos"></component>
+        </transition>
     </ul>
 </template>
 
 <script>
     import axios from 'axios';
     import Cookie from 'js-cookie';
+    import defmod from '../default';
 
     export default {
         created () {
             this.initPM();
             this.initWeather();
-            if(navigator.geolocation){
+            if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(pos => {
                     Cookie.set('lat', pos.coords.latitude);
                     Cookie.set('lng', pos.coords.longitude);
                     Cookie.remove('nogps');
                 }, err => {
                     Cookie.set('nogps', 1);
-                },{
+                }, {
                     enableHighAccuracy: true,
                     maximumAge: 3600 * 1000
                 });
@@ -42,30 +60,32 @@
             }
         },
         data: () => ({
-            pm25: '初始化...',
-            pos: '',
+            pm25: '',
+            pos: '定位中...',
             weaPos: '',
             nowTemp: '',
             nowWea: '',
             nowWind: '',
             f1Temp: '',
             f1Wea: '',
+            setPos: false
         }),
         computed: {
-            pmLevel(){
-                let pos = this.pos;
-                let pm = this.pm25;
-                let res = 'PM2.5: ' + pm;
-                if (this.pm25 <= 50) {
-                    res = 'PM2.5: <span class="text-success">' + pm + '</span> ' + pos;
-                } else if (this.pm25 > 51 && this.pm25 <= 150) {
-                    res = 'PM2.5: <span class="text-warning">' + pm + '</span> ' + pos;
-                } else if (this.pm25 > 151 && this.pm25 <= 200) {
-                    res = 'PM2.5: <span class="text-danger">' + pm + '</span> ' + pos;
-                } else if (this.pm25 > 200) {
-                    res = 'PM2.5: <span class="text-info">' + pm + '</span> ' + pos;
+            posComp(){
+                return this.setPos ? 'position' : 'defmod';
+            },
+            pmClass(){
+                let pm = this.pm25, pmClass = 'text-primary';
+                if (pm >= 0 && pm <= 50) {
+                    pmClass = 'text-success';
+                } else if (pm > 51 && pm <= 150) {
+                    pmClass = 'text-warning';
+                } else if (pm > 151 && pm <= 200) {
+                    pmClass = 'text-danger';
+                } else if (pm > 200) {
+                    pmClass = 'text-info';
                 }
-                return res;
+                return pmClass;
             },
             nowWeather(){
                 if (this.nowWea && this.nowTemp && this.nowWind) {
@@ -87,9 +107,9 @@
             initPM(){
                 let getData = pos => {
                     let opt = '';
-                    if(pos){
+                    if (pos) {
                         opt = {
-                            params:{
+                            params: {
                                 lat: pos.lat || '',
                                 lng: pos.lng || ''
                             }
@@ -100,13 +120,13 @@
                         if (res.data.status != 'fail') {
                             let msg = res.data.data;
                             this.pm25 = msg.aqi;
-                            this.pos = '('+ msg.pos +')';
+                            this.pos = msg.pos;
                         }
                     });
                 };
                 let cookieLat = Cookie.get('lat');
                 let cookieLng = Cookie.get('lng');
-                if(cookieLat && cookieLng){
+                if (cookieLat && cookieLng) {
                     getData({
                         lat: cookieLat,
                         lng: cookieLng
@@ -128,7 +148,37 @@
                         this.f1Wea = msg.f1.day_weather + '~' + msg.f1.night_weather;
                     }
                 });
+            },
+            changePos(){
+                if (!this.pm25) {
+                    return;
+                }
+                this.setPos = true;
+            },
+            setPosSucc(city){
+                this.pos = city.cn;
+                axios.get('/addons/fetch/pm25', {
+                    params: {idx: city.idx}
+                }).then(res => {
+                    // 响应成功回调
+                    if (res.data.status != 'fail') {
+                        let msg = res.data.data;
+                        this.pm25 = msg.aqi;
+                        this.pos = msg.pos;
+                    }
+                });
+            },
+            closePos(){
+                this.setPos = false;
             }
+        },
+        components: {
+            defmod,
+            position: (resolve) => {
+                require(['./position'], (component) => {
+                    resolve(component);
+                });
+            },
         }
     }
 </script>

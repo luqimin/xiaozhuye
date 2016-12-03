@@ -13,11 +13,11 @@ export default class extends Base {
      * @return {Promise} []
      */
     indexAction() {
-        const execFile = child_process.execFile;
-        let child = execFile(shPath, [''], (err, stdout, tderr) => {
-            if (err) throw err;
-            console.log(stdout);
-            return this.success(stdout);
-        });
+    //     const execFile = child_process.execFile;
+    //     let child = execFile(shPath, [''], (err, stdout, tderr) => {
+    //         if (err) throw err;
+    //         console.log(stdout);
+    //         return this.success(stdout);
+    //     });
     }
 }

@@ -94,7 +94,7 @@
         },
         props: [
             'type',
-            'title',
+            'title'
         ],
         data: () => ({
             userSitesId: [],
@@ -105,7 +105,7 @@
             siteCategory: '',
             siteIssecret: false,
             siteIsfocus: false,
-            error: '',
+            error: ''
         }),
         computed: {
             ...mapGetters([

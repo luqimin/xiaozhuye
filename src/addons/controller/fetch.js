@@ -4,22 +4,22 @@ import Base from './base.js';
 import axios from 'axios';
 import fs from 'fs';
 import _ from 'lodash';
-import { slugify } from 'transliteration';
+import {slugify} from 'transliteration';
 slugify.config({
     lowercase: true,
     separator: ''
 });
 
 const CITY = [
-    { cn: '北京', en: 'beijing', idx: '3303' },
-    { cn: '上海', en: 'shanghai', idx: '1437' },
-    { cn: '合肥', en: 'hefei', idx: '1497' },
-    { cn: '安庆', en: 'anqing', idx: '7900' },
-    { cn: '芜湖', en: 'wuhu', idx: '1498' },
-    { cn: '南京', en: 'nanjing', idx: '1485' },
-    { cn: '武汉', en: 'wuhan', idx: '1529' },
-    { cn: '济南', en: 'jinan', idx: '1505' },
-    { cn: '临沂', en: 'linyi', idx: '1517' }
+    {cn: '北京', en: 'beijing', idx: '3303'},
+    {cn: '上海', en: 'shanghai', idx: '1437'},
+    {cn: '合肥', en: 'hefei', idx: '1497'},
+    {cn: '安庆', en: 'anqing', idx: '7900'},
+    {cn: '芜湖', en: 'wuhu', idx: '1498'},
+    {cn: '南京', en: 'nanjing', idx: '1485'},
+    {cn: '武汉', en: 'wuhan', idx: '1529'},
+    {cn: '济南', en: 'jinan', idx: '1505'},
+    {cn: '临沂', en: 'linyi', idx: '1517'}
 ];
 
 export default class extends Base {
@@ -111,22 +111,42 @@ export default class extends Base {
     //     }
     // }
 
+    async getcityAction() {
+        let name = this.get('city');
+        if (!name) {
+            return this.fail('请输入城市名');
+        }
+
+        let model = this.model('city');
+
+        let list = await model.getInfo({
+            "cn|en": ["like", `%${name}%`]
+        }, {
+            en: 'ASC'
+        });
+
+        return this.success(list);
+    }
+
     //pm2.5
     async pm25Action() {
         if (this.cookie('city_id') && !this.cookie('city_name')) {
             this.cookie('city_id', null);
         }
 
+        let idx = this.get('idx');
         let cityCookie = this.cookie('city_id');
         let _city = CITY[0];
-        if (!cityCookie) {
+
+        if (!idx && !cityCookie) {
+        // if (1 + 1) {
             let ip = this.ip();
             //判断ua
             let isH5 = () => {
-                var sUserAgent = this.userAgent();
-                var reg = new RegExp('Silk|Kindle|MIDP|WAP|(UP\.Browser)|Smartphone|Obigo|(AU\.Browser)|(wxd\.Mms)|(WxdB\.Browser)|CLDC|(UP\.Link)|(KM\.Browser)|UCWEB|(SEMC-Browser)|Mini|Symbian|Palm|Nokia|Panasonic|MOT|SonyEricsson|NEC|Alcatel|Ericsson|BENQ|BenQ|Amoisonic|Amoi|Capitel|PHILIPS|SAMSUNG|Lenovo|Mitsu|Motorola|SHARP|WAPPER|LG|EG900|CECT|Compal|kejian|Bird|(BIRD|G900/V1\.0)|Arima|CTL|TDG|Daxian|DAXIAN|DBTEL|Eastcom|EASTCOM|PANTECH|Dopod|Haier|HAIER|KONKA|KEJIAN|LENOVO|Soutec|SOUTEC|SAGEM|SEC|SED|EMOL|INNO55|ZTE|iPhone|Android|(Windows\sCE)|(Opera\sMini)|iPod|(Googlebot-Mobile)|IEMobile|(Windows\sPhone)');
+                let sUserAgent = this.userAgent();
+                let reg = new RegExp('Silk|Kindle|MIDP|WAP|(UP\.Browser)|Smartphone|Obigo|(AU\.Browser)|(wxd\.Mms)|(WxdB\.Browser)|CLDC|(UP\.Link)|(KM\.Browser)|UCWEB|(SEMC-Browser)|Mini|Symbian|Palm|Nokia|Panasonic|MOT|SonyEricsson|NEC|Alcatel|Ericsson|BENQ|BenQ|Amoisonic|Amoi|Capitel|PHILIPS|SAMSUNG|Lenovo|Mitsu|Motorola|SHARP|WAPPER|LG|EG900|CECT|Compal|kejian|Bird|(BIRD|G900/V1\.0)|Arima|CTL|TDG|Daxian|DAXIAN|DBTEL|Eastcom|EASTCOM|PANTECH|Dopod|Haier|HAIER|KONKA|KEJIAN|LENOVO|Soutec|SOUTEC|SAGEM|SEC|SED|EMOL|INNO55|ZTE|iPhone|Android|(Windows\sCE)|(Opera\sMini)|iPod|(Googlebot-Mobile)|IEMobile|(Windows\sPhone)');
                 return reg.test(sUserAgent);
-            }
+            };
             let client = isH5() ? 'mb' : 'pc';
 
             //百度地图api，ip精确查找
@@ -182,7 +202,7 @@ export default class extends Base {
                 this.cookie("city_name", _city.cn);
             }
         } else {
-            _city.idx = cityCookie;
+            _city.idx = idx || cityCookie;
             _city.cn = this.cookie('city_name');
         }
         let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`).catch(err => {
@@ -195,7 +215,7 @@ export default class extends Base {
                 pos: _city.cn,
                 aqi: result.aqi,
                 time: result.time.s
-            }
+            };
             return this.success(data);
         }
         return this.fail({

@@ -22,19 +22,6 @@ export default class extends Base {
         this.end();
     }
 
-    async testAction() {
-        memcached.set('foo', 'bar', 1000, (err, res) => {
-            console.log(err + '   ======err');
-            console.log(res + '   ======res');
-        });
-    }
-
-    async testtAction() {
-        let memcached = this.model('memcached');
-        let aaa = await memcached.get('qilu@163.com#code');
-        console.log(aaa);
-    }
-
     async sendemailcodeAction() {
         let email = this.post('email');
         if (!email) {
