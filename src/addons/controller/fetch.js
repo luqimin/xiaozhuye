@@ -2,7 +2,6 @@
 
 import Base from './base.js';
 import axios from 'axios';
-import fs from 'fs';
 import _ from 'lodash';
 import {slugify} from 'transliteration';
 slugify.config({
@@ -12,14 +11,7 @@ slugify.config({
 
 const CITY = [
     {cn: '北京', en: 'beijing', idx: '3303'},
-    {cn: '上海', en: 'shanghai', idx: '1437'},
-    {cn: '合肥', en: 'hefei', idx: '1497'},
-    {cn: '安庆', en: 'anqing', idx: '7900'},
-    {cn: '芜湖', en: 'wuhu', idx: '1498'},
-    {cn: '南京', en: 'nanjing', idx: '1485'},
-    {cn: '武汉', en: 'wuhan', idx: '1529'},
-    {cn: '济南', en: 'jinan', idx: '1505'},
-    {cn: '临沂', en: 'linyi', idx: '1517'}
+    {cn: '上海', en: 'shanghai', idx: '1437'}
 ];
 
 export default class extends Base {
@@ -117,6 +109,14 @@ export default class extends Base {
             return this.fail('请输入城市名');
         }
 
+        //检查缓存是否有当前城市数据
+        let Memcached = this.model("webapi/memcached");
+        let cityCache = await Memcached.get('city#' + encodeURIComponent(name));
+        if (cityCache) {
+            return this.json(cityCache);
+        }
+
+
         let model = this.model('city');
 
         let list = await model.getInfo({
@@ -125,7 +125,33 @@ export default class extends Base {
             en: 'ASC'
         });
 
-        return this.success(list);
+        let succData = {};
+
+        if (!list.length) {
+            let loc = await axios.get(`https://api.map.baidu.com/geocoder/v2/?output=json&address=${encodeURIComponent(name)}&ak=6fd470666614aa24ae93d4f61463050c`).catch(err => {
+                console.log(err.code);
+            });
+            if (loc && loc.data && loc.data.status == 0) {
+                loc = loc.data.result.location;
+                let lat = loc.lat;
+                let lng = loc.lng;
+                let nearbyCity = await model.nearBy({lat, lng}, 0.1, 0.05);
+                succData = {
+                    errno: 201,
+                    errmsg: '附近的地点',
+                    data: nearbyCity
+                };
+                Memcached.set('city#' + encodeURIComponent(name), succData, 0);
+                return this.json(succData);
+            }
+        }
+        succData = {
+            errno: 0,
+            errmsg: 'cities from usEmbassy',
+            data: list
+        };
+        Memcached.set('city#' + encodeURIComponent(name), succData, 0);
+        return this.json(succData);
     }
 
     //pm2.5
@@ -135,12 +161,12 @@ export default class extends Base {
         }
 
         let idx = this.get('idx');
-        let cityCookie = this.cookie('city_id');
         let _city = CITY[0];
 
-        if (!idx && !cityCookie) {
-        // if (1 + 1) {
+        if (!idx) {
+            // if (1 + 1) {
             let ip = this.ip();
+
             //判断ua
             let isH5 = () => {
                 let sUserAgent = this.userAgent();
@@ -175,36 +201,25 @@ export default class extends Base {
                 }
             }
 
-            let span = 0.1;
             let model = this.model('city');
             //从数据库获取距离当前地点最近的city
-            for (let i = 0; i < 100; i++) {
-                let whereSql = `lat > (${lat} - ${span}) AND lat < (${lat} + ${span}) AND lng > (${lng} - ${span}) AND lng < (${lng} + ${span})`;
-                let list = await model.getInfo(whereSql, {
-                    lat: 'ASC',
-                    lng: 'ASC'
-                });
-                if (list.length) {
-                    //如果查询到结果，计算结果中距离最短的地点
-                    for (let j = 0; j < list.length; j++) {
-                        list[j].distance = Math.pow((lat - list[j].lat), 2) + Math.pow((lng - list[j].lng), 2);
-                    }
-                    _city = _.minBy(list, 'distance');
-                    break;
-                } else {
-                    span += 0.1;
-                }
-            }
+            let _city = await model.nearBy({lat, lng}, 0.1, 0.1, 1);
 
             //将地区信息写入cookie
-            if ((this.get('lat') && this.get('lng')) || this.cookie('nogps')) {
-                this.cookie("city_id", _city.idx);
-                this.cookie("city_name", _city.cn);
-            }
+            this.cookie("city_id", _city.idx);
+            this.cookie("city_name", _city.cn);
         } else {
-            _city.idx = idx || cityCookie;
+            _city.idx = idx;
             _city.cn = this.cookie('city_name');
         }
+
+        //检查缓存是否有当前地点PM25数据
+        let Memcached = this.model("webapi/memcached");
+        let pmCache = await Memcached.get('pm25#' + _city.idx);
+        if (pmCache) {
+            return this.success(pmCache);
+        }
+
         let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`).catch(err => {
             console.log(err.code);
         });
@@ -216,6 +231,7 @@ export default class extends Base {
                 aqi: result.aqi,
                 time: result.time.s
             };
+            Memcached.set('pm25#' + _city.idx, data, 30 * 60);
             return this.success(data);
         }
         return this.fail({

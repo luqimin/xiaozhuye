@@ -44,20 +44,15 @@
         created () {
             this.initPM();
             this.initWeather();
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    Cookie.set('lat', pos.coords.latitude);
-                    Cookie.set('lng', pos.coords.longitude);
-                    Cookie.remove('nogps');
-                }, err => {
-                    Cookie.set('nogps', 1);
-                }, {
-                    enableHighAccuracy: true,
-                    maximumAge: 3600 * 1000
-                });
-            } else {
-                Cookie.set('nogps', 1);
-            }
+//            if (navigator.geolocation) {
+//                navigator.geolocation.getCurrentPosition(pos => {
+//                    Cookie.set('lat', pos.coords.latitude);
+//                    Cookie.set('lng', pos.coords.longitude);
+//                }, err => {}, {
+//                    enableHighAccuracy: true,
+//                    maximumAge: 3600 * 1000
+//                });
+//            }
         },
         data: () => ({
             pm25: '',
@@ -109,10 +104,7 @@
                     let opt = '';
                     if (pos) {
                         opt = {
-                            params: {
-                                lat: pos.lat || '',
-                                lng: pos.lng || ''
-                            }
+                            params: pos
                         };
                     }
                     axios.get('/addons/fetch/pm25', opt).then(res => {
@@ -124,9 +116,14 @@
                         }
                     });
                 };
+                let cookieIdx = Cookie.get('city_id');
                 let cookieLat = Cookie.get('lat');
                 let cookieLng = Cookie.get('lng');
-                if (cookieLat && cookieLng) {
+                if (cookieIdx) {
+                    getData({
+                        idx: cookieIdx
+                    });
+                } else if (cookieLat && cookieLng) {
                     getData({
                         lat: cookieLat,
                         lng: cookieLng

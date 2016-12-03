@@ -1,7 +1,6 @@
 'use strict';
 
 import Base from './base.js';
-import Memcached from 'memcached';
 
 export default class extends Base {
     /**
