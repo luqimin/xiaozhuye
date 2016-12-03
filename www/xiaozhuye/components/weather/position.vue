@@ -40,6 +40,14 @@
     import Cookie from 'js-cookie';
 
     export default {
+        created(){
+            let city = Cookie.get('city_name');
+            if (city) {
+                this.search({
+                    target: {value: city, forceNear: 1}
+                });
+            }
+        },
         data: () => ({
             cityList: [],
             errCity: 0
@@ -48,7 +56,10 @@
             search(e){
                 this.errCity = 100;
                 axios.get('/addons/fetch/getcity', {
-                    params: {city: e.target.value}
+                    params: {
+                        city: e.target.value,
+                        forceNear: e.target.forceNear
+                    }
                 }).then(res => {
                     if (res.data.errno == 0) {
                         if (res.data.data.length) {
@@ -70,7 +81,7 @@
             },
             setPos(e){
                 Cookie.set('lat', e.target.attributes.lat.value, {expires: 366, path: '/'});
-                Cookie.set('lat', e.target.attributes.lat.value, {expires: 366, path: '/'});
+                Cookie.set('lng', e.target.attributes.lng.value, {expires: 366, path: '/'});
                 Cookie.set('city_id', e.target.id, {expires: 366, path: '/'});
                 Cookie.set('city_name', e.target.innerText, {expires: 366, path: '/'});
                 this.$emit('setPosSucc', {

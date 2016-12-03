@@ -105,25 +105,35 @@ export default class extends Base {
 
     async getcityAction() {
         let name = this.get('city');
+        let forceNear = this.get('forceNear');
         if (!name) {
             return this.fail('请输入城市名');
         }
 
         //检查缓存是否有当前城市数据
         let Memcached = this.model("webapi/memcached");
-        let cityCache = await Memcached.get('city#' + encodeURIComponent(name));
-        if (cityCache) {
-            return this.json(cityCache);
+        if (!forceNear) {
+            let cityCache = await Memcached.get('city#' + encodeURIComponent(name));
+            if (cityCache) {
+                return this.json(cityCache);
+            }
+        } else {
+            let cityCache = await Memcached.get('nearcity#' + encodeURIComponent(name));
+            if (cityCache) {
+                return this.json(cityCache);
+            }
         }
-
 
         let model = this.model('city');
 
-        let list = await model.getInfo({
-            "cn|en": ["like", `%${name}%`]
-        }, {
-            en: 'ASC'
-        });
+        let list = [];
+        if (!forceNear) {
+            list = await model.getInfo({
+                "cn|en": ["like", `%${name}%`]
+            }, {
+                en: 'ASC'
+            });
+        }
 
         let succData = {};
 
@@ -141,7 +151,8 @@ export default class extends Base {
                     errmsg: '附近的地点',
                     data: nearbyCity
                 };
-                Memcached.set('city#' + encodeURIComponent(name), succData, 0);
+                !forceNear && Memcached.set('city#' + encodeURIComponent(name), succData, 0);
+                forceNear && Memcached.set('nearcity#' + encodeURIComponent(name), succData, 0);
                 return this.json(succData);
             }
         }
@@ -150,16 +161,13 @@ export default class extends Base {
             errmsg: 'cities from usEmbassy',
             data: list
         };
-        Memcached.set('city#' + encodeURIComponent(name), succData, 0);
+        !forceNear && Memcached.set('city#' + encodeURIComponent(name), succData, 0);
+        forceNear && Memcached.set('nearcity#' + encodeURIComponent(name), succData, 0);
         return this.json(succData);
     }
 
     //pm2.5
     async pm25Action() {
-        if (this.cookie('city_id') && !this.cookie('city_name')) {
-            this.cookie('city_id', null);
-        }
-
         let idx = this.get('idx');
         let _city = CITY[0];
 
