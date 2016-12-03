@@ -13,8 +13,9 @@
                     <div class="form-group">
                         <input @change="search" @keyup.enter="search" type="text" class="form-control" placeholder="输入城市名搜索">
                     </div>
-                    <p v-if="errCity==201" class="text-primary">对不起哦，找不到当前地点，小主页为您推荐以下城市</p>
-                    <p v-if="errCity==404" class="text-warning">对不起哦，找不到当前地点，您试试输入详细地址，例如: 安徽省安庆市太湖县</p>
+                    <p v-if="errCity==201" class="text-primary">对不起哦，找不到当前地点，小主页为您推荐以下地点</p>
+                    <p v-if="errCity==301" class="text-info">小主页猜您附近还有这些地点, 点击设置哦:</p>
+                    <p v-if="errCity==404" class="text-warning">对不起哦，找不到当前地点，试试搜索详细地址，例如: 安徽省安庆市太湖县</p>
                     <p v-if="errCity==100" class="text-success">玩命计算中...</p>
                     <div class="siteWrap">
                         <template v-for="city in cityList">
@@ -71,7 +72,11 @@
                         }
                     } else if (res.data.errno == 201) {
                         this.cityList = res.data.data;
-                        this.errCity = 201;
+                        if (e.target.forceNear) {
+                            this.errCity = 301;
+                        } else {
+                            this.errCity = 201
+                        }
                     } else {
                         this.errCity = 404;
                     }
