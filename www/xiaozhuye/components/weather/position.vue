@@ -11,7 +11,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input @change="search" @keyup.enter="search" type="text" class="form-control" placeholder="输入城市名搜索">
+                        <input @change="search" @keyup.enter="search" type="text" class="form-control" placeholder="搜索城市、地标、地址">
                     </div>
                     <p v-if="errCity==201" class="text-primary">对不起哦，找不到当前地点，小主页为您推荐以下地点</p>
                     <p v-if="errCity==301" class="text-info">小主页猜您附近还有这些地点, 点击设置哦:</p>
@@ -23,9 +23,10 @@
                         </template>
                     </div>
                     <div class="well well-sm submitSiteWrap">
-                        <div><span>1. 目前仅收录美国驻华大使馆数据库中所有中国城市，如果搜索不到您的城市，请尝试搜索附近城市或手动定位</span></div>
-                        <div><span>2. 拼音字母搜索仅支持美国驻华大使馆数据库，请尽量使用汉字搜索</span></div>
-                        <div><span>3. 尽量输入详细地址，例如: 安徽省安庆市太湖县</span></div>
+                        <div><span>1. 小主页目前仅收录美国驻华大使馆数据库中所有中国城市数据</span></div>
+                        <div><span>2. 小主页可能无法提供精确地址，要不您就受累用附近的地点吧</span></div>
+                        <div><span>3. 拼音字母搜索结果可能不准确，最好还是多敲敲键盘搜汉字吧</span></div>
+                        <div><span>4. 尽量输入详细地址，例如：安徽省安庆市太湖县或八达岭长城</span></div>
                     </div>
                 </div>
                 <div class="modal-footer">
