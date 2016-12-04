@@ -17,11 +17,11 @@ select:-webkit-autofill {
 }
 
 .panel-heading a {
-    color: #ddd;
+    opacity: 0.8;
 }
 
 .panel-heading:hover a {
-    color: #fff;
+    opacity: 1;
 }
 
 .alert-dismissable,

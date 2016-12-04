@@ -23,10 +23,10 @@
                         </template>
                     </div>
                     <div class="well well-sm submitSiteWrap">
-                        <div><span>1. 小主页目前仅收录美国驻华大使馆数据库中所有中国城市数据</span></div>
-                        <div><span>2. 小主页可能无法提供精确地址，要不您就受累用附近的地点吧</span></div>
-                        <div><span>3. 拼音字母搜索结果可能不准确，最好还是多敲敲键盘搜汉字吧</span></div>
-                        <div><span>4. 尽量输入详细地址，例如：安徽省安庆市太湖县或八达岭长城</span></div>
+                        <div><span>## 小主页目前仅收录美国驻华大使馆数据库中所有中国城市数据</span></div>
+                        <div><span>## 小主页可能无法提供精确地址，要不您就受累用附近的地点吧</span></div>
+                        <div><span>## 拼音字母搜索结果可能不准确，最好还是多敲敲键盘搜汉字吧</span></div>
+                        <div><span>## 尽量输入详细地址，例如：安徽省安庆市太湖县或八达岭长城</span></div>
                     </div>
                 </div>
                 <div class="modal-footer">

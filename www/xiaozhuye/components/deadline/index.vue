@@ -54,7 +54,7 @@
         top: 5px;
         width: 50px;
         cursor: pointer;
-        opacity: 0;
+        opacity: 0.6;
         transition: opacity .3s;
     }
 

@@ -133,7 +133,7 @@
                     return;
                 }
                 this.clickFlag = 'siteconfig';
-            },
+            }
         }
     }
 </script>
