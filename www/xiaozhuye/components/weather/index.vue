@@ -44,15 +44,6 @@
         created () {
             this.initPM();
             this.initWeather();
-//            if (navigator.geolocation) {
-//                navigator.geolocation.getCurrentPosition(pos => {
-//                    Cookie.set('lat', pos.coords.latitude);
-//                    Cookie.set('lng', pos.coords.longitude);
-//                }, err => {}, {
-//                    enableHighAccuracy: true,
-//                    maximumAge: 3600 * 1000
-//                });
-//            }
         },
         data: () => ({
             pm25: '',
@@ -154,6 +145,7 @@
             },
             setPosSucc(city){
                 this.pos = city.cn;
+                this.pm25 = '获取中...';
                 axios.get('/addons/fetch/pm25', {
                     params: {idx: city.idx}
                 }).then(res => {

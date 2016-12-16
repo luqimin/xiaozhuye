@@ -3,15 +3,15 @@
 import Base from './base.js';
 import axios from 'axios';
 import _ from 'lodash';
-import {slugify} from 'transliteration';
+import { slugify } from 'transliteration';
 slugify.config({
     lowercase: true,
     separator: ''
 });
 
 const CITY = [
-    {cn: '北京', en: 'beijing', idx: '3303'},
-    {cn: '上海', en: 'shanghai', idx: '1437'}
+    { cn: '北京', en: 'beijing', idx: '3303' },
+    { cn: '上海', en: 'shanghai', idx: '1437' }
 ];
 
 export default class extends Base {
@@ -145,7 +145,7 @@ export default class extends Base {
                 loc = loc.data.result.location;
                 let lat = loc.lat;
                 let lng = loc.lng;
-                let nearbyCity = await model.nearBy({lat, lng}, 0.1, 0.05);
+                let nearbyCity = await model.nearBy({ lat, lng }, 0.1, 0.05);
                 succData = {
                     errno: 201,
                     errmsg: '附近的地点',
@@ -211,7 +211,7 @@ export default class extends Base {
 
             let model = this.model('city');
             //从数据库获取距离当前地点最近的city
-            let _city = await model.nearBy({lat, lng}, 0.1, 0.1, 1);
+            let _city = await model.nearBy({ lat, lng }, 0.1, 0.1, 1);
 
             //将地区信息写入cookie
             this.cookie("city_id", _city.idx);
@@ -321,6 +321,7 @@ export default class extends Base {
         this.end(result);
     }
 
+    //段子
     async duanziAction() {
         let res = await axios.get('https://route.showapi.com/255-1?page=&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
             console.log(err.code);
@@ -328,5 +329,33 @@ export default class extends Base {
         });
         let result = res && res.data.showapi_res_body.pagebean.contentlist;
         this.end(result);
+    }
+
+    //搜索关键词
+    async sugAction() {
+        let name = this.get('name');
+        let word = encodeURIComponent(this.get('word'));
+        let url = `https://sug.so.360.cn/suggest?encodein=utf-8&encodeout=utf-8&format=json&word=${word}`;
+        if (['taobao', 'tmall', '淘宝搜', '天猫搜', '淘宝', '天猫'].indexOf(name) != -1) {
+            url = `https://suggest.taobao.com/sug?code=utf-8&q=${word}`;
+        }
+        let res = await axios.get(url).catch(err => {
+            console.log(err.code);
+            return '';
+        });
+        let result = res && res.data && res.data.result;
+        let resArray = [];
+        if (result.length) {
+            if (Array.isArray(result[0])) {
+                for (let i of result) {
+                    resArray.push(i[0])
+                }
+            } else {
+                for (let i of result) {
+                    resArray.push(i.word)
+                }
+            }
+        }
+        this.success(resArray);
     }
 }
