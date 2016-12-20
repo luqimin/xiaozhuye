@@ -24,13 +24,13 @@
     <div class="baidu">
         <div class="input-group" :class="{'has-error':isError}">
             <form @submit.prevent="search" >
-                <input @input="input" @blur="blur" @keyup.down="down" @keyup.up="up" type="text" v-model="word" class="form-control" placeholder="输入关键字搜索" autofocus tabindex="1">
+                <input @click.stop @input="input" @focus="focus" @keyup.down="down" @keyup.up="up" v-model="word" type="text" class="form-control" placeholder="输入关键字搜索" autofocus tabindex="1">
             </form>
             <span class="input-group-btn">
                 <a :href="url" class="btn btn-primary" type="button" target="_blank">{{name}}搜索</button>
             </span>
         </div>
-        <div v-show="keywords.length" class="list-group">
+        <div v-show="isShowSug && keywords.length" class="list-group">
             <a v-for="(word, index) in keywords" v-bind:href="word.url" class="list-group-item" :class="{on: keyNum==index}" target="_blank">{{word.name}}</a>
         </div>
     </div>
@@ -72,6 +72,11 @@ let getSearchUrl = function (e) {
 };
 
 export default {
+    created(){
+        this.$parent.$el.onclick = ()=>{
+            this.isShowSug = 0;
+        }
+    },
     data: ()=>({
         word: '',
         oriWord: '',
@@ -79,6 +84,7 @@ export default {
         oriUrl: '',
         name: '',
         keywords: [],
+        isShowSug: 1,
         keyNum: -1,
         isError: false
     }),
@@ -97,6 +103,7 @@ export default {
             this.keyNum = -1;
             if(!this.word){
                 this.keywords = [];
+                this.isShowSug = 0;
                 return;
             }
             let searchTool = getSearchUrl(this.word);
@@ -129,10 +136,8 @@ export default {
                 this.keywords = [];
             });
         },
-        blur() {
-            if(!this.word){
-                this.keywords = [];
-            }
+        focus() {
+            this.isShowSug = 1;
         },
         down() {
             this.keyNum++;
