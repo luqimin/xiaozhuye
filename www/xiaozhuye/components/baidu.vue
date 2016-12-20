@@ -23,7 +23,9 @@
 <template>
     <div class="baidu">
         <div class="input-group" :class="{'has-error':isError}">
-            <input @input="input" @blur="blur" @keyup.enter="search" @keyup.down="down" @keyup.up="up" type="text" v-model="word" class="form-control" placeholder="输入关键字搜索" autofocus tabindex="1">
+            <form @submit.prevent="search" >
+                <input @input="input" @blur="blur" @keyup.down="down" @keyup.up="up" type="text" v-model="word" class="form-control" placeholder="输入关键字搜索" autofocus tabindex="1">
+            </form>
             <span class="input-group-btn">
                 <a :href="url" class="btn btn-primary" type="button" target="_blank">{{name}}搜索</button>
             </span>
