@@ -101,7 +101,6 @@ export default {
         },
         input(e){
             this.keyNum = -1;
-            this.isShowSug = 1;
             if(!this.word){
                 this.keywords = [];
                 this.isShowSug = 0;
