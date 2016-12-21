@@ -3,15 +3,15 @@
 import Base from './base.js';
 import axios from 'axios';
 import _ from 'lodash';
-import { slugify } from 'transliteration';
+import {slugify} from 'transliteration';
 slugify.config({
     lowercase: true,
     separator: ''
 });
 
 const CITY = [
-    { cn: '北京', en: 'beijing', idx: '3303' },
-    { cn: '上海', en: 'shanghai', idx: '1437' }
+    {cn: '北京', en: 'beijing', idx: '3303'},
+    {cn: '上海', en: 'shanghai', idx: '1437'}
 ];
 
 export default class extends Base {
@@ -145,7 +145,7 @@ export default class extends Base {
                 loc = loc.data.result.location;
                 let lat = loc.lat;
                 let lng = loc.lng;
-                let nearbyCity = await model.nearBy({ lat, lng }, 0.1, 0.05);
+                let nearbyCity = await model.nearBy({lat, lng}, 0.1, 0.05);
                 succData = {
                     errno: 201,
                     errmsg: '附近的地点',
@@ -171,10 +171,12 @@ export default class extends Base {
         let idx = this.get('idx');
         let _city = CITY[0];
 
+        console.log(idx);
         if (!idx) {
             // if (1 + 1) {
             let ip = this.ip();
 
+            console.log(ip);
             //判断ua
             let isH5 = () => {
                 let sUserAgent = this.userAgent();
@@ -189,6 +191,7 @@ export default class extends Base {
 
             //判断是否能精确获取lat/lng,如果不能则通过ip获取pos
             if (!lat || !lng) {
+                console.log('null lat lng');
                 let loc = await axios.get(`https://api.map.baidu.com/highacciploc/v1?qcip=${ip}&qterm=${client}&ak=6fd470666614aa24ae93d4f61463050c&coord=bd09ll&extensions=1`).catch(err => {
                     console.log(err.code);
                 });
@@ -207,12 +210,14 @@ export default class extends Base {
                         lng = secLoc.point.x;
                     }
                 }
+                console.log('lat===>' + lat);
+                console.log('lng===>' + lng);
             }
 
             let model = this.model('city');
             //从数据库获取距离当前地点最近的city
-            let _city = await model.nearBy({ lat, lng }, 0.1, 0.1, 1);
-
+            let _city = await model.nearBy({lat, lng}, 0.1, 0.1, 1);
+            console.log('fujin city====> ' + _city);
             //将地区信息写入cookie
             this.cookie("city_id", _city.idx);
             this.cookie("city_name", _city.cn);
@@ -224,6 +229,7 @@ export default class extends Base {
         //检查缓存是否有当前地点PM25数据
         let Memcached = this.model("webapi/memcached");
         let pmCache = await Memcached.get('pm25#' + _city.idx);
+        console.log('pmcache====> ' + pmCache);
         if (pmCache) {
             return this.success(pmCache);
         }
