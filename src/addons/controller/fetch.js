@@ -3,15 +3,15 @@
 import Base from './base.js';
 import axios from 'axios';
 import _ from 'lodash';
-import { slugify } from 'transliteration';
+import {slugify} from 'transliteration';
 slugify.config({
     lowercase: true,
     separator: ''
 });
 
 const CITY = [
-    { cn: '北京', en: 'beijing', idx: '3303' },
-    { cn: '上海', en: 'shanghai', idx: '1437' }
+    {cn: '北京', en: 'beijing', idx: '3303'},
+    {cn: '上海', en: 'shanghai', idx: '1437'}
 ];
 
 export default class extends Base {
@@ -145,7 +145,7 @@ export default class extends Base {
                 loc = loc.data.result.location;
                 let lat = loc.lat;
                 let lng = loc.lng;
-                let nearbyCity = await model.nearBy({ lat, lng }, 0.1, 0.05);
+                let nearbyCity = await model.nearBy({lat, lng}, 0.1, 0.05);
                 succData = {
                     errno: 201,
                     errmsg: '附近的地点',
@@ -211,8 +211,7 @@ export default class extends Base {
 
             let model = this.model('city');
             //从数据库获取距离当前地点最近的city
-            let _city = await model.nearBy({ lat, lng }, 0.1, 0.1, 1);
-
+            let _city = await model.nearBy({lat, lng}, 0.1, 0.1, 1);
             //将地区信息写入cookie
             this.cookie("city_id", _city.idx);
             this.cookie("city_name", _city.cn);
@@ -228,11 +227,13 @@ export default class extends Base {
             return this.success(pmCache);
         }
 
-        let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`).catch(err => {
+        let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`, {
+            timeout: 5000,
+        }).catch(err => {
             console.log(err.code);
         });
-        // let res = await axios.get(`https://waqi.info/api/feed/@${_city.id}/obs.cn.json`);
-        if (res.data.rxs && res.data.rxs.status == 'ok') {
+
+        if (res && res.data.rxs && res.data.rxs.status == 'ok') {
             let result = res.data.rxs.obs[0].msg;
             let data = {
                 pos: _city.cn,
@@ -241,6 +242,20 @@ export default class extends Base {
             };
             Memcached.set('pm25#' + _city.idx, data, 30 * 60);
             return this.success(data);
+        } else {
+            console.log('pm2.5接口错误，启用备用接口');
+            res = await axios.get(`https://api.waqi.info/api/feed/@${_city.idx}/obs.cn.json`);
+            if (res.data.rxs && res.data.rxs.status == 'ok') {
+                let result = res.data.rxs.obs[0].msg;
+                let data = {
+                    pos: _city.cn,
+                    aqi: result.aqi,
+                    time: result.time.s.cn,
+                    note: 'beiyong'
+                };
+                Memcached.set('pm25#' + _city.idx, data, 30 * 60);
+                return this.success(data);
+            }
         }
         return this.fail({
             status: 'fail'
