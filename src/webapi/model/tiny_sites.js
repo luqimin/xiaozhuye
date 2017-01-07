@@ -21,8 +21,7 @@ export default class extends think.model.base {
             }
 
         } else {
-            let data = this.where(whereOpt).order(orderOpt).limit(limitNum).select();
-            return data;
+            return this.where(whereOpt).order(orderOpt).limit(limitNum).select();
         }
 
     }

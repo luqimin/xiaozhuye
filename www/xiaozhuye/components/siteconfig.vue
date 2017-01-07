@@ -238,8 +238,7 @@
 
                 this.error = '';
 
-                api.addUserSite((res) => {
-                    console.log(res);
+                api.addUserSite(res => {
                     if (res.errno == 0) {
                         return this.error = '提交成功';
                     } else if (res.errno == 1104) {
