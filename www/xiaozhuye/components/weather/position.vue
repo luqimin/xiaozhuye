@@ -4,6 +4,10 @@
         padding: 2px 3px;
         font-size: 12px;
     }
+
+    .siteWrap span {
+        transition: background-color 1s, color .3s;
+    }
 </style>
 <template>
     <div class="modal">
@@ -23,7 +27,7 @@
                     <p v-if="errCity==100" class="text-success">玩命计算中...</p>
                     <div class="siteWrap">
                         <template v-for="(city, index) in cityList">
-                            <span @click="setPos" :id="city.idx" :lat="city.lat" :lng="city.lng" class="btn btn-success btn-sm">
+                            <span @click="setPos" :id="city.idx" :lat="city.lat" :lng="city.lng" class="btn btn-sm" :class="pmClass[index]">
                                 {{city.cn}}
                                 <span v-if="aqiList[index]" class="badge">{{aqiList[index]}}</span>
                             </span>
@@ -60,8 +64,28 @@
         data: () => ({
             cityList: [],
             aqiList: [],
+            pmClass: [],
             errCity: 0
         }),
+        computed: {
+            pmClass(){
+                let arr = [];
+                for (let pm of this.aqiList) {
+                    let pmClass = 'btn-primary';
+                    if (pm >= 0 && pm <= 50) {
+                        pmClass = 'btn-success';
+                    } else if (pm > 50 && pm <= 150) {
+                        pmClass = 'btn-warning';
+                    } else if (pm > 150 && pm <= 200) {
+                        pmClass = 'btn-danger';
+                    } else if (pm > 200) {
+                        pmClass = 'btn-info';
+                    }
+                    arr.push(pmClass);
+                }
+                return arr;
+            }
+        },
         methods: {
             search(e){
                 this.errCity = 100;
@@ -121,7 +145,7 @@
                     }).then(res => {
                         if (res.data.status != 'fail') {
                             let msg = res.data.data;
-                            this.$set(this.aqiList, num, msg.aqi);
+                            this.$set(this.aqiList, num, msg && msg.aqi);
                         }
                     });
                 }
