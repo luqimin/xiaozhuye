@@ -134,14 +134,17 @@
             }
         },
         watch: {
-            cityList: function () {
+            cityList: function (city) {
                 this.aqiList = [];
+                for (let s of city) {
+                    this.aqiList.push('-');
+                }
                 //为所有搜索结果查询pm2.5的值
                 let i = 0;
-                for (i; i < this.cityList.length; i++) {
+                for (i; i < city.length; i++) {
                     let num = i;
                     axios.get('/addons/fetch/pm25', {
-                        params: {idx: this.cityList[num].idx}
+                        params: {idx: city[num].idx}
                     }).then(res => {
                         if (res.data.status != 'fail') {
                             let msg = res.data.data;
