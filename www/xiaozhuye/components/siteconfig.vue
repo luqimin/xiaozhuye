@@ -1,3 +1,15 @@
+<style>
+    .sitesBox .siteWrap .badge {
+        font-size: 15px;
+        border-radius: 50%;
+        margin: 0 0 0 6px;
+        padding: 0 0 0 1px;
+        height: 16px;
+        width: 16px;
+        line-height: 13px;
+    }
+</style>
+
 <template>
     <div class="modal">
         <div class="modal-dialog">
@@ -6,7 +18,7 @@
                     <button @click="hideModal" type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title">网址配置{{title}}</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body sitesBox">
                     <div class="form-group">
                         <input @input="search" type="text" class="form-control" placeholder="点此搜索网址库，点击添加">
                     </div>
