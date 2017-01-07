@@ -72,14 +72,16 @@
                 let arr = [];
                 for (let pm of this.aqiList) {
                     let pmClass = 'btn-primary';
-                    if (pm >= 0 && pm <= 50) {
+                    if (pm >= 0 && pm < 50) {
                         pmClass = 'btn-success';
-                    } else if (pm > 50 && pm <= 150) {
+                    } else if (pm >= 50 && pm < 150) {
                         pmClass = 'btn-warning';
-                    } else if (pm > 150 && pm <= 200) {
+                    } else if (pm >= 150 && pm < 200) {
                         pmClass = 'btn-danger';
-                    } else if (pm > 200) {
+                    } else if (pm >= 200 && pm < 300) {
                         pmClass = 'btn-info';
+                    } else if (pm >= 300) {
+                        pmClass = 'btn-terrible';
                     }
                     arr.push(pmClass);
                 }

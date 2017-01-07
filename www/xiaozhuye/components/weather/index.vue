@@ -62,14 +62,16 @@
             },
             pmClass(){
                 let pm = this.pm25, pmClass = 'text-primary';
-                if (pm >= 0 && pm <= 50) {
+                if (pm >= 0 && pm < 50) {
                     pmClass = 'text-success';
-                } else if (pm > 50 && pm <= 150) {
+                } else if (pm >= 50 && pm < 150) {
                     pmClass = 'text-warning';
-                } else if (pm > 150 && pm <= 200) {
+                } else if (pm >= 150 && pm < 200) {
                     pmClass = 'text-danger';
-                } else if (pm > 200) {
+                } else if (pm >= 200 && pm < 300) {
                     pmClass = 'text-info';
+                } else if (pm >= 300) {
+                    pmClass = 'text-terrible';
                 }
                 return pmClass;
             },
