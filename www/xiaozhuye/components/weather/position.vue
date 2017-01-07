@@ -147,6 +147,8 @@
                             let msg = res.data.data;
                             this.$set(this.aqiList, num, msg && msg.aqi);
                         }
+                    }).catch(err => {
+                        this.$set(this.aqiList, num, '-');
                     });
                 }
             }
