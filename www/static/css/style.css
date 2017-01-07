@@ -11,7 +11,9 @@
 }
 
 .btn-terrible:hover, .btn-terrible:active:hover {
+    color: #ffffff;
     background-color: #630000;
+    border-color: transparent;
 }
 
 .btn-terrible .badge {
