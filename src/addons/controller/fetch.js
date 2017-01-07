@@ -24,6 +24,16 @@ export default class extends Base {
         return this.display();
     }
 
+    async delcacheAction() {
+        let Memcached = this.model("webapi/memcached");
+        let res = await Memcached.flush();
+        if (res) {
+            this.success({
+                msg: '清除memcached成功'
+            });
+        }
+    }
+
     //获取美国大使馆pm接口所有数据
     // async getcityfAction() {
     //     let city = [];
@@ -191,7 +201,7 @@ export default class extends Base {
                 let data = {
                     pos: city.cn,
                     aqi: result.aqi,
-                    time: result.time.s
+                    time: result.time.s || result.time
                 };
                 Memcached.set('pm25#' + city.idx, data, 30 * 60);
                 return this.success(data);
@@ -259,16 +269,18 @@ export default class extends Base {
             //将地区信息写入cookie
             this.cookie("city_id", _city.idx);
             this.cookie("city_name", _city.cn);
-
             await getAqi(_city);
         } else {
-            _city.idx = idx;
-            _city.cn = this.cookie('city_name');
-            
-            await getAqi(_city);
+            let model = this.model('city');
+            let _city = await model.findInfo({
+                'idx': idx
+            }, 'cn');
+
+            await getAqi({
+                cn: _city.cn,
+                idx: idx
+            });
         }
-
-
     }
 
     //天气

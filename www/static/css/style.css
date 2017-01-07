@@ -94,15 +94,6 @@ select:-webkit-autofill {
 .siteConfig {
     display: block;
 }
-.siteWrap .badge {
-    font-size: 15px;
-    border-radius: 50%;
-    margin: 0 0 0 6px;
-    padding: 0 0 0 1px;
-    height: 16px;
-    width: 16px;
-    line-height: 13px;
-}
 .submitSiteWrap {
     margin: 16px 0 -10px 0;
 }

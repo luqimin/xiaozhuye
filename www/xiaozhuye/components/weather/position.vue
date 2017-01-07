@@ -1,5 +1,9 @@
 <style>
-
+    .siteWrap .badge {
+        margin: 0;
+        padding: 2px 3px;
+        font-size: 12px;
+    }
 </style>
 <template>
     <div class="modal">
@@ -18,8 +22,11 @@
                     <p v-if="errCity==404" class="text-warning">对不起哦，找不到当前地点，试试搜索详细地址，例如: 安徽省安庆市太湖县</p>
                     <p v-if="errCity==100" class="text-success">玩命计算中...</p>
                     <div class="siteWrap">
-                        <template v-for="city in cityList">
-                            <span @click="setPos" :id="city.idx" :lat="city.lat" :lng="city.lng" class="btn btn-success btn-sm">{{city.cn}}</span>
+                        <template v-for="(city, index) in cityList">
+                            <span @click="setPos" :id="city.idx" :lat="city.lat" :lng="city.lng" class="btn btn-success btn-sm">
+                                {{city.cn}}
+                                <span v-if="aqiList[index]" class="badge">{{aqiList[index]}}</span>
+                            </span>
                         </template>
                     </div>
                     <div class="well well-sm submitSiteWrap">
@@ -52,6 +59,7 @@
         },
         data: () => ({
             cityList: [],
+            aqiList: [],
             errCity: 0
         }),
         methods: {
@@ -99,6 +107,24 @@
             },
             close(){
                 this.$emit('closeSetPos');
+            }
+        },
+        watch: {
+            cityList: function () {
+                this.aqiList = [];
+                //为所有搜索结果查询pm2.5的值
+                let i = 0;
+                for (i; i < this.cityList.length; i++) {
+                    let num = i;
+                    axios.get('/addons/fetch/pm25', {
+                        params: {idx: this.cityList[num].idx}
+                    }).then(res => {
+                        if (res.data.status != 'fail') {
+                            let msg = res.data.data;
+                            this.$set(this.aqiList, num, msg.aqi);
+                        }
+                    });
+                }
             }
         }
     }

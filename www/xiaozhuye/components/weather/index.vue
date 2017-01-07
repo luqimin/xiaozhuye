@@ -167,7 +167,7 @@
                 require(['./position'], (component) => {
                     resolve(component);
                 });
-            },
+            }
         }
     }
 </script>
