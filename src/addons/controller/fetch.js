@@ -171,10 +171,53 @@ export default class extends Base {
         let idx = this.get('idx');
         let _city = CITY[0];
 
+        let getAqi = async city => {
+            //检查缓存是否有当前地点PM25数据
+            let Memcached = this.model("webapi/memcached");
+            let pmCache = await Memcached.get('pm25#' + city.idx);
+
+            if (pmCache) {
+                return this.success(pmCache);
+            }
+
+            let res = await axios.get(`https://waqi.info/api/feed/@${city.idx}/now.json`, {
+                timeout: 5000,
+            }).catch(err => {
+                console.log(err.code);
+            });
+
+            if (res && res.data.rxs && res.data.rxs.status == 'ok') {
+                let result = res.data.rxs.obs[0].msg;
+                let data = {
+                    pos: city.cn,
+                    aqi: result.aqi,
+                    time: result.time.s
+                };
+                Memcached.set('pm25#' + city.idx, data, 30 * 60);
+                return this.success(data);
+            } else {
+                console.log('pm2.5接口错误，启用备用接口');
+                res = await axios.get(`https://api.waqi.info/api/feed/@${city.idx}/obs.cn.json`);
+                if (res.data.rxs && res.data.rxs.status == 'ok') {
+                    let result = res.data.rxs.obs[0].msg;
+                    let data = {
+                        pos: city.cn,
+                        aqi: result.aqi,
+                        time: result.time.s.cn,
+                        note: 'beiyong'
+                    };
+                    Memcached.set('pm25#' + city.idx, data, 30 * 60);
+                    return this.success(data);
+                }
+            }
+            return this.fail({
+                status: 'fail'
+            });
+        };
+
         if (!idx) {
             // if (1 + 1) {
             let ip = this.ip();
-
             //判断ua
             let isH5 = () => {
                 let sUserAgent = this.userAgent();
@@ -212,54 +255,20 @@ export default class extends Base {
             let model = this.model('city');
             //从数据库获取距离当前地点最近的city
             let _city = await model.nearBy({lat, lng}, 0.1, 0.1, 1);
+
             //将地区信息写入cookie
             this.cookie("city_id", _city.idx);
             this.cookie("city_name", _city.cn);
+
+            await getAqi(_city);
         } else {
             _city.idx = idx;
             _city.cn = this.cookie('city_name');
+            
+            await getAqi(_city);
         }
 
-        //检查缓存是否有当前地点PM25数据
-        let Memcached = this.model("webapi/memcached");
-        let pmCache = await Memcached.get('pm25#' + _city.idx);
-        if (pmCache) {
-            return this.success(pmCache);
-        }
 
-        let res = await axios.get(`https://waqi.info/api/feed/@${_city.idx}/now.json`, {
-            timeout: 5000,
-        }).catch(err => {
-            console.log(err.code);
-        });
-
-        if (res && res.data.rxs && res.data.rxs.status == 'ok') {
-            let result = res.data.rxs.obs[0].msg;
-            let data = {
-                pos: _city.cn,
-                aqi: result.aqi,
-                time: result.time.s
-            };
-            Memcached.set('pm25#' + _city.idx, data, 30 * 60);
-            return this.success(data);
-        } else {
-            console.log('pm2.5接口错误，启用备用接口');
-            res = await axios.get(`https://api.waqi.info/api/feed/@${_city.idx}/obs.cn.json`);
-            if (res.data.rxs && res.data.rxs.status == 'ok') {
-                let result = res.data.rxs.obs[0].msg;
-                let data = {
-                    pos: _city.cn,
-                    aqi: result.aqi,
-                    time: result.time.s.cn,
-                    note: 'beiyong'
-                };
-                Memcached.set('pm25#' + _city.idx, data, 30 * 60);
-                return this.success(data);
-            }
-        }
-        return this.fail({
-            status: 'fail'
-        });
     }
 
     //天气
