@@ -319,7 +319,7 @@ export default class extends Base {
             console.log(err.code);
             return '';
         });
-        let result = res && res.data.result.data;
+        let result = res && res.data.result && res.data.result.data;
         if (result) {
             this.end(_.dropRight(result, 21));
         } else {
