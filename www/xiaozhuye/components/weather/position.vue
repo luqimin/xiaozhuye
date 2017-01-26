@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button @click="close" type="button" class="btn btn-primary">保存更改</button>
+                    <button @click="close" type="button" class="btn btn-primary">关闭</button>
                 </div>
             </div>
         </div>
@@ -64,7 +64,6 @@
         data: () => ({
             cityList: [],
             aqiList: [],
-            pmClass: [],
             errCity: 0
         }),
         computed: {

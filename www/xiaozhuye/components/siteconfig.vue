@@ -88,7 +88,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button @click="hideModal" type="button" class="btn btn-primary">保存更改</button>
+                    <button @click="hideModal" type="button" class="btn btn-primary">关闭</button>
                 </div>
             </div>
         </div>
