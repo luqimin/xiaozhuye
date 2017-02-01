@@ -187,7 +187,7 @@ export default class extends Base {
             let pmCache = await Memcached.get('pm25#' + city.idx);
 
             if (pmCache) {
-                // return this.success(pmCache);
+                return this.success(pmCache);
             }
 
             // let res = await axios.get(`https://waqi.info/api/feed/@${city.idx}/now.json`, {
