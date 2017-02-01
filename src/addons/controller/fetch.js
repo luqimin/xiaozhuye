@@ -187,10 +187,11 @@ export default class extends Base {
             let pmCache = await Memcached.get('pm25#' + city.idx);
 
             if (pmCache) {
-                return this.success(pmCache);
+                // return this.success(pmCache);
             }
 
-            let res = await axios.get(`https://waqi.info/api/feed/@${city.idx}/now.json`, {
+            // let res = await axios.get(`https://waqi.info/api/feed/@${city.idx}/now.json`, {
+            let res = await axios.get(`https://api.waqi.info/api/feed/@${city.idx}/obs.cn.json`, {
                 timeout: 5000,
             }).catch(err => {
                 console.log(err.code);
@@ -201,19 +202,20 @@ export default class extends Base {
                 let data = {
                     pos: city.cn,
                     aqi: result.aqi,
-                    time: result.time.s || result.time
+                    time: result.time.s.cn || result.time.s || result.time
                 };
                 Memcached.set('pm25#' + city.idx, data, 30 * 60);
                 return this.success(data);
             } else {
                 console.log('pm2.5接口错误，启用备用接口');
-                res = await axios.get(`https://api.waqi.info/api/feed/@${city.idx}/obs.cn.json`);
+                res = await axios.get(`https://waqi.info/api/feed/@${city.idx}/now.json`);
+                // res = await axios.get(`https://api.waqi.info/api/feed/@${city.idx}/obs.cn.json`);
                 if (res.data.rxs && res.data.rxs.status == 'ok') {
                     let result = res.data.rxs.obs[0].msg;
                     let data = {
                         pos: city.cn,
                         aqi: result.aqi,
-                        time: result.time.s.cn,
+                        time: result.time.s.cn || result.time.s,
                         note: 'beiyong'
                     };
                     Memcached.set('pm25#' + city.idx, data, 30 * 60);
