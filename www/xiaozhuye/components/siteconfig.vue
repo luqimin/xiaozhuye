@@ -80,8 +80,7 @@
                         </div>
                         <div class="form-inline row addSiteLineTwo">
                             <div class="submitSiteBtn col-md-4">
-                                <button @click="addUserSite" type="submit" class="btn btn-default btn-block">提交入库
-                                </button>
+                                <button @click="addUserSite" type="submit" class="btn btn-default btn-block">提交入库</button>
                             </div>
                         </div>
                     </div>
