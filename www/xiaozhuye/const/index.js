@@ -23,33 +23,25 @@ export const MODARRAY = {
     deadline: {
         name: '云倒计时'
     }
-}
+};
 export const MODCONF = ['gnnews', 'baidu'];
 export let ORDER = {
     a: [{
         name: 'baidu'
     }],
     b: [{
-            name: 'toutiao'
-        },
-
-        {
-            name: 'gnnews'
-        },
-
-        {
-            name: 'gwnews'
-        },
-
-        {
-            name: 'duanzi'
-        }
+        name: 'toutiao'
+    }, {
+        name: 'gnnews'
+    }, {
+        name: 'gwnews'
+    }, {
+        name: 'yule'
+    }, {
+        name: 'duanzi'
+    }
     ],
     c: [{
-            name: 'deadline'
-        },
-        {
-            name: 'yule'
-        }
-    ]
-}
+        name: 'deadline'
+    }]
+};

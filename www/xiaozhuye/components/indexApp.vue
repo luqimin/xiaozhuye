@@ -41,26 +41,35 @@
             </div>
         </nav>
         <div class="container">
-            <h1>
-                <!--<%= title%>-->
-            </h1>
             <component v-bind:is="noteComp"></component>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-6">
                     <component v-bind:is="a0Comp"></component>
                     <Sites></Sites>
+                </div>
+                <div v-if="c0Comp != 'defmod'" class="col-md-3">
+                    <component v-bind:is="c0Comp"></component>
+                </div>
+                <div :class="c0Comp == 'defmod' ? 'col-md-6' : 'col-md-3'">
+                    <modconfig></modconfig>
                     <about></about>
                 </div>
-                <div class="col-md-6">
+            </div>
+            <div v-if="bCount" class="row">
+                <div v-if="b0Comp != 'defmod'" :class="bCount == 1 ? 'col-md-12' : 'col-md-6'">
                     <component v-bind:is="b0Comp"></component>
+                </div>
+                <div v-if="b1Comp != 'defmod'" :class="bCount == 1 ? 'col-md-12' : 'col-md-6'">
                     <component v-bind:is="b1Comp"></component>
+                </div>
+                <div v-if="b2Comp != 'defmod'" :class="bCount == 1 ? 'col-md-12' : 'col-md-6'">
                     <component v-bind:is="b2Comp"></component>
+                </div>
+                <div v-if="b3Comp != 'defmod'" :class="bCount == 1 ? 'col-md-12' : 'col-md-6'">
                     <component v-bind:is="b3Comp"></component>
                 </div>
-                <div class="col-md-3">
-                    <modconfig></modconfig>
-                    <component v-bind:is="c0Comp"></component>
-                    <component v-bind:is="c1Comp"></component>
+                <div v-if="b4Comp != 'defmod'" :class="bCount == 1 ? 'col-md-12' : 'col-md-6'">
+                    <component v-bind:is="b4Comp"></component>
                 </div>
             </div>
         </div>
@@ -149,14 +158,23 @@
             b3Comp(){
                 return this.mokuai.indexOf(ORDER.b[3].name) != -1 ? ORDER.b[3].name : 'defmod';
             },
+            b4Comp(){
+                return this.mokuai.indexOf(ORDER.b[4].name) != -1 ? ORDER.b[4].name : 'defmod';
+            },
             c0Comp(){
                 return this.mokuai.indexOf(ORDER.c[0].name) != -1 ? ORDER.c[0].name : 'defmod';
             },
-            c1Comp(){
-                return this.mokuai.indexOf(ORDER.c[1].name) != -1 ? ORDER.c[1].name : 'defmod';
-            },
             noteComp(){
                 return this.mokuai.indexOf('notepad') != -1 ? 'notepad' : 'defmod';
+            },
+            bCount(){
+                let num = 0;
+                for (let p of ORDER.b) {
+                    if (this.mokuai.indexOf(p.name) != -1) {
+                        num++;
+                    }
+                }
+                return num;
             },
         },
         data: () => ({

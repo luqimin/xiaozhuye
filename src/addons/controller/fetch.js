@@ -323,7 +323,7 @@ export default class extends Base {
         });
         let result = res && res.data.result && res.data.result.data;
         if (result) {
-            this.end(_.dropRight(result, 21));
+            this.end(_.dropRight(result, 20));
         } else {
             this.end('');
         }
