@@ -5,8 +5,6 @@ import * as types from './mutation-types';
 import * as getters from './getters';
 import * as actions from './actions';
 
-import api from '../api';
-
 import {MODCONF} from '../const';
 
 Vue.use(Vuex);
@@ -34,6 +32,9 @@ const mutations = {
         }
     },
     [types.INIT_SITES](state, list) {
+        if (list.length == state.SITES.length) {
+            return;
+        }
         state.SITES = list.concat(state.SITES);
     },
     [types.USER_LOGOUT](state) {

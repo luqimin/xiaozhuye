@@ -8,9 +8,9 @@ export const initUser = ({ commit }) => {
         username: Cookie.get('usr_name') || '',
         isLogin: Cookie.get('usr_name') ? 1 : 0,
         mokuai: Cookie.get('usr_mokuai') && Cookie.get('usr_mokuai').split(',') || [],
-        isvip: Cookie.get('usr_isvip') ? true : false,
+        isvip: !!Cookie.get('usr_isvip'),
     })
-}
+};
 
 export const initSites = ({ commit }) => {
     if (window.localStorage && localStorage.getItem('constSites')) {
@@ -24,7 +24,7 @@ export const initSites = ({ commit }) => {
         isConst: 1
     });
 
-}
+};
 
 export const userLogout = ({ commit }) => {
     api.logout(res => {
@@ -32,4 +32,4 @@ export const userLogout = ({ commit }) => {
             commit(types.USER_LOGOUT);
         }
     });
-}
+};
