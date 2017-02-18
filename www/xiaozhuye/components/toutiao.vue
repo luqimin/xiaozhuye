@@ -7,7 +7,7 @@
 		<div class="list-group">
 			<a v-for="item in lists" :href="item.url" class="list-group-item" target="_blank">
                 {{item.title}}
-                <span class="badge">{{item.realtype}}</span>
+                <span class="badge">{{item.author_name}}</span>
             </a>
 		</div>
 	</div>
