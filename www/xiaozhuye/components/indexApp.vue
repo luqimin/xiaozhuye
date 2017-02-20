@@ -143,34 +143,37 @@
                 'isLogin',
                 'mokuai',
             ]),
+            mokArr(){
+                return Object.keys(this.mokuai);
+            },
             a0Comp(){
-                return this.mokuai.indexOf(ORDER.a[0].name) != -1 ? ORDER.a[0].name : 'defmod';
+                return this.mokArr.indexOf(ORDER.a[0].name) != -1 ? ORDER.a[0].name : 'defmod';
             },
             b0Comp(){
-                return this.mokuai.indexOf(ORDER.b[0].name) != -1 ? ORDER.b[0].name : 'defmod';
+                return this.mokArr.indexOf(ORDER.b[0].name) != -1 ? ORDER.b[0].name : 'defmod';
             },
             b1Comp(){
-                return this.mokuai.indexOf(ORDER.b[1].name) != -1 ? ORDER.b[1].name : 'defmod';
+                return this.mokArr.indexOf(ORDER.b[1].name) != -1 ? ORDER.b[1].name : 'defmod';
             },
             b2Comp(){
-                return this.mokuai.indexOf(ORDER.b[2].name) != -1 ? ORDER.b[2].name : 'defmod';
+                return this.mokArr.indexOf(ORDER.b[2].name) != -1 ? ORDER.b[2].name : 'defmod';
             },
             b3Comp(){
-                return this.mokuai.indexOf(ORDER.b[3].name) != -1 ? ORDER.b[3].name : 'defmod';
+                return this.mokArr.indexOf(ORDER.b[3].name) != -1 ? ORDER.b[3].name : 'defmod';
             },
             b4Comp(){
-                return this.mokuai.indexOf(ORDER.b[4].name) != -1 ? ORDER.b[4].name : 'defmod';
+                return this.mokArr.indexOf(ORDER.b[4].name) != -1 ? ORDER.b[4].name : 'defmod';
             },
             c0Comp(){
-                return this.mokuai.indexOf(ORDER.c[0].name) != -1 ? ORDER.c[0].name : 'defmod';
+                return this.mokArr.indexOf(ORDER.c[0].name) != -1 ? ORDER.c[0].name : 'defmod';
             },
             noteComp(){
-                return this.mokuai.indexOf('notepad') != -1 ? 'notepad' : 'defmod';
+                return this.mokArr.indexOf('notepad') != -1 ? 'notepad' : 'defmod';
             },
             bCount(){
                 let num = 0;
                 for (let p of ORDER.b) {
-                    if (this.mokuai.indexOf(p.name) != -1) {
+                    if (this.mokArr.indexOf(p.name) != -1) {
                         num++;
                     }
                 }

@@ -25,7 +25,7 @@ const mutations = {
         state.isLogin = info.isLogin;
         state.username = info.username;
         state.isvip = info.isvip;
-        if (info.mokuai.length == 0) {
+        if (Object.keys(info.mokuai).length == 0) {
             state.mokuai = MODCONF;
         } else {
             state.mokuai = info.mokuai;

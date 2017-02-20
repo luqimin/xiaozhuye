@@ -24,7 +24,10 @@ export const MODARRAY = {
         name: '云倒计时'
     }
 };
-export const MODCONF = ['gnnews', 'baidu'];
+export const MODCONF = {
+    gnnews: {},
+    baidu: {}
+};
 export let ORDER = {
     a: [{
         name: 'baidu'

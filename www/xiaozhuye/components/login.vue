@@ -136,9 +136,13 @@
                         that.loginSuccess = 1;
                         that.loginFail = 0;
                         setTimeout(() => {
+                            let mokObj = {};
+                            for (let m of res.data.data.mokuai.split(',')) {
+                                mokObj[m] = {};
+                            }
                             that.$store.commit('updateParam', {
                                 key: ['isLogin', 'mokuai', 'isvip'],
-                                value: [1, res.data.data.mokuai.split(','), res.data.data.isvip]
+                                value: [1, mokObj, res.data.data.isvip]
                             });
                         }, 666);
                         api.mySites((res) => {

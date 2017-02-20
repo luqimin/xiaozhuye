@@ -4,10 +4,17 @@ import * as types from './mutation-types';
 import Cookie from 'js-cookie';
 
 export const initUser = ({ commit }) => {
+    let _mokuai = Cookie.get('usr_mokuai') && Cookie.get('usr_mokuai').split(',') || [],
+        mokuai = {};
+
+    for (let m of _mokuai) {
+        mokuai[m] = {};
+    }
+
     commit(types.INIT_USER, {
         username: Cookie.get('usr_name') || '',
         isLogin: Cookie.get('usr_name') ? 1 : 0,
-        mokuai: Cookie.get('usr_mokuai') && Cookie.get('usr_mokuai').split(',') || [],
+        mokuai: mokuai,
         isvip: !!Cookie.get('usr_isvip'),
     })
 };

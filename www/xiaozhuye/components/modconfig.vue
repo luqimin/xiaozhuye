@@ -5,7 +5,7 @@
         <div class="mokuaiConfig checkbox">
         <template v-for="(value, key) in MODARRAY" >
             <label>
-                <input @change="updateMokuai" :value="key" v-if="mokuai.indexOf(key)!=-1" checked type="checkbox">
+                <input @change="updateMokuai" :value="key" v-if="Object.keys(mokuai).indexOf(key)!=-1" checked type="checkbox">
                 <input @change="updateMokuai" :value="key" v-else type="checkbox">
                 {{value.name}}
             </label>
@@ -36,12 +36,7 @@ export default {
 	},
     methods: {
         updateMokuai(e){
-            let _mokuai = [];
-            if (typeof this.mokuai == 'string') {
-                _mokuai.push(this.mokuai);
-            } else {
-                _mokuai = this.mokuai;
-            }
+            let _mokuai = Object.keys(this.mokuai);
             if (e.target.checked) {
                 _mokuai.push(e.target.value);
             } else {
@@ -50,6 +45,7 @@ export default {
                     _mokuai.splice(index, 1);
                 }
             }
+
             //写入用户数据库
             if(Cookie.get('usr_id')){
                 api.editMokuai((res) => {
@@ -60,9 +56,13 @@ export default {
             }
             //记录cookie
             Cookie.set('usr_mokuai', _mokuai.join(','),{ expires: 366});
+            let mokuaiObj = {};
+            for (let m of _mokuai) {
+                mokuaiObj[m] = {};
+            }
             this.$store.commit('updateParam', {
                 key:['mokuai'],
-                value: [_mokuai]
+                value: [mokuaiObj]
             });
         },
     }
