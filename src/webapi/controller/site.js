@@ -133,9 +133,9 @@ export default class extends Base {
             isactive: 1,
             isconst: isConst || 0
         }, {
+            orderid: 'ASC',
             id: 'ASC',
             isfocus: 'DESC',
-            orderid: 'ASC'
         }, num);
         return this.success(list);
     }

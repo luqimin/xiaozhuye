@@ -67,7 +67,7 @@
             },
             ALLSITES(){
                 let _arr = this.SITES.concat(this.USERSITES);
-                _arr.sort(firstBy('isfocus', -1).thenBy('id'));
+                _arr.sort(firstBy('isfocus', -1).thenBy('orderid').thenBy('id'));
                 return _arr;
             }
         },
