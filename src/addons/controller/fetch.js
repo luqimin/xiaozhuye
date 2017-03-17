@@ -201,8 +201,8 @@ export default class extends Base {
                 let result = res.data.rxs.obs[0].msg;
                 let data = {
                     pos: city.cn,
-                    aqi: result.aqi,
-                    time: result.time.s.cn || result.time.s || result.time
+                    aqi: (result && result.aqi) || res.data.rxs.obs[1].msg.aqi,
+                    time:  (result && result.time) || res.data.rxs.obs[1].msg.time
                 };
                 Memcached.set('pm25#' + city.idx, data, 30 * 60);
                 return this.success(data);
