@@ -17,7 +17,10 @@
 }
 
 .pmForcast span.pm {
+    display: inline-block;
+    width: 26px;
     background: #fff;
+    text-align: center;
 }
 
 span.pos {
@@ -42,7 +45,7 @@ span.pos:hover {
                       class="pm"
                       :class="getPMClass(pm25)">{{pm25}}</span> [
                 <span @click="changePos"
-                      class="pos">{{pos}}</span>]</a>
+                      class="pos">{{pos}}</span> ]</a>
         </li>
         <li v-if="weather.city"
             class="dropdown"
@@ -50,23 +53,29 @@ span.pos:hover {
             @mouseenter="showWeatherDetail"
             @mouseleave="showWeatherDetail">
             <a class="btn btn-link dropdown-toggle"
-               title="点击查看天气详情">
-                <span>{{city.name}}: <img class="weatherIcon" :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + condition.icon + '.png'"></span>
-                <span> {{weather.shortforecast}}</span>
+               title="滑动查看天气详情">
+                <span>{{city.name}}: {{condition.temp}}°<img class="weatherIcon" :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + condition.icon + '.png'"></span>
+                <span>{{weather.shortforecast}}</span>
                 <span class="caret"></span>
             </a>
             <div class="dropdown-menu weatherDetail">
-                <li><a>{{condition.tips}}</a></li>
+                <li><a>小提醒: {{condition.tips}}</a></li>
                 <li class="divider"></li>
-                <li><a>{{condition.temp}}℃, {{condition.windDir}} {{condition.windLevel}} 级</a></li>
+                <li><a>{{condition.temp}}°, {{condition.windDir}} {{condition.windLevel}} 级</a></li>
                 <li class="divider"></li>
-                <li><a>近期空气质量情况</a></li>
+                <li><a>近期天气情况</a></li>
                 <li class="pm25 pmForcast"
-                    v-for="day in weather.aqiForecast">
-                    <a>{{day.date}}: <span class="pm" :class="getPMClass(day.value)">{{day.value}}</span></a>
+                    v-for="(day, index) in weather.aqiForecast">
+                    <a>
+                        <span style="display:inline-block;width:43px;">{{day.date.split('-')[1] + '/' + day.date.split('-')[2]}}: </span>
+                        <img class="weatherIcon"
+                             :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + forcast[index].conditionIdDay + '.png'">
+                        <span style="display:inline-block;width:20px;">{{forcast[index].tempDay}}°</span>
+                        <span class="pm"
+                              :class="getPMClass(day.value)">{{day.value}}</span>
+                        <span>{{forcast[index].windDirDay}} {{forcast[index].windLevelDay}} 级</span>
+                    </a>
                 </li>
-                <li class="divider"></li>
-                <li><a>近期天气预报添加中...</a></li>
             </div>
         </li>
         <transition name="fade">
@@ -125,6 +134,9 @@ export default {
         condition() {
             return this.weather.condition || {};
         },
+        forcast() {
+            return this.weather.forcast;
+        },
         weatherHtml() {
             let html = this.weather.shortforecast;
 
@@ -147,6 +159,9 @@ export default {
                         this.pm25 = msg.aqi;
                         this.pos = msg.pos;
                     }
+                }).catch(() => {
+                    this.pm25 = this.weather.aqi && this.weather.aqi.value;
+                    this.pos = this.city.name;
                 });
             };
             let cookieIdx = Cookie.get('city_id');

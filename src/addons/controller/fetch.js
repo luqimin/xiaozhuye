@@ -192,7 +192,7 @@ export default class extends Base {
 
             // let res = await axios.get(`https://waqi.info/api/feed/@${city.idx}/now.json`, {
             let res = await axios.get(`https://api.waqi.info/api/feed/@${city.idx}/obs.cn.json`, {
-                timeout: 5000,
+                timeout: 3000,
             }).catch(err => {
                 console.log(err.code);
             });
@@ -208,7 +208,9 @@ export default class extends Base {
                 return this.success(data);
             } else {
                 console.log('pm2.5接口错误，启用备用接口');
-                res = await axios.get(`https://waqi.info/api/feed/@${city.idx}/now.json`);
+                res = await axios.get(`https://waqi.info/api/feed/@${city.idx}/now.json`, {
+                    timeout: 2000,
+                });
                 // res = await axios.get(`https://api.waqi.info/api/feed/@${city.idx}/obs.cn.json`);
                 if (res.data.rxs && res.data.rxs.status == 'ok') {
                     let result = res.data.rxs.obs[0].msg;
@@ -357,6 +359,9 @@ export default class extends Base {
         let aqi = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/aqi', '', _option).catch(err => {
             console.log(err);
         });
+        let forcast = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/forecast15days', '', _option).catch(err => {
+            console.log(err);
+        });
 
         let _res = {
             city: condition.data.data.city,
@@ -364,6 +369,7 @@ export default class extends Base {
             aqi: aqi.data.data.aqi,
             aqiForecast: aqiForecast.data.data.aqiForecast,
             shortforecast: shortforecast.data.data.sfc.banner,
+            forcast: forcast.data.data.forecast
         }
 
         Memcached.set(`weather#${lat}#${lng}`, _res, 30 * 60);
