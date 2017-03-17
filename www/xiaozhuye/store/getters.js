@@ -5,4 +5,5 @@ export const isvip = state => state.isvip;
 export const mokuai = state => state.mokuai;
 export const SITES = state => state.SITES;
 export const USERSITES = state => state.USERSITES;
+export const weather = state => state.weather;
 export const isShowAlert = state => state.isShowAlert;

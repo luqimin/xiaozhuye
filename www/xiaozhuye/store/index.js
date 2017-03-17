@@ -5,7 +5,7 @@ import * as types from './mutation-types';
 import * as getters from './getters';
 import * as actions from './actions';
 
-import {MODCONF} from '../const';
+import { MODCONF } from '../const';
 
 Vue.use(Vuex);
 
@@ -17,6 +17,7 @@ const state = {
     mokuai: [], //包含：sites,gnnews,gwnews,duanzi,yule
     SITES: [],
     USERSITES: [],
+    weather: {},
     isShowAlert: 0
 };
 

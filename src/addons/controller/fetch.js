@@ -3,15 +3,15 @@
 import Base from './base.js';
 import axios from 'axios';
 import _ from 'lodash';
-import {slugify} from 'transliteration';
+import { slugify } from 'transliteration';
 slugify.config({
     lowercase: true,
     separator: ''
 });
 
 const CITY = [
-    {cn: '北京', en: 'beijing', idx: '3303'},
-    {cn: '上海', en: 'shanghai', idx: '1437'}
+    { cn: '北京', en: 'beijing', idx: '3303' },
+    { cn: '上海', en: 'shanghai', idx: '1437' }
 ];
 
 export default class extends Base {
@@ -155,7 +155,7 @@ export default class extends Base {
                 loc = loc.data.result.location;
                 let lat = loc.lat;
                 let lng = loc.lng;
-                let nearbyCity = await model.nearBy({lat, lng}, 0.1, 0.05);
+                let nearbyCity = await model.nearBy({ lat, lng }, 0.1, 0.05);
                 succData = {
                     errno: 201,
                     errmsg: '附近的地点',
@@ -202,7 +202,7 @@ export default class extends Base {
                 let data = {
                     pos: city.cn,
                     aqi: (result && result.aqi) || res.data.rxs.obs[1].msg.aqi,
-                    time:  (result && result.time) || res.data.rxs.obs[1].msg.time
+                    time: (result && result.time) || res.data.rxs.obs[1].msg.time
                 };
                 Memcached.set('pm25#' + city.idx, data, 30 * 60);
                 return this.success(data);
@@ -266,7 +266,7 @@ export default class extends Base {
 
             let model = this.model('city');
             //从数据库获取距离当前地点最近的city
-            let _city = await model.nearBy({lat, lng}, 0.1, 0.1, 1);
+            let _city = await model.nearBy({ lat, lng }, 0.1, 0.1, 1);
 
             //将地区信息写入cookie
             this.cookie("city_id", _city.idx);
@@ -283,6 +283,91 @@ export default class extends Base {
                 idx: idx
             });
         }
+    }
+
+    //墨迹天气
+    async mojiAction() {
+
+        let ip = this.ip();
+        //判断ua
+        let isH5 = () => {
+            let sUserAgent = this.userAgent();
+            let reg = new RegExp('Silk|Kindle|MIDP|WAP|(UP\.Browser)|Smartphone|Obigo|(AU\.Browser)|(wxd\.Mms)|(WxdB\.Browser)|CLDC|(UP\.Link)|(KM\.Browser)|UCWEB|(SEMC-Browser)|Mini|Symbian|Palm|Nokia|Panasonic|MOT|SonyEricsson|NEC|Alcatel|Ericsson|BENQ|BenQ|Amoisonic|Amoi|Capitel|PHILIPS|SAMSUNG|Lenovo|Mitsu|Motorola|SHARP|WAPPER|LG|EG900|CECT|Compal|kejian|Bird|(BIRD|G900/V1\.0)|Arima|CTL|TDG|Daxian|DAXIAN|DBTEL|Eastcom|EASTCOM|PANTECH|Dopod|Haier|HAIER|KONKA|KEJIAN|LENOVO|Soutec|SOUTEC|SAGEM|SEC|SED|EMOL|INNO55|ZTE|iPhone|Android|(Windows\sCE)|(Opera\sMini)|iPod|(Googlebot-Mobile)|IEMobile|(Windows\sPhone)');
+            return reg.test(sUserAgent);
+        };
+        let client = isH5() ? 'mb' : 'pc';
+        //百度地图api，ip精确查找
+        let lat = this.get('lat') || this.cookie('lat') || 0,
+            lng = this.get('lng') || this.cookie('lng') || 0;
+
+        //判断是否能精确获取lat/lng,如果不能则通过ip获取pos
+        if (!lat || !lng) {
+            let loc = await axios.get(`https://api.map.baidu.com/highacciploc/v1?qcip=${ip}&qterm=${client}&ak=6fd470666614aa24ae93d4f61463050c&coord=bd09ll&extensions=1`).catch(err => {
+                console.log(err.code);
+            });
+            if (loc && loc.data && loc.data.result && loc.data.result.error == '161') {
+                loc = loc.data.content;
+                lat = loc.location.lat;
+                lng = loc.location.lng;
+            } else {
+                //百度地图api，ip模糊查找
+                let secLoc = await axios.get(`https://api.map.baidu.com/location/ip?ip=${ip}&ak=6fd470666614aa24ae93d4f61463050c&coor=bd09ll`).catch(err => {
+                    console.log(err.code);
+                });
+                if (secLoc && secLoc.data && secLoc.data.content) {
+                    secLoc = secLoc.data.content;
+                    lat = secLoc.point.y;
+                    lng = secLoc.point.x;
+                }
+            }
+
+            //将经纬度写入cookie
+            this.cookie("lat", lat);
+            this.cookie("lng", lng);
+        }
+
+        let Memcached = this.model("webapi/memcached");
+
+        let weatherCache = await Memcached.get(`weather#${lat}#${lng}`);
+
+        if (weatherCache) {
+            return this.success(weatherCache);
+        }
+
+        //请求墨迹接口获取天气信息
+        let _option = {
+            responseType: 'json',
+            params: {
+                lat: lat,
+                lon: lng
+            },
+            headers: {
+                Authorization: "APPCODE a6bc03a9c15348f888c43b757dca40be"
+            }
+        };
+        let condition = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/condition', '', _option).catch(err => {
+            console.log(err);
+        });
+        let aqiForecast = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/aqiforecast5days', '', _option).catch(err => {
+            console.log(err);
+        });
+        let shortforecast = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/shortforecast', '', _option).catch(err => {
+            console.log(err);
+        });
+        let aqi = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/aqi', '', _option).catch(err => {
+            console.log(err);
+        });
+
+        let _res = {
+            city: condition.data.data.city,
+            condition: condition.data.data.condition,
+            aqi: aqi.data.data.aqi,
+            aqiForecast: aqiForecast.data.data.aqiForecast,
+            shortforecast: shortforecast.data.data.sfc.banner,
+        }
+
+        Memcached.set(`weather#${lat}#${lng}`, _res, 30 * 60);
+        return this.success(_res);
     }
 
     //天气
