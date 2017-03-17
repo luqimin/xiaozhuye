@@ -51,9 +51,10 @@ span.pos:hover {
             class="dropdown"
             :class="showWeatherClass"
             @mouseenter="showWeatherDetail"
-            @mouseleave="showWeatherDetail">
+            @mouseleave="hideWeatherDetail">
             <a class="btn btn-link dropdown-toggle"
-               title="滑动查看天气详情">
+               title="查看天气详情"
+               @click="toggleWeatherDetail">
                 <span>{{city.name}}: {{condition.temp}}°<img class="weatherIcon" :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + condition.icon + '.png'"></span>
                 <span>{{weather.shortforecast}}</span>
                 <span class="caret"></span>
@@ -192,6 +193,12 @@ export default {
             });
         },
         showWeatherDetail() {
+            this.showWeatherClass = 'open';
+        },
+        hideWeatherDetail() {
+            this.showWeatherClass = '';
+        },
+        toggleWeatherDetail() {
             this.showWeatherClass == 'open' ? this.showWeatherClass = '' : this.showWeatherClass = 'open';
         },
         changePos() {
