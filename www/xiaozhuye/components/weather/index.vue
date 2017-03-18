@@ -62,7 +62,7 @@ span.pos:hover {
             <div class="dropdown-menu weatherDetail">
                 <li><a>小提醒: {{condition.tips}}</a></li>
                 <li class="divider"></li>
-                <li><a>{{condition.temp}}°, {{condition.windDir}} {{condition.windLevel}} 级</a></li>
+                <li><a>{{condition.temp}}° {{condition.condition}} {{condition.windDir}} {{condition.windLevel}} 级</a></li>
                 <li class="divider"></li>
                 <li><a>近期天气情况</a></li>
                 <li class="pm25 pmForcast"
@@ -70,6 +70,7 @@ span.pos:hover {
                     <a>
                         <span style="display:inline-block;width:43px;">{{day.date.split('-')[1] + '/' + day.date.split('-')[2]}}: </span>
                         <img class="weatherIcon"
+                             :title="forcast[index].conditionDay"
                              :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + forcast[index].conditionIdDay + '.png'">
                         <span style="display:inline-block;width:20px;">{{forcast[index].tempDay}}°</span>
                         <span class="pm"

@@ -7,11 +7,6 @@ export default class extends think.controller.base {
      *@description action请求验证用户token 
      */
     async __before(action) {
-
-        //页面加载写入csrf
-        let csrf = await this.session('__CSRF__');
-        await this.cookie('__CSRF__', csrf);
-
         //登录、注册不验证token
         if (this.http.action === 'login' ||
             this.http.action === 'register' ||
@@ -52,9 +47,10 @@ export default class extends think.controller.base {
     }
 
     __call() {
-            this.fail("接口不存在");
-        }
-        //用户信息
+        this.fail("接口不存在");
+    }
+
+    //用户信息
     userInfo() {
         return user;
     }

@@ -42,13 +42,6 @@ export default class extends Base {
 
         let cacheModel = this.model('memcached');
 
-        //csrf检验
-        let csrf = await this.session('__CSRF__');
-        let clientCsrf = this.cookie('__CSRF__');
-        if (!clientCsrf || clientCsrf != csrf) {
-            return this.fail(1005, "csrf verification failed");
-        }
-
         //判断邮箱发送次数
         let emailCountCache = await cacheModel.get(email + '#email') || 0;
         if (emailCountCache >= 3) {

@@ -7,6 +7,11 @@ var prod = process.env.NODE_ENV === 'production' ? true : false;
 var plugins = [];
 if (prod) {
     plugins = [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: '"production"'
+            }
+        }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false
@@ -32,7 +37,7 @@ module.exports = {
         chunkFilename: 'xiaozhuye/chunk/[id].[chunkhash:6].js'
     },
     resolve: {
-        extensions: ['', '.js', '.vue', 'jsx'],
+        extensions: ['', '.js', '.vue'],
         alias: {
             'vue$': 'vue/dist/vue.js'
         }
@@ -40,16 +45,11 @@ module.exports = {
     plugins: plugins,
     module: {
         loaders: [{
-            test: /\.vue$/,
-            loader: 'vue'
-        },
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: 'babel'
+                test: /\.vue$/,
+                loader: 'vue'
             },
             {
-                test: /\.jsx$/,
+                test: /\.js$/,
                 exclude: /node_modules/,
                 loader: 'babel'
             },

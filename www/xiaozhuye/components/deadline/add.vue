@@ -1,29 +1,42 @@
 <style>
-    .deadline .addNote {
-        margin: 15px 15px 15px 0;
-    }
+.deadline .addNote {
+    margin: 15px 15px 15px 0;
+}
 
-    .deadline .addNote .btn-note {
-        margin-right: 10px;
-    }
+.deadline .addNote .btn-note {
+    margin-right: 10px;
+}
 
-    .deadline .cov-vue-date {
-        display: block!important;
-    }
+.deadline .cov-vue-date {
+    display: block!important;
+}
 </style>
 <template>
-    <div v-show="isShow" class="addNote">
+    <div v-show="isShow"
+         class="addNote">
         <div class="form-group">
-            <input v-model="noteTitle" class="form-control" type="text" id="noteTitle" placeholder="倒计时标题">
+            <input v-model="noteTitle"
+                   class="form-control"
+                   type="text"
+                   id="noteTitle"
+                   placeholder="倒计时标题">
         </div>
         <div class="form-group">
-            <input v-model="noteContent" class="form-control" type="text" id="noteContent" placeholder="倒计时内容">
+            <input v-model="noteContent"
+                   class="form-control"
+                   type="text"
+                   id="noteContent"
+                   placeholder="倒计时内容">
         </div>
         <div class="form-group">
-            <date-picker :date="noteDay" :option="option" :limit="limit"></date-picker>
+            <date-picker :date="noteDay"
+                         :option="option"
+                         :limit="limit"></date-picker>
         </div>
         <div class="form-group clearfix">
-            <button @click="addNote" type="submit" class="btn btn-primary btn-sm">提&nbsp;&nbsp;&nbsp;交</button>
+            <button @click="addNote"
+                    type="submit"
+                    class="btn btn-primary btn-sm">提&nbsp;&nbsp;&nbsp;交</button>
             <span :class="{'text-danger': error != '提交成功', 'text-success': error == '提交成功'}">{{error}}</span>
         </div>
     </div>
@@ -32,12 +45,13 @@
 <script>
 import axios from 'axios';
 import myDatepicker from 'vue-datepicker';
+import Cookie from 'js-cookie';
 
 export default {
     props: [
         'show'
     ],
-	data: ()=> ({
+    data: () => ({
         //日期选择器
         noteDay: {
             time: ''
@@ -69,8 +83,8 @@ export default {
         },
         limit: [
             {
-                type:'fromto',
-                from:new Date(),
+                type: 'fromto',
+                from: new Date(),
             }
         ],
         noteTitle: '',
@@ -78,12 +92,12 @@ export default {
         error: ''
     }),
     computed: {
-        isShow(res){
+        isShow(res) {
             return this.show;
         }
     },
-	methods: {
-        addNote(){
+    methods: {
+        addNote() {
             if (!this.noteTitle) {
                 return this.error = '请输入倒计时标题';
             }
@@ -93,13 +107,14 @@ export default {
             if (!this.noteDay.time) {
                 return this.error = '请选择一个日期';
             }
-            
+
             axios.post('/webapi/deadline/add', {
                 noteTitle: this.noteTitle,
                 noteContent: this.noteContent,
-                noteDay: this.noteDay.time
+                noteDay: this.noteDay.time,
+                __CSRF__: Cookie.get('__CSRF__')
             }).then(res => {
-                if(res.data && !res.data.errno){
+                if (res.data && !res.data.errno) {
                     this.$emit('addOneNote', {
                         title: this.noteTitle,
                         content: this.noteContent,
@@ -114,7 +129,7 @@ export default {
                 }
             });
         }
-	},
+    },
     components: {
         'date-picker': myDatepicker
     }

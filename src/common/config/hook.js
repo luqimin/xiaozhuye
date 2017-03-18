@@ -5,5 +5,5 @@
  * https://thinkjs.org/doc/middleware.html#toc-df6
  */
 export default {
-    view_before: ["prepend", "csrf"]
+    logic_before: ["prepend", "csrf"]
 }
