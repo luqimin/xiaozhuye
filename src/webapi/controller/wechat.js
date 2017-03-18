@@ -17,6 +17,10 @@ export default class extends Base {
     }
 
     async postmsgAction() {
+        let autoEnd = setTimeout(() => {
+            this.end('');
+        }, 3000);
+
         this.http.req.on('data', data => {
             parser.parseString(data, (err, result) => {
                 let _postMsg = result.xml,
@@ -47,9 +51,10 @@ export default class extends Base {
     <MsgType><![CDATA[text]]></MsgType>
     <Content><![CDATA[${_resText}]]></Content>
 </xml>`;
-
+                clearTimeout(autoEnd);
                 this.end(_resXml);
             });
         });
     }
+
 }
