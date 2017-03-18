@@ -17,17 +17,39 @@ export default class extends Base {
     }
 
     async postmsgAction() {
-        console.log(2222222);
-        let msg = this.post();
+        this.http.req.on('data', data => {
+            parser.parseString(data, (err, result) => {
+                let _postMsg = result.xml,
+                    ToUserName = _postMsg.ToUserName[0],
+                    FromUserName = _postMsg.FromUserName[0],
+                    CreateTime = _postMsg.CreateTime[0],
+                    MsgType = _postMsg.MsgType[0],
+                    Content = _postMsg.Content[0],
+                    MsgId = _postMsg.MsgId[0];
 
-        console.log(msg);
 
-        parser.parseString(msg, (err, result) => {
-            console.log(result);
+                let resMsg = {
+                    xml: {
+                        ToUserName: FromUserName,
+                        FromUserName: ToUserName,
+                        CreateTime: parseInt(new Date().valueOf() / 1000),
+                        MsgType: 'text',
+                        Content: 'hehehhe',
+                    }
+                };
 
-            this.end(result);
+                let _resText = '3312321hehehehe';
+
+                let _resXml = `<xml>
+    <ToUserName><![CDATA[${FromUserName}]]></ToUserName>
+    <FromUserName><![CDATA[${ToUserName}]]></FromUserName>
+    <CreateTime>${parseInt(new Date().valueOf() / 1000)}</CreateTime>
+    <MsgType><![CDATA[text]]></MsgType>
+    <Content><![CDATA[${_resText}]]></Content>
+</xml>`;
+
+                this.end(_resXml);
+            });
         });
-
-        // let xml = builder.buildObject(obj);
     }
 }
