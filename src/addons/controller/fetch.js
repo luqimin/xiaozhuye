@@ -290,12 +290,12 @@ export default class extends Base {
     //墨迹天气
     async mojiAction() {
         //判断csrf
-        let _csrf = await this.session('__CSRF__');
-        let clientCsrf = this.cookie('__CSRF__');
+        // let _csrf = await this.session('__CSRF__');
+        // let clientCsrf = this.cookie('__CSRF__');
 
-        if (!clientCsrf || _csrf != clientCsrf) {
-            return this.fail('suck it');
-        }
+        // if (!clientCsrf || _csrf != clientCsrf) {
+        //     return this.fail('suck it');
+        // }
 
         let ip = this.ip();
         //判断ua

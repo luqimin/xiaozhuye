@@ -15,8 +15,8 @@ export default class extends Base {
         });
 
         //给页面写入csrf
-        let _csrf = await this.session('__CSRF__');
-        this.cookie('__CSRF__', _csrf);
+        // let _csrf = await this.session('__CSRF__');
+        // this.cookie('__CSRF__', _csrf);
 
         //auto render template file index_index.html
         return this.display();
