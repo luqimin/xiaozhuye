@@ -66,7 +66,7 @@ export default class extends Base {
             'key': '09ff8a2bd69e43d7bbdb924090c5c492',
             'info': Content,
             'loc': '',
-            'userid': FromUserName
+            'userid': FromUserName.replace(/[^a-zA-Z0-9]/g, '')
         }, {}).catch(err => {
             console.log(err);
         });
