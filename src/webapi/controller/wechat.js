@@ -1,7 +1,10 @@
 'use strict';
 
 import Base from './base.js';
-import xmlParse from 'htmlparser2';
+import xml2js from 'xml2js';
+
+let parser = new xml2js.Parser();
+let builder = new xml2js.Builder();
 
 export default class extends Base {
     /**
@@ -12,9 +15,19 @@ export default class extends Base {
         //auto render template file index_index.html
         return this.display();
     }
+
     async postmsgAction() {
-        let msg = this.http.request;
+        console.log(2222222);
+        let msg = this.post();
+
         console.log(msg);
-        console.log(xmlParse(msg));
+
+        parser.parseString(msg, (err, result) => {
+            console.log(result);
+
+            this.end(result);
+        });
+
+        // let xml = builder.buildObject(obj);
     }
 }

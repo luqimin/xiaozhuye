@@ -12,6 +12,7 @@ export default class extends think.controller.base {
             this.http.action === 'register' ||
             this.http.action === 'get' ||
             this.http.action === 'sendemailcode' ||
+            this.http.action === 'postmsg' ||
             this.http.action === 'test' ||
             this.http.action === 'testt') {
             return;
