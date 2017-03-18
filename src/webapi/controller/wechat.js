@@ -26,25 +26,25 @@ export default class extends Base {
     }
 
     async postmsgAction() {
+        // //验证微信开发者token
+        // let signature = this.get('signature');
+        // let timestamp = this.get('timestamp');
+        // let nonce = this.get('nonce');
+        // let echostr = this.get('echostr');
 
-        let signature = this.get('signature');
-        let timestamp = this.get('timestamp');
-        let nonce = this.get('nonce');
-        let echostr = this.get('echostr');
+        // let oriArray = [];
+        // oriArray[0] = nonce;
+        // oriArray[1] = timestamp;
+        // oriArray[2] = 'xiaozhuye';
+        // oriArray.sort();
+        // let original = oriArray.join('');
+        // let scyptoString = sha1(original);
 
-        let oriArray = [];
-        oriArray[0] = nonce;
-        oriArray[1] = timestamp;
-        oriArray[2] = 'xiaozhuye';
-        oriArray.sort();
-        let original = oriArray.join('');
-        let scyptoString = sha1(original);
-
-        if (signature == scyptoString) {
-            this.end(echostr);
-        } else {
-            this.end("false");
-        }
+        // if (signature == scyptoString) {
+        //     this.end(echostr);
+        // } else {
+        //     this.end("false");
+        // }
 
         let autoEnd = setTimeout(() => {
             this.end('');
