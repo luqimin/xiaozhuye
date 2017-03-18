@@ -38,16 +38,16 @@ export default class extends Base {
     }
 
     async postmsgAction() {
-        //超时处理
-        let autoEnd = setTimeout(() => {
-            this.end(`<xml>
+        let creatMsg = (FromUserName, ToUserName, msg) => {
+            let xml = `<xml>
     <ToUserName><![CDATA[${FromUserName}]]></ToUserName>
     <FromUserName><![CDATA[${ToUserName}]]></FromUserName>
     <CreateTime>${parseInt(new Date().valueOf() / 1000)}</CreateTime>
     <MsgType><![CDATA[text]]></MsgType>
-    <Content><![CDATA[超时了...真尴尬]]></Content>
-</xml>`);
-        }, 3000);
+    <Content><![CDATA[${msg}]]></Content>
+</xml>`;
+            return xml;
+        };
 
         let xml = await this.http.getPayload();
         let _postMsg = await parseXml(xml);
@@ -59,6 +59,11 @@ export default class extends Base {
             MsgType = _postMsgData.MsgType[0],
             Content = _postMsgData.Content[0],
             MsgId = _postMsgData.MsgId[0];
+
+        //超时处理
+        let autoEnd = setTimeout(() => {
+            this.end(creatMsg(FromUserName, ToUserName, '超时了...真尴尬'));
+        }, 3000);
 
         console.log(`收到微信消息: ${FromUserName} === ${Content}`);
 
@@ -78,13 +83,7 @@ export default class extends Base {
             console.log(`获得图灵机器人反馈: ${_resText}`);
         }
 
-        let _resXml = `<xml>
-    <ToUserName><![CDATA[${FromUserName}]]></ToUserName>
-    <FromUserName><![CDATA[${ToUserName}]]></FromUserName>
-    <CreateTime>${parseInt(new Date().valueOf() / 1000)}</CreateTime>
-    <MsgType><![CDATA[text]]></MsgType>
-    <Content><![CDATA[${_resText}]]></Content>
-</xml>`;
+        let _resXml = creatMsg(FromUserName, ToUserName, _resText);
 
         this.end(_resXml);
 
