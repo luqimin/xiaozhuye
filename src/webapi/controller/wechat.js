@@ -80,6 +80,17 @@ export default class extends Base {
         if (tuling.status == 200 && tuling.data) {
             clearTimeout(autoEnd);
             _resText = tuling.data.text;
+
+            switch (parseInt(tuling.data.code)) {
+                case 200000:
+                    _resText += `: ${tuling.data.url}`;
+                    break;
+                case 302000:
+                    break;
+                default:
+                    break;
+            }
+
             console.log(`获得图灵机器人反馈: ${_resText}`);
         }
 
