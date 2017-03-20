@@ -10,13 +10,15 @@ export default {
         axios.get('/addons/fetch/' + name, '').then(res => {
             // 响应成功回调
             let list = res.data;
-            if (list && list.length) {
+            if (list && Array.isArray(list) && list.length) {
                 window.localStorage && localStorage.setItem(name, JSON.stringify(res.data));
                 cb(list);
+            } else {
+                cb();
             }
-        }, function(res) {
+        }, function (res) {
             // 响应错误回调
-            cb(res.data);
+            cb();
         });
     },
     //用户登录
@@ -34,7 +36,7 @@ export default {
         axios.get('/webapi/useraccount/logout', '').then(res => {
             // 响应成功回调
             cb(res.data);
-        }, function(res) {
+        }, function (res) {
             // 响应错误回调
             cb(res.data);
         });
@@ -56,7 +58,7 @@ export default {
         axios.get('/webapi/site/get', { params: opt }).then(res => {
             // 响应成功回调
             cb(res.data.data);
-        }, function(res) {
+        }, function (res) {
             // 响应错误回调
             cb(res.data);
         });
@@ -67,7 +69,7 @@ export default {
         axios.get('/webapi/site/my', { params: opt }).then(res => {
             // 响应成功回调
             cb(res.data.data);
-        }, function(res) {
+        }, function (res) {
             // 响应错误回调
             cb(res.data);
         });
@@ -78,7 +80,7 @@ export default {
         axios.get('/webapi/site/search', { params: opt }).then(res => {
             // 响应成功回调
             cb(res.data.data);
-        }, function(res) {
+        }, function (res) {
             // 响应错误回调
             cb(res.data);
         });
