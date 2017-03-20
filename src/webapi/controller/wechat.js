@@ -60,11 +60,6 @@ export default class extends Base {
             Content = _postMsgData.Content[0],
             MsgId = _postMsgData.MsgId[0];
 
-        //超时处理
-        let autoEnd = setTimeout(() => {
-            this.end(creatMsg(FromUserName, ToUserName, '超时了...真尴尬'));
-        }, 3000);
-
         console.log(`收到微信消息: ${FromUserName} === ${Content}`);
 
         let tuling = await axios.post('http://www.tuling123.com/openapi/api', {
@@ -72,25 +67,25 @@ export default class extends Base {
             'info': Content,
             'loc': '',
             'userid': FromUserName.replace(/[^a-zA-Z0-9]/g, '')
-        }, {}).catch(err => {
+        }, { timeout: 3000 }).catch(err => {
             console.log(err);
+            this.end(creatMsg(FromUserName, ToUserName, '超时了...真尴尬'));
         });
 
         let _resText = '呀，猿收到你消息啦';
+        
         if (tuling.status == 200 && tuling.data) {
-            clearTimeout(autoEnd);
             _resText = tuling.data.text;
-
+            //处理多种机器人反馈信息
             switch (parseInt(tuling.data.code)) {
-                case 200000:
-                    _resText += `: ${tuling.data.url}`;
-                    break;
-                case 302000:
-                    break;
-                default:
-                    break;
+            case 200000:
+                _resText += `: ${tuling.data.url}`;
+                break;
+            case 302000:
+                break;
+            default:
+                break;
             }
-
             console.log(`获得图灵机器人反馈: ${_resText}`);
         }
 

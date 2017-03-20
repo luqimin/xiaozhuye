@@ -190,19 +190,18 @@ export default class extends Base {
                 return this.success(pmCache);
             }
 
-            // let res = await axios.get(`https://waqi.info/api/feed/@${city.idx}/now.json`, {
-            let res = await axios.get(`https://api.waqi.info/api/feed/@${city.idx}/obs.cn.json`, {
+            let res = await axios.get(`https://api.waqi.info/feed/@${city.idx}/?token=0d68ef690b21a5a54986a447526bd99e1ffbd6de`, {
                 timeout: 3000,
             }).catch(err => {
                 console.log(err.code);
             });
 
-            if (res && res.data.rxs && res.data.rxs.status == 'ok') {
-                let result = res.data.rxs.obs[0].msg;
+            if (res && res.data.data && res.data.status == 'ok') {
+                let result = res.data.data;
                 let data = {
                     pos: city.cn,
-                    aqi: (result && result.aqi) || res.data.rxs.obs[1].msg.aqi,
-                    time: (result && result.time) || res.data.rxs.obs[1].msg.time
+                    aqi: result && result.aqi,
+                    time: result && result.time
                 };
                 Memcached.set('pm25#' + city.idx, data, 30 * 60);
                 return this.success(data);
