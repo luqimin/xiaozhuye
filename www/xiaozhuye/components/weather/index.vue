@@ -70,12 +70,12 @@ span.pos:hover {
                     <a>
                         <span style="display:inline-block;width:43px;">{{day.date.split('-')[1] + '/' + day.date.split('-')[2]}}: </span>
                         <img class="weatherIcon"
-                             :title="forcast[index].conditionDay"
-                             :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + forcast[index].conditionIdDay + '.png'">
-                        <span style="display:inline-block;width:20px;">{{forcast[index].tempDay}}°</span>
+                             :title="forecast && forecast[index].conditionDay"
+                             :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + (forecast && forecast[index].conditionIdDay) + '.png'">
+                        <span style="display:inline-block;width:20px;">{{forecast && forecast[index].tempDay}}°</span>
                         <span class="pm"
                               :class="getPMClass(day.value)">{{day.value}}</span>
-                        <span>{{forcast[index].windDirDay}} {{forcast[index].windLevelDay}} 级</span>
+                        <span>{{forecast && forecast[index].windDirDay}} {{forecast && forecast[index].windLevelDay}} 级</span>
                     </a>
                 </li>
             </div>
@@ -136,13 +136,11 @@ export default {
         condition() {
             return this.weather.condition || {};
         },
-        forcast() {
-            return this.weather.forcast;
+        forecast() {
+            return this.weather.forecast;
         },
         weatherHtml() {
-            let html = this.weather.shortforecast;
-
-            return html;
+            return this.weather.shortforecast;
         }
     },
     methods: {

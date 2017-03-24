@@ -365,7 +365,7 @@ export default class extends Base {
         let aqi = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/aqi', '', _option).catch(err => {
             console.log(err);
         });
-        let forcast = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/forecast15days', '', _option).catch(err => {
+        let forecast = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/forecast15days', '', _option).catch(err => {
             console.log(err);
         });
 
@@ -375,7 +375,7 @@ export default class extends Base {
             aqi: aqi.data.data.aqi,
             aqiForecast: aqiForecast.data.data.aqiForecast,
             shortforecast: shortforecast.data.data.sfc.banner,
-            forcast: forcast.data.data.forecast
+            forecast: forecast.data.data.forecast
         }
 
         Memcached.set(`weather#${lat}#${lng}`, _res, 30 * 60);
