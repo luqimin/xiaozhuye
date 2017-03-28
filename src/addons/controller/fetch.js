@@ -191,7 +191,7 @@ export default class extends Base {
             }
 
             let res = await axios.get(`https://api.waqi.info/feed/@${city.idx}/?token=0d68ef690b21a5a54986a447526bd99e1ffbd6de`, {
-                timeout: 3000,
+                timeout: 5000,
             }).catch(err => {
                 console.log(err.code);
             });
@@ -219,7 +219,7 @@ export default class extends Base {
                         time: result.time.s.cn || result.time.s,
                         note: 'beiyong'
                     };
-                    Memcached.set('pm25#' + city.idx, data, 30 * 60);
+                    // Memcached.set('pm25#' + city.idx, data, 30 * 60);
                     return this.success(data);
                 }
             }
