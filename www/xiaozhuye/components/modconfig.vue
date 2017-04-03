@@ -1,8 +1,6 @@
 <template>
     <div class="alert alert-dismissible alert-warning">
-        <button type="button"
-                class="close"
-                data-dismiss="alert">&times;</button>
+        <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
         <strong>模块配置</strong>
         <div class="mokuaiConfig checkbox">
             <template v-for="(value, key) in MODARRAY">
@@ -18,7 +16,7 @@
                            type="checkbox"> {{value.name}}
                 </label>
             </template>
-    
+
         </div>
     </div>
 </template>
