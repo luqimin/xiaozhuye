@@ -373,9 +373,9 @@ export default class extends Base {
             city: condition.data.data.city,
             condition: condition.data.data.condition,
             aqi: aqi.data.data.aqi,
-            aqiForecast: aqiForecast.data.data.aqiForecast,
+            aqiForecast: _.drop(aqiForecast.data.data.aqiForecast),
             shortforecast: shortforecast.data.data.sfc.banner,
-            forecast: forecast.data.data.forecast
+            forecast: _.drop(forecast.data.data.forecast)
         }
 
         Memcached.set(`weather#${lat}#${lng}`, _res, 30 * 60);

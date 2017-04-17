@@ -16,7 +16,7 @@
     transition: background .2s;
 }
 
-.pmForcast span.pm {
+.pmForecast span.pm {
     display: inline-block;
     width: 26px;
     background: #fff;
@@ -64,8 +64,8 @@ span.pos:hover {
                 <li class="divider"></li>
                 <li><a>{{condition.temp}}° {{condition.condition}} {{condition.windDir}} {{condition.windLevel}} 级</a></li>
                 <li class="divider"></li>
-                <li><a>近期天气情况</a></li>
-                <li class="pm25 pmForcast"
+                <li><a>天气预报</a></li>
+                <li class="pm25 pmForecast"
                     v-for="(day, index) in weather.aqiForecast">
                     <a>
                         <span style="display:inline-block;width:43px;">{{day.date.split('-')[1] + '/' + day.date.split('-')[2]}}: </span>
