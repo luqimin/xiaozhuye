@@ -68,7 +68,20 @@ span.pos:hover {
                 <li class="pm25 pmForecast"
                     v-for="(day, index) in weather.aqiForecast">
                     <a>
-                        <span style="display:inline-block;width:43px;">{{day.date.split('-')[1] + '/' + day.date.split('-')[2]}}: </span>
+                        <span style="display:inline-block;width:43px;">
+                            <span v-if="index == 0">
+                                今天:
+                            </span>
+                            <span v-else-if="index == 1">
+                                明天:
+                            </span>
+                            <span v-else-if="index == 2">
+                                后天:
+                            </span>
+                            <span v-else>
+                                {{day.date.split('-')[1] + '/' + day.date.split('-')[2]}}:
+                            </span>
+                        </span>
                         <img class="weatherIcon"
                              :title="forecast && forecast[index].conditionDay"
                              :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + (forecast && forecast[index].conditionIdDay) + '.png'">
