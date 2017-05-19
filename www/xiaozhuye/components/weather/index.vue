@@ -55,8 +55,8 @@ span.pos:hover {
             <a class="btn btn-link dropdown-toggle"
                title="查看天气详情"
                @click="toggleWeatherDetail">
-                <span>{{city.name}}: {{condition.temp}}°<img class="weatherIcon" :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + condition.icon + '.png'"></span>
-                <span>{{weather.shortforecast}}</span>
+                <span>{{city.name}}: {{condition.temp}}° (体感温度: {{condition.realFeel}}°) <img class="weatherIcon" :src="'https://www.moji.com/templets/mojichina/images/weather/weather/w' + condition.icon + '.png'"></span>
+                <!--<span>{{weather.shortforecast}}</span>-->
                 <span class="caret"></span>
             </a>
             <div class="dropdown-menu weatherDetail">
@@ -79,7 +79,7 @@ span.pos:hover {
                                 后天:
                             </span>
                             <span v-else>
-                                {{day.date.split('-')[1] + '/' + day.date.split('-')[2]}}:
+                                {{day.day}}:
                             </span>
                         </span>
                         <img class="weatherIcon"
@@ -151,9 +151,6 @@ export default {
         },
         forecast() {
             return this.weather.forecast;
-        },
-        weatherHtml() {
-            return this.weather.shortforecast;
         }
     },
     methods: {

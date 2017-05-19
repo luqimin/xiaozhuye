@@ -3,16 +3,19 @@
 import Base from './base.js';
 import axios from 'axios';
 import _ from 'lodash';
-import { slugify } from 'transliteration';
+import moment from 'moment';
+import {slugify} from 'transliteration';
 slugify.config({
     lowercase: true,
     separator: ''
 });
 
 const CITY = [
-    { cn: '北京', en: 'beijing', idx: '3303' },
-    { cn: '上海', en: 'shanghai', idx: '1437' }
+    {cn: '北京', en: 'beijing', idx: '3303'},
+    {cn: '上海', en: 'shanghai', idx: '1437'}
 ];
+
+moment.locale('zh-cn');
 
 export default class extends Base {
     /**
@@ -155,7 +158,7 @@ export default class extends Base {
                 loc = loc.data.result.location;
                 let lat = loc.lat;
                 let lng = loc.lng;
-                let nearbyCity = await model.nearBy({ lat, lng }, 0.1, 0.05);
+                let nearbyCity = await model.nearBy({lat, lng}, 0.1, 0.05);
                 succData = {
                     errno: 201,
                     errmsg: '附近的地点',
@@ -267,7 +270,7 @@ export default class extends Base {
 
             let model = this.model('city');
             //从数据库获取距离当前地点最近的city
-            let _city = await model.nearBy({ lat, lng }, 0.1, 0.1, 1);
+            let _city = await model.nearBy({lat, lng}, 0.1, 0.1, 1);
 
             //将地区信息写入cookie
             this.cookie("city_id", _city.idx);
@@ -368,6 +371,16 @@ export default class extends Base {
         let forecast = await axios.post('http://aliv8.data.moji.com/whapi/json/aliweather/forecast15days', '', _option).catch(err => {
             console.log(err);
         });
+
+        try {
+            if (aqiForecast.data.data.aqiForecast.length) {
+                for (let d of aqiForecast.data.data.aqiForecast) {
+                    d.day = moment(d.date).format('dddd');
+                }
+            }
+        } catch (err) {
+            console.log(err)
+        }
 
         let _res = {
             city: condition.data.data.city,
