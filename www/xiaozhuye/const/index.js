@@ -25,7 +25,7 @@ export const MODARRAY = {
     }
 };
 export const MODCONF = {
-    gnnews: {},
+    toutiao: {},
     baidu: {}
 };
 export let ORDER = {
@@ -42,8 +42,7 @@ export let ORDER = {
         name: 'yule'
     }, {
         name: 'duanzi'
-    }
-    ],
+    }],
     c: [{
         name: 'deadline'
     }]
