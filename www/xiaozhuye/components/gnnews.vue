@@ -6,7 +6,9 @@
                  alt="刷新">
         </div>
         <div class="list-group">
-            <a v-for="news in lists" v-bind:href="news.link" class="list-group-item" target="_blank">{{news.title}}</a>
+            <a v-for="news in lists" v-bind:href="news.url" class="list-group-item" target="_blank">{{news.title}}
+                <span class="badge">{{news.author_name}}</span>
+            </a>
         </div>
     </div>
 </template>

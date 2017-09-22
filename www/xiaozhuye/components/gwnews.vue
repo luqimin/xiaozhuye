@@ -5,7 +5,8 @@
 			<img @click="refresh" class="pull-right btn-refresh" :class="{ing:ing}" src="/static/img/refresh.png" alt="刷新">
 		</div>
 		<div class="list-group">
-			<a v-for="item in lists" :href="item.link" class="list-group-item" target="_blank">{{item.title}}</a>
+			<a v-for="item in lists" :href="item.link" class="list-group-item" target="_blank">{{item.title}}
+				<span class="badge">{{item.author_name}}</span></a>
 		</div>
 	</div>
 </template>

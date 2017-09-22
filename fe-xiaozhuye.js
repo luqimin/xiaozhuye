@@ -31,12 +31,12 @@ if (fs.existsSync(jsPath)) {
 // webpack打包
 console.log('\033[91m 开始打包js... \033[0m');
 compiler.run((err, stats) => {
-    if (stats.hasErrors()) {
-        return console.log(stats.toJson().errorDetails);
-    }
-    if (stats.hasWarnings()) {
-        return console.log(stats.hasWarnings());
-    }
+    // if (stats.hasErrors()) {
+    //     return console.log(stats.toJson().errorDetails);
+    // }
+    // if (stats.hasWarnings()) {
+    //     return console.log(stats.hasWarnings());
+    // }
 
     let chunksArr = stats.toJson('minimal').chunks;
     // console.log(chunksArr);

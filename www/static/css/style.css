@@ -203,7 +203,6 @@ select:-webkit-autofill {
 }
 
 .col-md-6 .addon .addonimg {
-    height: 180px;
     cursor: -webkit-zoom-in;
 }
 
@@ -235,6 +234,10 @@ select:-webkit-autofill {
 
 .addon video.embed-responsive-item {
     cursor: -webkit-zoom-out;
+}
+
+.yuleimg div {
+    transition: all .25s;
 }
 
 /*about*/

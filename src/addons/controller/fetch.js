@@ -17,6 +17,8 @@ const CITY = [
 
 moment.locale('zh-cn');
 
+let AliYunAPPCODE = 'a6bc03a9c15348f888c43b757dca40be';
+
 export default class extends Base {
     /**
      * index action
@@ -441,32 +443,50 @@ export default class extends Base {
 
     //国内焦点
     async gnfocusAction() {
-        let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001cd&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
+        let res = await axios.get('http://topnews.market.alicloudapi.com/toutiao/index?type=guonei', {
+            headers: {'Authorization': `APPCODE ${AliYunAPPCODE}`},
+        }).catch(err => {
             console.log(err.code);
             return '';
         });
-        let result = res && res.data.showapi_res_body.pagebean.contentlist;
-        this.end(result);
+        let result = res && res.data.result && res.data.result.data;
+        if (result) {
+            this.end(_.dropRight(result, 20));
+        } else {
+            this.end('');
+        }
     }
 
     //国外焦点
     async gwfocusAction() {
-        let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a108b3cdc86cf39001ce&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
+        let res = await axios.get('http://topnews.market.alicloudapi.com/toutiao/index?type=guoji', {
+            headers: {'Authorization': `APPCODE ${AliYunAPPCODE}`},
+        }).catch(err => {
             console.log(err.code);
             return '';
         });
-        let result = res && res.data.showapi_res_body.pagebean.contentlist;
-        this.end(result);
+        let result = res && res.data.result && res.data.result.data;
+        if (result) {
+            this.end(_.dropRight(result, 20));
+        } else {
+            this.end('');
+        }
     }
 
     //娱乐焦点
     async yuleAction() {
-        let res = await axios.get('https://route.showapi.com/109-35?channelId=5572a10ab3cdc86cf39001eb&maxResult=10&needAllList=0&needContent=0&needHtml=0&page=1&showapi_appid=25653&showapi_sign=fde151b148b6494aa99d07426967b617').catch(err => {
+        let res = await axios.get('http://topnews.market.alicloudapi.com/toutiao/index?type=yule', {
+            headers: {'Authorization': `APPCODE ${AliYunAPPCODE}`},
+        }).catch(err => {
             console.log(err.code);
             return '';
         });
-        let result = res && res.data.showapi_res_body.pagebean.contentlist;
-        this.end(result);
+        let result = res && res.data.result && res.data.result.data;
+        if (result) {
+            this.end(_.dropRight(result, 20));
+        } else {
+            this.end('');
+        }
     }
 
     //段子
